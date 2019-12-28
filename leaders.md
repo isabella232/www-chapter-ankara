@@ -1,3 +1,3 @@
 ### Leaders
 
-* [Alper Basaran](mailto://alper.basaran@owasp.org)
+* [Alper Basaran](mailto:alper.basaran@owasp.org)
