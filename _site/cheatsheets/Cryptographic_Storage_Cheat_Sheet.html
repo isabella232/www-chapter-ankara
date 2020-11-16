@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Cryptographic Storage Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Cryptographic Storage Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Cryptographic Storage Cheat Sheet | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Cryptographic Storage Cheat Sheet | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Cryptographic_Storage_Cheat_Sheet.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Cryptographic+Storage+Cheat+Sheet" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Cryptographic Storage Cheat Sheet</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>Cross Site Scripting Prevention Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet">DOM based XSS Prevention Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p>This article provides a simple model to follow when implementing solutions to protect data at rest.</p>
+
+<h1 id="architectural-decision">Architectural Decision</h1>
+
+<p>An architectural decision must be made to determine the appropriate method to protect data at rest. There are such wide varieties of products, methods and mechanisms for cryptographic storage. This cheat sheet will only focus on low-level guidelines for developers and architects who are implementing cryptographic solutions. We will not address specific vendor solutions, nor will we address the design of cryptographic algorithms.</p>
+
+<p>The general practices and required minimum key length depending on the scenario listed below.</p>
+
+<ul>
+  <li>Key exchange: <code class="language-plaintext highlighter-rouge">Diffie–Hellman key exchange with minimum 2048 bits</code></li>
+  <li>Message Integrity: <code class="language-plaintext highlighter-rouge">HMAC-SHA2</code></li>
+  <li>Message Hash: <code class="language-plaintext highlighter-rouge">SHA2 256 bits</code></li>
+  <li>Asymmetric encryption: <code class="language-plaintext highlighter-rouge">RSA 2048 bits</code></li>
+  <li>Symmetric encryption: <code class="language-plaintext highlighter-rouge">AES 128 bits</code></li>
+  <li>Password Hashing: <code class="language-plaintext highlighter-rouge">Argon2, PBKDF2, Scrypt, Bcrypt</code></li>
+</ul>
+
+<h1 id="providing-cryptographic-functionality">Providing Cryptographic Functionality</h1>
+
+<h2 id="secure-cryptographic-storage-design">Secure Cryptographic Storage Design</h2>
+
+<ul>
+  <li>All protocols and algorithms for authentication and secure communication should be well vetted by the cryptographic community.</li>
+  <li>Ensure certificates are properly validated against the hostnames/users ie whom they are meant for.</li>
+  <li>Avoid using wildcard certificates unless there is a business need for it</li>
+  <li>Maintain a cryptographic standard to ensure that the developer community knows about the approved ciphersuits for network security protocols, algorithms, permitted use, cryptoperiods and Key Management</li>
+</ul>
+
+<h3 id="rule---only-store-sensitive-data-that-you-need">Rule - Only store sensitive data that you need</h3>
+
+<p>Many eCommerce businesses utilize third party payment providers to store credit card information for recurring billing. This offloads the burden of keeping credit card numbers safe.</p>
+
+<h3 id="rule---use-strong-approved-authenticated-encryption">Rule - Use strong approved Authenticated Encryption</h3>
+
+<p>E.g. <a href="http://en.wikipedia.org/wiki/CCM_mode">CCM</a> or <a href="http://en.wikipedia.org/wiki/GCM_mode">GCM</a> are approved <a href="http://en.wikipedia.org/wiki/Authenticated_encryption">Authenticated Encryption</a> modes based on <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> algorithm.</p>
+
+<h4 id="rule---use-strong-approved-cryptographic-algorithms">Rule - Use strong approved cryptographic algorithms</h4>
+
+<p>Do not implement an existing cryptographic algorithm on your own, no matter how easy it appears. Instead, use widely accepted algorithms and widely accepted implementations.</p>
+
+<p>Only use approved public algorithms such as AES, RSA public key cryptography, and SHA-256 or better for hashing. Do not use weak algorithms, such as MD5 or SHA1. Avoid hashing for password storage, instead use Argon2, PBKDF2, bcrypt or scrypt. Note that the classification of a “strong” cryptographic algorithm can change over time. See <a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r4.pdf">NIST approved algorithms</a> or ISO TR 14742 “Recommendations on Cryptographic Algorithms and their use” or <a href="http://www.enisa.europa.eu/activities/identity-and-trust/library/deliverables/algorithms-key-size-and-parameters-report-2014/at_download/fullReport">Algorithms, key size and parameters report – 2014</a> from European Union Agency for Network and Information Security. E.g. <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> 128, <a href="http://en.wikipedia.org/wiki/RSA_%28cryptosystem%29">RSA</a> 3072, <a href="http://en.wikipedia.org/wiki/Secure_Hash_Algorithm">SHA</a> 256.</p>
+
+<p>Ensure that the implementation has (at minimum) had some cryptography experts involved in its creation. If possible, use an implementation that is FIPS 140-2 certified.</p>
+
+<p>See <a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r4.pdf">NIST approved algorithms</a> Table 2 “Comparable strengths” for the strength (“security bits”) of different algorithms and key lengths, and how they compare to each other.</p>
+
+<ul>
+  <li>In general, where different algorithms are used, they should have comparable strengths e.g. if an AES-128 key is to be encrypted, an AES-128 key or greater, or RSA-3072 or greater could be used to encrypt it.</li>
+  <li>In general, hash lengths are twice as long as the security bits offered by the symmetric/asymmetric algorithm  e.g. SHA-224 for 3TDEA (112 security bits) (due to the <a href="http://en.wikipedia.org/wiki/Birthday_attack">Birthday Attack</a>)</li>
+</ul>
+
+<p>If a password is being used to protect keys then the <a href="http://en.wikipedia.org/wiki/Password_strength">password strength</a> should be sufficient for the strength of the keys it is protecting.</p>
+
+<p>When 3DES is used, ensure <code class="language-plaintext highlighter-rouge">K1 != K2 != K3</code>, and the minimum key length must be <code class="language-plaintext highlighter-rouge">192 bits</code> .</p>
+
+<h4 id="rule---use-approved-cryptographic-modes">Rule - Use approved cryptographic modes</h4>
+
+<p>In general, you should not use AES, DES or other symmetric cipher primitives directly. <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/current_modes.html">NIST approved modes</a> should be used instead.</p>
+
+<p><strong>Note:</strong> Do not use <a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29">ECB mode</a> for encrypting lots of data (the other modes are better because they chain the blocks of data together to improve the data security).</p>
+
+<h4 id="rule---use-cryptographically-secure-pseudo-random-number-generators-csprng">Rule - Use cryptographically secure pseudo random number generators (CSPRNG)</h4>
+
+<p>When generating random bits in the context of software security, use the available Cryptographically Secure Pseudo-Random Number Generator (CSPRNG) library or module available on the programming language you are using.</p>
+
+<p>Do not use Pseudo-Random Number Generators (PRNG) since they are not secure and will produce deterministic results. The chosen numbers are not completely random because a mathematical algorithm is used to select them, but they are sufficiently random for practical purposes.</p>
+
+<p>PRNGs are primarily used for generating random-looking numbers in use cases such as modeling and simulation in software, while CSPRNGs are intended for generating random-looking numbers resistant to prediction for security use cases such as random passwords, CSRF tokens, session IDs, etc.</p>
+
+<p>The use of CSPRNGs will ensure that all random numbers, especially those used for cryptographic parameters (keys, IVs, MAC tags), random file names, random GUIDs, and random strings are generated in a cryptographically strong fashion.</p>
+
+<p>Ensure that random algorithms are seeded with sufficient entropy.</p>
+
+<p>Tools like <a href="http://csrc.nist.gov/groups/ST/toolkit/rng/documentation_software.html">NIST RNG Test tool</a> (as used in PCI PTS Derived Test Requirements) can be used to comprehensively assess the quality of a Random Number Generator by reading e.g. 128MB of data from the RNG source and then assessing its randomness properties with the tool.</p>
+
+<p>The following functions are considered <strong>weak</strong> pseudo-random number generators and should not be used in the context of security:</p>
+
+<ul>
+  <li>C : <code class="language-plaintext highlighter-rouge">random()</code>, <code class="language-plaintext highlighter-rouge">rand()</code> instead use <a href="http://man7.org/linux/man-pages/man2/getrandom.2.html">getrandom(2)</a></li>
+  <li>Java and Android OS : <code class="language-plaintext highlighter-rouge">java.util.Random()</code> instead use <a href="https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html">java.security.SecureRandom</a></li>
+  <li>PHP : <code class="language-plaintext highlighter-rouge">rand()</code>, <code class="language-plaintext highlighter-rouge">mt_rand()</code>, <code class="language-plaintext highlighter-rouge">array_rand()</code>, <code class="language-plaintext highlighter-rouge">uniqid()</code> instead use <a href="https://www.php.net/manual/en/function.random-bytes.php">random_bytes()</a>, <a href="https://www.php.net/manual/en/function.random-int.php">random_int()</a> in PHP 7 or <a href="https://www.php.net/manual/en/function.openssl-random-pseudo-bytes.php">openssl_random_pseudo_bytes()</a> in PHP 5 (which is <strong>deprecated</strong> and <strong>should not be used</strong>)</li>
+  <li>.NET/C# : <code class="language-plaintext highlighter-rouge">Random()</code>, instead use <a href="https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.rngcryptoserviceprovider?view=netframework-4.8">RNGCryptoServiceProvider</a></li>
+  <li>Objective-C/Apple IOS : <code class="language-plaintext highlighter-rouge">arc4random()</code> (Uses RC4 Cipher), instead use <a href="https://developer.apple.com/documentation/security/1399291-secrandomcopybytes?language=objc">SecRandomCopyBytes</a></li>
+  <li>Python : <code class="language-plaintext highlighter-rouge">random()</code>, instead use <a href="https://docs.python.org/3/library/secrets.html#module-secrets">secrets()</a></li>
+  <li>Ruby : <code class="language-plaintext highlighter-rouge">Random</code>, instead use <a href="https://ruby-doc.org/stdlib-2.5.1/libdoc/securerandom/rdoc/SecureRandom.html">SecureRandom</a></li>
+  <li>Go: <code class="language-plaintext highlighter-rouge">rand</code> using <code class="language-plaintext highlighter-rouge">math/rand</code> package, instead use <a href="https://golang.org/pkg/crypto/rand/">crypto.rand</a> package</li>
+  <li>Rust: <code class="language-plaintext highlighter-rouge">rand::prng::XorShiftRng</code>, instead use <a href="https://docs.rs/rand/0.5.0/rand/prng/chacha/struct.ChaChaRng.html">rand::prng::chacha::ChaChaRng</a> and the rest of the Rust library <a href="https://docs.rs/rand/0.5.0/rand/prng/index.html#cryptographically-secure-pseudo-random-number-generators-csprngs">CSPRNGs.</a></li>
+</ul>
+
+<p>For secure random number generation, refer to NIST SP 800-90A. CTR-DRBG, HASH-DRBG or HMAC-DRBG are recommended. Refer to NIST SP800-22 A Statistical Test Suite for Random and Pseudorandom Number Generators for Cryptographic Applications, and the testing toolkit.</p>
+
+<p>References:</p>
+<ul>
+  <li>http://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-22r1a.pdf</li>
+</ul>
+
+<h4 id="rule---use-authenticated-encryption-of-data">Rule - Use Authenticated Encryption of data</h4>
+
+<p>Use (<a href="http://en.wikipedia.org/wiki/Authenticated_encryption">AE</a>) modes under a uniform API. Recommended modes include <a href="http://en.wikipedia.org/wiki/CCM_mode">CCM</a>, and <a href="http://en.wikipedia.org/wiki/Galois/Counter_Mode">GCM</a> as these, and only these as of November 2014, are specified in <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/current_modes.html">NIST approved modes</a>, ISO IEC 19772 (2009) “Information technology - Security techniques - Authenticated encryption”, and <a href="http://en.wikipedia.org/wiki/IEEE_P1619">IEEE P1619 Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices</a>:</p>
+
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Authenticated_encryption">Authenticated Encryption</a> gives <a href="http://en.wikipedia.org/wiki/Confidentiality">confidentiality</a>, <a href="http://en.wikipedia.org/wiki/Data_integrity">integrity</a>, and <a href="http://en.wikipedia.org/wiki/Authentication">authenticity</a> (CIA); encryption alone just gives confidentiality. Encryption must always be combined with message integrity and authenticity protection. Otherwise the ciphertext may be vulnerable to manipulation causing changes to the underlying plaintext data, especially if it’s being passed over untrusted channels (e.g. in an URL or cookie).</li>
+  <li>These modes require only one key. In general, the tag sizes and the IV sizes should be set to maximum values.</li>
+</ul>
+
+<p>If these recommended <a href="http://en.wikipedia.org/wiki/Authenticated_encryption">AE</a> modes are not available:</p>
+
+<ul>
+  <li>Combine encryption in <a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29">cipher-block chaining (CBC) mode</a> with post-encryption message authentication code, such as <a href="http://en.wikipedia.org/wiki/HMAC">HMAC</a> or <a href="http://en.wikipedia.org/wiki/CMAC">CMAC</a> i.e. Encrypt-then-MAC.
+    <ul>
+      <li>Note that Integrity and Authenticity are preferable to Integrity alone i.e. a MAC such as HMAC-SHA256 or HMAC-SHA512 is a better choice than SHA-256 or SHA-512.</li>
+    </ul>
+  </li>
+  <li>Use 2 independent keys for these 2 independent operations.</li>
+  <li>Do not use ECB mode. CDC is preferred.</li>
+  <li>Do not use <a href="http://en.wikipedia.org/wiki/CBC-MAC#Security_with_fixed_and_variable-length_messages">CBC MAC for variable length data</a></li>
+  <li>The <a href="http://csrc.nist.gov/groups/STM/cavp/index.html">CAVP program</a> is a good default place to go for validation of cryptographic algorithms when one does not have AES or one of the authenticated encryption modes that provide confidentiality and authenticity (i.e., data origin authentication) such as CCM, EAX, CMAC, etc. For Java, if you are using SunJCE that will be the case. The cipher modes supported in JDK 1.5 and later are CBC, CFB, CFBx, CTR, CTS, ECB, OFB, OFBx, PCBC. None of these cipher modes are authenticated encryption modes. (That’s why it is added explicitly.) If you are using an alternate JCE provider such as Bouncy Castle, RSA JSafe, IAIK, etc., then these authenticated encryption modes should be used.</li>
+</ul>
+
+<p><strong>Note:</strong></p>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Disk_encryption_theory">Disk encryption</a> is a special case of <a href="http://en.wikipedia.org/wiki/Data_at_Rest">data at rest</a> e.g. Encrypted File System on a Hard Disk Drive.</li>
+  <li><a href="http://csrc.nist.gov/publications/nistpubs/800-38E/nist-sp-800-38E.pdf">XTS-AES mode</a> is optimized for Disk encryption and is one of the <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/current_modes.html">NIST approved modes</a>; it provides confidentiality and some protection against data manipulation (but not as strong as the <a href="http://en.wikipedia.org/wiki/Authenticated_encryption">AE</a> <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/current_modes.html">NIST approved modes</a>). It is also specified in <a href="http://en.wikipedia.org/wiki/IEEE_P1619">IEEE P1619 Standard for Cryptographic Protection of Data on Block-Oriented Storage Devices</a></li>
+</ul>
+
+<h3 id="rule---store-a-one-way-and-salted-value-of-passwords">Rule - Store a one-way and salted value of passwords</h3>
+
+<p>Use Argon2, PBKDF2, bcrypt or scrypt for password storage. For more information on password storage, please see the <a href="/cheatsheets/Password_Storage_Cheat_Sheet.html">Password Storage Cheat Sheet</a>.</p>
+
+<h3 id="rule---ensure-that-the-cryptographic-protection-remains-secure-even-if-access-controls-fail">Rule - Ensure that the cryptographic protection remains secure even if access controls fail</h3>
+
+<p>This rule supports the principle of defense in depth. Access controls (usernames, passwords, privileges, etc.) are one layer of protection. Storage encryption should add an additional layer of protection that will continue protecting the data even if an attacker subverts the database access control layer.</p>
+
+<h3 id="rule---ensure-that-any-secret-key-is-protected-from-unauthorized-access">Rule - Ensure that any secret key is protected from unauthorized access</h3>
+
+<h4 id="rule---define-a-key-lifecycle">Rule - Define a key lifecycle</h4>
+
+<p>The key lifecycle details the various states that a key will move through during its life. The lifecycle will specify when a key should no longer be used for encryption, when a key should no longer be used for decryption (these are not necessarily coincident), whether data must be rekeyed when a new key is introduced, and when a key should be removed from use all together.</p>
+
+<h4 id="rule---store-unencrypted-keys-away-from-the-encrypted-data">Rule - Store unencrypted keys away from the encrypted data</h4>
+
+<p>If the keys are stored with the data then any compromise of the data will easily compromise the keys as well. Unencrypted keys should never reside on the same machine or cluster as the data.</p>
+
+<h4 id="rule---use-independent-keys-when-multiple-keys-are-required">Rule - Use independent keys when multiple keys are required</h4>
+
+<p>Ensure that key material is independent. That is, do not choose a second key which is easily related to the first (or any preceding) keys.</p>
+
+<h4 id="rule---protect-keys-in-a-key-vault">Rule - Protect keys in a key vault</h4>
+
+<p>Keys should remain in a protected key vault at all times. In particular, ensure that there is a gap between the threat vectors that have direct access to the data and the threat vectors that have direct access to the keys.</p>
+
+<p>This implies that keys should not be stored on the application or web server (assuming that application attackers are part of the relevant threat model).</p>
+
+<h4 id="rule---document-concrete-procedures-for-managing-keys-through-the-lifecycle">Rule - Document concrete procedures for managing keys through the lifecycle</h4>
+
+<p>These procedures must be written down and the key custodians must be adequately trained.</p>
+
+<h4 id="rule---build-support-for-changing-algorithms-and-keys-when-needed">Rule - Build support for changing algorithms and keys when needed</h4>
+
+<p>If keys are compromised or an external authority expires them, key changes will be needed. Application polices or emergency needs will force application administrators to rotate keys and potentially rekey data at some point.</p>
+
+<p>It’s best to be prepared to rapidly handle this need when necessary. Including a key version and encryption algorithm version with the encrypted data is a useful, proactive feature.</p>
+
+<p>For instance, including a simple prefix string, such as “<code class="language-plaintext highlighter-rouge">{1,1}...</code>”, prior to the encrypted data could indicate algorithm version 1, key version 1. This allows for an “online” change to the encryption algorithm and key without re-encrypting all existing data all at once.</p>
+
+<h4 id="rule---document-concrete-procedures-to-handle-a-key-compromise">Rule - Document concrete procedures to handle a key compromise</h4>
+
+<p>Ensure operations staff have the information they need, readily available, when rotation of encryption keys must be performed. Rotating keys should not require changes to source code or other risky deployment measures, since doing this in the middle of an incident will already place a great deal of stress on these staff.</p>
+
+<h4 id="rule---limit-quantity-of-data-encrypted-with-one-key">Rule - Limit quantity of data encrypted with one key</h4>
+
+<p>If the amount of data encrypted grows beyond a <strong>certain threshold</strong>, a new key should be used. This <strong>certain threshold</strong> varies depending on the encryption algorithm used, but is typically 2³⁵ bytes (around 34 gigabytes) for 64 bit block ciphers (DES, 3DES, Blowfish, RC5, …) and 2⁶⁸ bytes (around 295,147,905 terabytes) for 128 bit block ciphers (AES, TwoFish, Serpent). If encrypting with a modern cipher, this threshold is unlikely to be reached, but it should be considered when evaluating algorithms and rotation procedures.</p>
+
+<h3 id="rule---follow-applicable-regulations-on-use-of-cryptography">Rule - Follow applicable regulations on use of cryptography</h3>
+
+<h4 id="rule---under-pci-dss-requirement-3-you-must-protect-cardholder-data">Rule - Under PCI DSS requirement 3, you must protect cardholder data</h4>
+
+<p>The <a href="https://www.pcisecuritystandards.org/document_library?category=pcidss&amp;document=pci_dss">Payment Card Industry (PCI) Data Security Standard (DSS)</a> was developed to encourage and enhance cardholder data security and facilitate the broad adoption of consistent data security measures globally. The standard was introduced in 2005 and replaced individual compliance standards from Visa, Mastercard, Amex, JCB and Diners.</p>
+
+<p>PCI DSS requirement 3 covers secure storage of credit card data. This requirement covers several aspects of secure storage including the data you must never store but we are covering Cryptographic Storage which is covered in requirements 3.4, 3.5 and 3.6 as you can see below:</p>
+
+<h5 id="34-render-pan-primary-account-number-at-minimum-unreadable-anywhere-it-is-stored">3.4 Render PAN (Primary Account Number), at minimum, unreadable anywhere it is stored</h5>
+
+<p>Compliance with requirement 3.4 can be met by implementing any of the four types of secure storage described in the standard which includes encrypting and hashing data. These two approaches will often be the most popular choices from the list of options. The standard doesn’t refer to any specific algorithms but it mandates the use of <strong>Strong Cryptography</strong>. The glossary document from the PCI council defines <strong>Strong Cryptography</strong> as:</p>
+
+<p><em>Cryptography based on industry-tested and accepted algorithms, along with strong key lengths and proper key-management practices. Cryptography is a method to protect data and includes both encryption (which is reversible) and hashing (which is not reversible, or “one way”). SHA-1 is an example of an industry-tested and accepted hashing algorithm. Examples of industry-tested and accepted standards and algorithms for encryption include AES (128 bits and higher), TDES (minimum double-length keys), RSA (1024 bits and higher), ECC (160 bits and higher), and ElGamal (1024 bits and higher).</em></p>
+
+<p>If you have implemented the second rule in this cheat sheet you will have implemented a strong cryptographic algorithm which is compliant with or stronger than the requirements of PCI DSS requirement 3.4. You need to ensure that you identify all locations that card data could be stored including logs and apply the appropriate level of protection. This could range from encrypting the data to replacing the card number in logs.</p>
+
+<p>This requirement can also be met by implementing disk encryption rather than file or column level encryption. The requirements for <strong>Strong Cryptography</strong> are the same for disk encryption and backup media. The card data should never be stored in the clear and by following the guidance in this cheat sheet you will be able to securely store your data in a manner which is compliant with PCI DSS requirement 3.4</p>
+
+<h5 id="35-protect-any-keys-used-to-secure-cardholder-data-against-disclosure-and-misuse">3.5 Protect any keys used to secure cardholder data against disclosure and misuse</h5>
+
+<p>As the requirement name above indicates, we are required to securely store the encryption keys themselves. This will mean implementing strong access control, auditing and logging for your keys. The keys must be stored in a location which is both secure and “away” from the encrypted data. This means key data shouldn’t be stored on web servers, database servers etc</p>
+
+<p>Access to the keys must be restricted to the smallest amount of users possible. This group of users will ideally be users who are highly trusted and trained to perform Key Custodian duties. There will obviously be a requirement for system/service accounts to access the key data to perform encryption/decryption of data.</p>
+
+<p>The keys themselves shouldn’t be stored in the clear but encrypted with a KEK (Key Encrypting Key). The KEK must not be stored in the same location as the encryption keys it is encrypting.</p>
+
+<h5 id="36-fully-document-and-implement-all-key-management-processes-and-procedures-for-cryptographic-keys-used-for-encryption-of-cardholder-data">3.6 Fully document and implement all key-management processes and procedures for cryptographic keys used for encryption of cardholder data</h5>
+
+<p>Requirement 3.6 mandates that key management processes within a PCI compliant company cover 8 specific key lifecycle steps:</p>
+
+<h6 id="361-generation-of-strong-cryptographic-keys">3.6.1 Generation of strong cryptographic keys</h6>
+
+<p>As we have previously described in this cheat sheet we need to use algorithms which offer high levels of data security. We must also generate strong keys so that the security of the data isn’t undermined by weak cryptographic keys. A strong key is generated by using a key length which is sufficient for your data security requirements and compliant with the PCI DSS. The key size alone isn’t a measure of the strength of a key. The data used to generate the key must be sufficiently random (“sufficient” often being determined by your data security requirements) and the entropy of the key data itself must be high.</p>
+
+<h6 id="362-secure-cryptographic-key-distribution">3.6.2 Secure cryptographic key distribution</h6>
+
+<p>The method used to distribute keys must be secure to prevent the theft of keys in transit. The use of a protocol such as Diffie Hellman can help secure the distribution of keys, the use of secure transport such as TLS and SSHv2 can also secure the keys in transit. Older protocols like SSLv3 should not be used.</p>
+
+<h6 id="363-secure-cryptographic-key-storage">3.6.3 Secure cryptographic key storage</h6>
+
+<p>The secure storage of encryption keys including KEK’s has been touched on in our description of requirement 3.5 (see above).</p>
+
+<h6 id="364-periodic-cryptographic-key-changes">3.6.4 Periodic cryptographic key changes</h6>
+
+<p>The PCI DSS standard mandates that keys used for encryption must be rotated at least annually. The key rotation process must remove an old key from the encryption/decryption process and replace it with a new key. All new data entering the system must encrypted with the new key. While it is recommended that existing data be rekeyed with the new key, as per the Rekey data at least every one to three years rule above, it is not clear that the PCI DSS requires this.</p>
+
+<h6 id="365-retirement-or-replacement-of-keys-as-deemed-necessary-when-the-integrity-of-the-key-has-been-weakened-or-keys-are-suspected-of-being-compromised">3.6.5 Retirement or replacement of keys as deemed necessary when the integrity of the key has been weakened or keys are suspected of being compromised</h6>
+
+<p>The key management processes must cater for archived, retired or compromised keys. The process of securely storing and replacing these keys will more than likely be covered by your processes for requirements 3.6.2, 3.6.3 and 3.6.4</p>
+
+<h6 id="366-split-knowledge-and-establishment-of-dual-control-of-cryptographic-keys">3.6.6 Split knowledge and establishment of dual control of cryptographic keys</h6>
+
+<p>The requirement for split knowledge and/or dual control for key management prevents an individual user performing key management tasks such as key rotation or deletion. The system should require two individual users to perform an action (i.e. entering a value from their own OTP) which creates to separate values which are concatenated to create the final key data.</p>
+
+<h6 id="367-prevention-of-unauthorized-substitution-of-cryptographic-keys">3.6.7 Prevention of unauthorized substitution of cryptographic keys</h6>
+
+<p>The system put in place to comply with requirement 3.6.6 can go a long way to preventing unauthorised substitution of key data. In addition to the dual control process you should implement strong access control, auditing and logging for key data so that unauthorised access attempts are prevented and logged.</p>
+
+<h6 id="368-requirement-for-cryptographic-key-custodians-to-sign-a-form-stating-that-they-understand-and-accept-their-key-custodian-responsibilities">3.6.8 Requirement for cryptographic key custodians to sign a form stating that they understand and accept their key-custodian responsibilities</h6>
+
+<p>To perform the strong key management functions we have seen in requirement 3.6 we must have highly trusted and trained key custodians who understand how to perform key management duties. The key custodians must also sign a form stating they understand the responsibilities that come with this role.</p>
+
+<h1 id="related-documentation--tools">Related documentation &amp; tools</h1>
+
+<h2 id="documentation">Documentation</h2>
+
+<ul>
+  <li><a href="https://www.owasp.org/index.php/Testing_for_SSL-TLS_%28OWASP-CM-001%29">Testing for SSL-TLS</a></li>
+  <li><a href="https://www.owasp.org/index.php/Guide_to_Cryptography">Guide to Cryptography</a></li>
+  <li><a href="http://www.owasp.org/index.php/ASVS">Application Security Verification Standard (ASVS) – Communication Security Verification Requirements (V10)</a></li>
+  <li><a href="https://github.com/ssllabs/research/wiki">SSLLabs wiki</a></li>
+  <li><a href="https://wiki.mozilla.org/Security/Server_Side_TLS">Mozilla TLS wiki</a></li>
+  <li><a href="/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">Transport Layer Protection Cheat Sheet</a></li>
+  <li><a href="https://bettercrypto.org/">BetterCrypto - Config Snippets</a></li>
+</ul>
+
+<h2 id="tools">Tools</h2>
+
+<ul>
+  <li><a href="https://testssl.sh/">TestSSL</a></li>
+  <li><a href="https://cryptosense.com/discovery/">Cryptosense</a></li>
+</ul>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>Cross Site Scripting Prevention Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet">DOM based XSS Prevention Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+

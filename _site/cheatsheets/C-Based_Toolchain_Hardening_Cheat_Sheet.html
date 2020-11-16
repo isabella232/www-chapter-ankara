@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="C-Based Toolchain Hardening Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="C-Based Toolchain Hardening Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | C-Based Toolchain Hardening Cheat Sheet | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>C-Based Toolchain Hardening Cheat Sheet | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=C-Based+Toolchain+Hardening+Cheat+Sheet" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">C-Based Toolchain Hardening Cheat Sheet</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>C-Based Toolchain Hardening</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet">Choosing and Using Security Questions Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p><strong>C-Based Toolchain Hardening Cheat Sheet</strong> is a brief treatment of project settings that will help you deliver reliable and secure code when using C, C++ and Objective C languages in a number of development environments. A more in-depth treatment of this topic can be found <a href="/cheatsheets/C-Based_Toolchain_Hardening.html">here</a>. This cheatsheet will guide you through the steps you should take to create executables with firmer defensive postures and increased integration with the available platform security. Effectively configuring the toolchain also means your project will enjoy a number of benefits during development, including enhanced warnings and static analysis, and self-debugging code.</p>
+
+<p>There are four areas to be examined when hardening the toolchain: configuration, integration, static analysis, and platform security. Nearly all areas are overlooked or neglected when setting up a project. The neglect appears to be pandemic, and it applies to nearly all projects including Auto-configured projects, Makefile-based, Eclipse-based, and Xcode-based. It’s important to address the gaps at configuration and build time because it’s difficult to impossible to <a href="http://sourceware.org/ml/binutils/2012-03/msg00309.html">add hardening on a distributed executable after the fact</a> on some platforms.</p>
+
+<p>For those who would like a deeper treatment of the subject matter, please visit <a href="/cheatsheets/C-Based_Toolchain_Hardening.html">C-Based Toolchain Hardening</a>.</p>
+
+<h1 id="actionable-items">Actionable Items</h1>
+
+<p>The C-Based Toolchain Hardening Cheat Sheet calls for the following actionable items:</p>
+
+<ul>
+  <li>Provide debug, release, and test configurations</li>
+  <li>Provide an assert with useful behavior</li>
+  <li>Configure code to take advantage of configurations</li>
+  <li>Properly integrate third party libraries</li>
+  <li>Use the compiler’s built-in static analysis capabilities</li>
+  <li>Integrate with platform security measures</li>
+</ul>
+
+<p>The remainder of this cheat sheet briefly explains the bulleted, actionable items. For a thorough treatment, please visit the <a href="/cheatsheets/C-Based_Toolchain_Hardening.html">full article</a>.</p>
+
+<h1 id="build-configurations">Build Configurations</h1>
+
+<p>You should support three build configurations. First is <em>Debug</em>, second is <em>Release</em>, and third is <em>Test</em>. One size does <strong>not</strong> fit all, and each speaks to a different facet of the engineering process. You will use a debug build while developing, your continuous integration or build server will use test configurations, and you will ship release builds.</p>
+
+<p>1970’s K&amp;R code and one size fits all flags are from a bygone era. Processes have evolved and matured to meet the challenges of a modern landscape, including threats. Because tools like Autoconfig and Automake <a href="https://lists.gnu.org/archive/html/automake/2012-12/msg00019.html">do not support the notion of build configurations</a>, you should prefer to work in an Integrated Develop Environments (IDE) or write your makefiles so the desired targets are supported. In addition, Autoconfig and Automake often ignore user supplied flags (it depends on the folks writing the various scripts and templates), so you might find it easier to again write a makefile from scratch rather than retrofitting existing auto tool files.</p>
+
+<h2 id="debug-builds">Debug Builds</h2>
+
+<p>Debug is used during development, and the build assists you in finding problems in the code. During this phase, you develop your program and test integration with third party libraries you program depends upon. To help with debugging and diagnostics, you should define <code class="language-plaintext highlighter-rouge">DEBUG</code> and <code class="language-plaintext highlighter-rouge">_DEBUG</code> (if on a Windows platform) preprocessor macros and supply other ‘debugging and diagnostic’ oriented flags to the compiler and linker. Additional preprocessor macros for selected libraries are offered in the <a href="/cheatsheets/C-Based_Toolchain_Hardening.html">full article</a>.</p>
+
+<p>You should use the following for GCC when building for debug: <code class="language-plaintext highlighter-rouge">-O0</code> (or <code class="language-plaintext highlighter-rouge">-O1</code>) and <code class="language-plaintext highlighter-rouge">-g3</code> <code class="language-plaintext highlighter-rouge">-ggdb</code>. No optimizations improve debuggability because optimizations often rearrange statements to improve instruction scheduling and remove unneeded code. You may need <code class="language-plaintext highlighter-rouge">-O1</code> to ensure some analysis is performed. <code class="language-plaintext highlighter-rouge">-g3</code> ensures maximum debug information is available, including symbolic constants and <code class="language-plaintext highlighter-rouge">#defines</code>.</p>
+
+<p>Asserts will help you write self debugging programs. The program will alert you to the point of first failure quickly and easily. Because asserts are so powerful, the code should be completely and full instrumented with asserts that: (1) validates and asserts all program state relevant to a function or a method; (2) validates and asserts all function parameters; and (3) validates and asserts all return values for functions or methods which return a value. Because of item (3), you should be very suspicious of void functions that cannot convey failures.</p>
+
+<p>Anywhere you have an <code class="language-plaintext highlighter-rouge">if</code> statement for validation, you should have an assert. Anywhere you have an assert, you should have an <code class="language-plaintext highlighter-rouge">if</code> statement. They go hand-in-hand. Posix states if <code class="language-plaintext highlighter-rouge">NDEBUG</code> is <strong>not</strong> defined, then <code class="language-plaintext highlighter-rouge">assert</code> <a href="http://pubs.opengroup.org/onlinepubs/009604499/functions/assert.html">“shall write information about the particular call that failed on stderr and shall call abort”</a>. Calling abort during development is useless behavior, so you must supply your own assert that <code class="language-plaintext highlighter-rouge">SIGTRAP</code>s. A Unix and Linux example of a <code class="language-plaintext highlighter-rouge">SIGTRAP</code> based assert is provided in the <a href="/cheatsheets/C-Based_Toolchain_Hardening.html">full article</a>.</p>
+
+<p>Unlike other debugging and diagnostic methods - such as breakpoints and <code class="language-plaintext highlighter-rouge">printf</code> - asserts stay in forever and become silent guardians. If you accidentally nudge something in an apparently unrelated code path, the assert will snap the debugger for you. The enduring coverage means debug code - with its additional diagnostics and instrumentation - is more highly valued than unadorned release code. If code is checked in that does not have the additional debugging and diagnostics, including full assertions, you should reject the check-in.</p>
+
+<h2 id="release-builds">Release Builds</h2>
+
+<p>Release builds are diametrically opposed to debug configurations. In a release configuration, the program will be built for use in production. Your program is expected to operate correctly, securely and efficiently. The time for debugging and diagnostics is over, and your program will define <code class="language-plaintext highlighter-rouge">NDEBUG</code> to remove the supplemental information and behavior.</p>
+
+<p>A release configuration should also use <code class="language-plaintext highlighter-rouge">-O2</code>/<code class="language-plaintext highlighter-rouge">-O3</code>/<code class="language-plaintext highlighter-rouge">-Os</code> and <code class="language-plaintext highlighter-rouge">-g1</code>/<code class="language-plaintext highlighter-rouge">-g2</code>. The optimizations will make it somewhat more difficult to make sense of a stack trace, but they should be few and far between. The <code class="language-plaintext highlighter-rouge">-g</code><em><code class="language-plaintext highlighter-rouge">N</code></em> flag ensures debugging information is available for post mortem analysis. While you generate debugging information for release builds, you should strip the information before shipping and check the symbols into you version control system along with the tagged build.</p>
+
+<p>Release builds should also consider the configuration pair of <code class="language-plaintext highlighter-rouge">-mfunction-return=thunk</code> and <code class="language-plaintext highlighter-rouge">-mindirect-branch=thunk</code>. These are the “Reptoline” fix which is an indirect branch used to thwart speculative execution CPU vulnerabilities such as Spectre and Meltdown. The CPU cannot tell what code to [speculatively] execute because it is an indirect (as opposed to a direct) branch. This is an extra layer of indirection, like calling a pointer through a pointer.</p>
+
+<p><code class="language-plaintext highlighter-rouge">NDEBUG</code> will also remove asserts from your program by defining them to <code class="language-plaintext highlighter-rouge">void</code> since its not acceptable to crash via <code class="language-plaintext highlighter-rouge">abort</code> in production. You should not depend upon assert for crash report generation because those reports could contain sensitive information and may end up on foreign systems, including for example, <a href="http://msdn.microsoft.com/en-us/library/windows/hardware/gg487440.aspx">Windows Error Reporting</a>. If you want a crash dump, you should generate it yourself in a controlled manner while ensuring no sensitive information is written or leaked.</p>
+
+<p>Release builds should also curtail logging. If you followed earlier guidance, you have properly instrumented code and can determine the point of first failure quickly and easily. Simply log the failure and and relevant parameters. Remove all <code class="language-plaintext highlighter-rouge">NSLog</code> and similar calls because sensitive information might be logged to a system logger. Worse, the data in the logs might be egressed by backup or sync. If your default configuration includes a logging level of ten or <em>maximum verbosity</em>, you probably lack stability and are trying to track problems in the field. That usually means your program or library is not ready for production.</p>
+
+<h2 id="test-builds">Test Builds</h2>
+
+<p>A Test build is closely related to a release build. In this build configuration, you want to be as close to production as possible, so you should be using <code class="language-plaintext highlighter-rouge">-O2</code>/<code class="language-plaintext highlighter-rouge">-O3</code>/<code class="language-plaintext highlighter-rouge">-Os</code> <code class="language-plaintext highlighter-rouge">-g1</code>/<code class="language-plaintext highlighter-rouge">-g2</code> and “Reptoline” configuration options. You will run your suite of <em>positive</em> and <em>negative</em> tests against the test build.</p>
+
+<p>You will also want to exercise all functions or methods provided by the program and not just the public interfaces, so everything should be made public. For example, all member functions public (C++ classes), all selectors (Objective C), all methods (Java), and all interfaces (library or shared object) should be made available for testing. As such, you should:</p>
+
+<ul>
+  <li>Add <code class="language-plaintext highlighter-rouge">-Dprotected=public</code> <code class="language-plaintext highlighter-rouge">-Dprivate=public</code> to <code class="language-plaintext highlighter-rouge">CFLAGS</code> and <code class="language-plaintext highlighter-rouge">CXXFLAGS</code></li>
+  <li>Change <code class="language-plaintext highlighter-rouge">__attribute__</code> <code class="language-plaintext highlighter-rouge">((visibility</code> <code class="language-plaintext highlighter-rouge">("hidden")))</code> to <code class="language-plaintext highlighter-rouge">__attribute__</code> <code class="language-plaintext highlighter-rouge">((visibility</code> <code class="language-plaintext highlighter-rouge">("default")))</code></li>
+</ul>
+
+<p>Many Object Oriented purist oppose testing private interfaces, but this is not about object oriented-ness. This (<em>q.v.</em>) is about building reliable and secure software.</p>
+
+<p>You should also concentrate on negative tests. Positive self tests are relatively useless except for functional and regression tests. Since this is your line of business or area of expertise, you should have the business logic correct when operating in a benign environment. A hostile or toxic environment is much more interesting, and that’s where you want to know how your library or program will fail in the field when under attack.</p>
+
+<h1 id="library-integration">Library Integration</h1>
+
+<p>You must properly integrate and utilize libraries in your program. Proper integration includes acceptance testing, configuring for your build system, identifying libraries you <em>should</em> be using, and correctly using the libraries. A well integrated library can compliment your code, and a poorly written library can detract from your program. Because a stable library with required functionality can be elusive and its tricky to integrate libraries, you should try to minimize dependencies and avoid third party libraries whenever possible.</p>
+
+<p>Acceptance testing a library is practically non-existent. The testing can be a simple code review or can include additional measures, such as negative self tests. If the library is defective or does not meet standards, you must fix it or reject the library. An example of lack of acceptance testing is <a href="http://www.agarri.fr/blog/index.html">Adobe’s inclusion of a defective Sablotron library</a>, which resulted in <a href="http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2012-1525">CVE-2012-1525</a>. Another example is the 10’s to 100’s of millions of vulnerable embedded devices due to defects in <code class="language-plaintext highlighter-rouge">libupnp</code>. While its popular to lay blame on others, the bottom line is you chose the library so you are responsible for it.</p>
+
+<p>You must also ensure the library is integrated into your build process. For example, the OpenSSL library should be configured <strong>without</strong> SSLv2, SSLv3 and compression since they are defective. That means <code class="language-plaintext highlighter-rouge">config</code> should be executed with <code class="language-plaintext highlighter-rouge">-no-comp</code> <code class="language-plaintext highlighter-rouge">-no-sslv2</code> and <code class="language-plaintext highlighter-rouge">-no-sslv3</code>. As an additional example, using STLPort your debug configuration should also define <code class="language-plaintext highlighter-rouge">_STLP_DEBUG=1</code>, <code class="language-plaintext highlighter-rouge">_STLP_USE_DEBUG_LIB=1</code>, <code class="language-plaintext highlighter-rouge">_STLP_DEBUG_ALLOC=1</code>, <code class="language-plaintext highlighter-rouge">_STLP_DEBUG_UNINITIALIZED=1</code> because the library offers the additional diagnostics during development.</p>
+
+<p>Debug builds also present an opportunity to use additional libraries to help locate problems in the code. For example, you should be using a memory checker such as <em>Debug Malloc Library (Dmalloc)</em> during development. If you are not using Dmalloc, then ensure you have an equivalent checker, such as GCC 4.8’s <code class="language-plaintext highlighter-rouge">-fsanitize=memory</code>. This is one area where one size clearly does not fit all.</p>
+
+<p>Using a library properly is always difficult, especially when there is no documentation. Review any hardening documents available for the library, and be sure to visit the library’s documentation to ensure proper API usage. If required, you might have to review code or step library code under the debugger to ensure there are no bugs or undocumented features.</p>
+
+<h1 id="static-analysis">Static Analysis</h1>
+
+<p>Compiler writers do a fantastic job of generating object code from source code. The process creates a lot of additional information useful in analyzing code. Compilers use the analysis to offer programmers warnings to help detect problems in their code, but the catch is you have to ask for them. After you ask for them, you should take time to understand what the underlying issue is when a statement is flagged. For example, compilers will warn you when comparing a signed integer to an unsigned integer because <code class="language-plaintext highlighter-rouge">-1</code> <code class="language-plaintext highlighter-rouge">&gt;</code> <code class="language-plaintext highlighter-rouge">1</code> after C/C++ promotion. At other times, you will need to back off some warnings to help separate the wheat from the chaff. For example, interface programming is a popular C++ paradigm, so <code class="language-plaintext highlighter-rouge">-Wno-unused-parameter</code> will probably be helpful with C++ code.</p>
+
+<p>You should consider a clean compile as a security gate. If you find its painful to turn warnings on, then you have likely been overlooking some of the finer points in the details. In addition, you should strive for multiple compilers and platforms support since each has its own personality (and interpretation of the C/C++ standards). By the time your core modules clean compile under Clang, GCC, ICC, and Visual Studio on the Linux and Windows platforms, your code will have many stability obstacles removed.</p>
+
+<p>When compiling programs with GCC, you should use the following flags to help detect errors in your programs. The options should be added to <code class="language-plaintext highlighter-rouge">CFLAGS</code> for a program with C source files, and <code class="language-plaintext highlighter-rouge">CXXFLAGS</code> for a program with C++ source files. Objective C developers should add their warnings to <code class="language-plaintext highlighter-rouge">CFLAGS</code>: <code class="language-plaintext highlighter-rouge">-Wall</code> <code class="language-plaintext highlighter-rouge">-Wextra</code> <code class="language-plaintext highlighter-rouge">-Wconversion</code> <code class="language-plaintext highlighter-rouge">(or</code> <code class="language-plaintext highlighter-rouge">-Wsign-conversion),</code> <code class="language-plaintext highlighter-rouge">-Wcast-align,</code> <code class="language-plaintext highlighter-rouge">-Wformat=2</code> <code class="language-plaintext highlighter-rouge">-Wformat-security,</code> <code class="language-plaintext highlighter-rouge">-fno-common,</code> <code class="language-plaintext highlighter-rouge">-Wmissing-prototypes,</code> <code class="language-plaintext highlighter-rouge">-Wmissing-declarations,</code> <code class="language-plaintext highlighter-rouge">-Wstrict-prototypes,</code> <code class="language-plaintext highlighter-rouge">-Wstrict-overflow,</code> <code class="language-plaintext highlighter-rouge">and</code> <code class="language-plaintext highlighter-rouge">-Wtrampolines</code>. C++ presents additional opportunities under GCC, and the flags include <code class="language-plaintext highlighter-rouge">-Woverloaded-virtual,</code> <code class="language-plaintext highlighter-rouge">-Wreorder,</code> <code class="language-plaintext highlighter-rouge">-Wsign-promo,</code> <code class="language-plaintext highlighter-rouge">-Wnon-virtual-dtor</code> and possibly <code class="language-plaintext highlighter-rouge">-Weffc++</code>. Finally, Objective C should include <code class="language-plaintext highlighter-rouge">-Wstrict-selector-match</code> and <code class="language-plaintext highlighter-rouge">-Wundeclared-selector</code>.</p>
+
+<p>For a Microsoft platform, you should use: <code class="language-plaintext highlighter-rouge">/W4</code>, <code class="language-plaintext highlighter-rouge">/Wall</code>, and <code class="language-plaintext highlighter-rouge">/analyze</code>. If you don’t use <code class="language-plaintext highlighter-rouge">/Wall</code>, Microsoft recommends using <code class="language-plaintext highlighter-rouge">/W4</code> and enabling C4191, C4242, C4263, C4264, C4265, C4266, C4302, C4826, C4905, C4906, and C4928. Finally, <code class="language-plaintext highlighter-rouge">/analyze</code> is Enterprise Code Analysis, which is freely available with the <a href="https://www.microsoft.com/en-us/download/details.aspx?id=21">Windows SDK for Windows Server 2008 and .NET Framework 3.5 SDK</a> (you don’t need Visual Studio Enterprise edition).</p>
+
+<p>For additional details on the GCC and Windows options and flags, see <em><a href="http://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html">GCC Options to Request or Suppress Warnings</a></em>, <em><a href="http://blogs.msdn.com/b/vcblog/archive/2010/12/14/off-by-default-compiler-warnings-in-visual-c.aspx">“Off By Default” Compiler Warnings in Visual C++</a></em>, and <em><a href="http://msdn.microsoft.com/en-us/magazine/cc337897.aspx">Protecting Your Code with Visual C++ Defenses</a></em>.</p>
+
+<h1 id="platform-security">Platform Security</h1>
+
+<p>Integrating with platform security is essential to a defensive posture. Platform security will be your safety umbrella if someone discovers a bug with security implications - and you should always have it with you. For example, if your parser fails, then no-execute stacks and heaps can turn a 0-day into an annoying crash. Not integrating often leaves your users and customers vulnerable to malicious code. While you may not be familiar with some of the flags, you are probably familiar with the effects of omitting them. For example, Android’s Gingerbreak overwrote the Global Offset Table (GOT) in the ELF headers, and could have been avoided with <code class="language-plaintext highlighter-rouge">-z,relro</code>.</p>
+
+<p>When integrating with platform security on a Linux host, you should use the following flags: <code class="language-plaintext highlighter-rouge">-fPIE</code> (compiler) and <code class="language-plaintext highlighter-rouge">-pie</code> (linker), -fstack-protector-all (or -fstack-protector), <code class="language-plaintext highlighter-rouge">-z,noexecstack</code>, <code class="language-plaintext highlighter-rouge">-z,now</code>, <code class="language-plaintext highlighter-rouge">-z,relro</code>. If available, you should also use <code class="language-plaintext highlighter-rouge">_FORTIFY_SOURCES=2</code> (or <code class="language-plaintext highlighter-rouge">_FORTIFY_SOURCES=1</code> on Android 4.2), <code class="language-plaintext highlighter-rouge">-fsanitize=address</code> and <code class="language-plaintext highlighter-rouge">-fsanitize=thread</code> (the last two should be used in debug configurations). <code class="language-plaintext highlighter-rouge">-z,nodlopen</code> and <code class="language-plaintext highlighter-rouge">-z,nodump</code> might help in reducing an attacker’s ability to load and manipulate a shared object. On Gentoo and other systems with no-exec heaps, you should also use <code class="language-plaintext highlighter-rouge">-z,noexecheap</code>.</p>
+
+<p>Windows programs should include <code class="language-plaintext highlighter-rouge">/dynamicbase</code>, <code class="language-plaintext highlighter-rouge">/NXCOMPAT</code>, <code class="language-plaintext highlighter-rouge">/GS</code>, and <code class="language-plaintext highlighter-rouge">/SafeSEH</code> to ensure address space layout randomizations (ASLR), data execution prevention (DEP), use of stack cookies, and thwart exception handler overwrites.</p>
+
+<p>For additional details on the GCC and Windows options and flags, see <em><a href="http://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html">GCC Options Summary</a></em> and <em><a href="http://msdn.microsoft.com/en-us/magazine/cc337897.aspx">Protecting Your Code with Visual C++ Defenses</a></em>.</p>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>C-Based Toolchain Hardening</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet">Choosing and Using Security Questions Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+

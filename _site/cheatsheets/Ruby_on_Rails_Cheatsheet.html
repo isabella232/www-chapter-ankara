@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Ruby on Rails Cheatsheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Ruby on Rails Cheatsheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Ruby on Rails Cheatsheet | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Ruby on Rails Cheatsheet | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Ruby_on_Rails_Cheatsheet.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Ruby+on+Rails+Cheatsheet" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Ruby on Rails Cheatsheet</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>REST Security Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet">SAML Security Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p>This <em>Cheatsheet</em> intends to provide quick basic Ruby on Rails security tips for developers. It complements, augments or emphasizes points brought up in the <a href="http://guides.rubyonrails.org/security.html">rails security guide</a> from rails core.</p>
+
+<p>The Rails framework abstracts developers from quite a bit of tedious work and provides the means to accomplish complex tasks quickly and with ease. New developers, those unfamiliar with the inner-workings of Rails, likely need a basic set of guidelines to secure fundamental aspects of their application. The intended purpose of this doc is to be that guide.</p>
+
+<h1 id="items">Items</h1>
+
+<h2 id="command-injection">Command Injection</h2>
+
+<p>Ruby offers a function called “eval” which will dynamically build new Ruby code based on Strings. It also has a number of ways to call system commands.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">eval</span><span class="p">(</span><span class="s2">"ruby code here"</span><span class="p">)</span>
+<span class="no">System</span><span class="p">(</span><span class="s2">"os command here"</span><span class="p">)</span>
+<span class="sb">`ls -al /`</span>   <span class="p">(</span><span class="n">backticks</span> <span class="n">contain</span> <span class="n">os</span> <span class="n">command</span><span class="p">)</span>
+<span class="no">Kernel</span><span class="p">.</span><span class="nf">exec</span><span class="p">(</span><span class="s2">"os command here"</span><span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="s2">"</span><span class="se">\|</span><span class="s2"> os command here"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>While the power of these commands is quite useful, extreme care should be taken when using them in a Rails based application. Usually, its just a bad idea. If need be, a whitelist of possible values should be used and any input should be validated as thoroughly as possible.</p>
+
+<p>The Ruby Security Reviewer’s Guide has a <a href="http://code.google.com/p/ruby-security/wiki/Guide#Good_ol%27_shell_injection">section on injection</a> and there are a number of OWASP references for it, starting at the top: <a href="https://www.owasp.org/index.php/Command_Injection">Command Injection</a>.</p>
+
+<h2 id="sql-injection">SQL Injection</h2>
+
+<p>Ruby on Rails is often used with an ORM called ActiveRecord, though it is flexible and can be used with other data sources. Typically very simple Rails applications use methods on the Rails models to query data. Many use cases protect for SQL Injection out of the box. However, it is possible to write code that allows for SQL Injection.</p>
+
+<p>Here is an example (Rails 2.X style):</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vi">@projects</span> <span class="o">=</span> <span class="no">Project</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="s2">"name like </span><span class="si">#{</span><span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A Rails 3.X example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span>
+<span class="vi">@projects</span> <span class="o">=</span> <span class="no">Project</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="s2">"name like '"</span> <span class="o">+</span> <span class="nb">name</span> <span class="o">+</span> <span class="s2">"'"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>In both of these cases, the statement is injectable because the name parameter is not escaped.</p>
+
+<p>Here is the idiom for building this kind of statement:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vi">@projects</span> <span class="o">=</span> <span class="no">Project</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="p">[</span> <span class="s2">"name like ?"</span><span class="p">,</span> <span class="s2">"</span><span class="si">#{</span><span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<p>An AREL based solution:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vi">@projects</span> <span class="o">=</span> <span class="no">Project</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="s2">"name like ?"</span><span class="p">,</span> <span class="s2">"%</span><span class="si">#{</span><span class="n">params</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span><span class="si">}</span><span class="s2">%"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Use caution not to build SQL statements based on user controlled input. A list of more realistic and detailed examples is here: <a href="http://rails-sqli.org">rails-sqli.org</a>. OWASP has extensive information about <a href="https://www.owasp.org/index.php/SQL_Injection">SQL Injection</a>.</p>
+
+<h2 id="cross-site-scripting-xss">Cross-site Scripting (XSS)</h2>
+
+<p>By default, in Rails 3.0 and up protection against XSS comes as the default behavior. When string data is shown in views, it is escaped prior to being sent back to the browser. This goes a long way, but there are common cases where developers bypass this protection - for example to enable rich text editing. In the event that you want to pass variables to the front end with tags intact, it is tempting to do the following in your .erb file (ruby markup).</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Wrong! Older rails versions, do not do this!</span>
+<span class="o">&lt;</span><span class="sx">%= raw @product.name %&gt; 
+
+# Wrong! Newer rails versions, do not do this!
+&lt;%=</span> <span class="vi">@product</span><span class="p">.</span><span class="nf">name</span><span class="p">.</span><span class="nf">html_safe</span> <span class="sx">%&gt;
+
+# Wrong! Newer rails versions, do not do this!
+&lt;%= content_tag @product.name %&gt;</span>
+</code></pre></div></div>
+
+<p>Unfortunately, any field that uses <code class="language-plaintext highlighter-rouge">raw</code>, <code class="language-plaintext highlighter-rouge">html_safe</code>, <code class="language-plaintext highlighter-rouge">content_tag</code> or similar like this will be a potential XSS target. Note that there are also widespread misunderstandings about <code class="language-plaintext highlighter-rouge">html_safe()</code>.</p>
+
+<p><a href="http://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html">This writeup</a> describes the underlying SafeBuffer mechanism in detail. Other tags that change the way strings are prepared for output can introduce similar issues, including content_tag.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">content_tag</span><span class="p">(</span><span class="s2">"/&gt;&lt;script&gt;alert('hack!');&lt;/script&gt;"</span><span class="p">)</span> <span class="c1"># XSS example</span>
+<span class="c1"># produces: &lt;/&gt;&lt;script&gt;alert('hack!');&lt;/script&gt;&gt;&lt;//&gt;&lt;script&gt;alert('hack!');&lt;/script&gt;&gt;</span>
+</code></pre></div></div>
+
+<p>The method <code class="language-plaintext highlighter-rouge">html_safe</code> of String is somewhat confusingly named. It means that we know for sure the content of the string is safe to include in HTML without escaping. <strong>This method itself is un-safe!</strong></p>
+
+<p>If you must accept HTML content from users, consider a markup language for rich text in an application (Examples include: markdown and textile) and disallow HTML tags. This helps ensures that the input accepted doesn’t include HTML content that could be malicious.</p>
+
+<p>If you cannot restrict your users from entering HTML, consider implementing content security policy to disallow the execution of any javascript. And finally, consider using the <code class="language-plaintext highlighter-rouge">#sanitize</code> method that let’s you whitelist allowed tags. Be careful, this method has been shown to be flawed numerous times and will never be a complete solution.</p>
+
+<p>An often overlooked XSS attack vector for older versions of rails is the <code class="language-plaintext highlighter-rouge">href</code> value of a link:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="sx">%= link_to "Personal Website", @user.website %&gt;
+</span></code></pre></div></div>
+
+<p>If <code class="language-plaintext highlighter-rouge">@user.website</code> contains a link that starts with <code class="language-plaintext highlighter-rouge">javascript:</code>, the content will execute when a user clicks the generated link:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"javascript:alert('Haxored')"</span><span class="nt">&gt;</span>Personal Website<span class="nt">&lt;/a&gt;</span>
+</code></pre></div></div>
+
+<p>Newer Rails versions escape such links in a better way.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">link_to</span> <span class="s2">"Personal Website"</span><span class="p">,</span> <span class="s1">'javascript:alert(1);'</span><span class="p">.</span><span class="nf">html_safe</span><span class="p">()</span>
+<span class="c1"># Will generate:</span>
+<span class="c1"># "&lt;a href="javascript:alert(1);"&gt;Personal Website&lt;/a&gt;"</span>
+</code></pre></div></div>
+
+<p>Using <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security</a> Policy is one more security measure to forbid execution for links starting with <code class="language-plaintext highlighter-rouge">javascript:</code> .</p>
+
+<p><a href="https://github.com/presidentbeef/brakeman">Brakeman scanner</a> helps in finding XSS problems in Rails apps.</p>
+
+<p>OWASP provides more general information about XSS in a top level page: <a href="https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29">Cross-site Scripting (XSS)</a>.</p>
+
+<h2 id="sessions">Sessions</h2>
+
+<p>By default, Ruby on Rails uses a Cookie based session store. What that means is that unless you change something, the session will not expire on the server. That means that some default applications may be vulnerable to replay attacks. It also means that sensitive information should never be put in the session.</p>
+
+<p>The best practice is to use a database based session, which thankfully is very easy with Rails:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Project</span><span class="o">::</span><span class="no">Application</span><span class="p">.</span><span class="nf">config</span><span class="p">.</span><span class="nf">session_store</span> <span class="ss">:active_record_store</span>
+</code></pre></div></div>
+
+<p>There is an <a href="/cheatsheets/Session_Management_Cheat_Sheet.html">Session Management Cheat Sheet</a>.</p>
+
+<h2 id="authentication">Authentication</h2>
+
+<p>As with all sensitive data, start securing your authentication with enabling TLS in your configuration:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/environments/production.rb</span>
+<span class="c1"># Force all access to the app over SSL, use Strict-Transport-Security, </span>
+<span class="c1"># and use secure cookies</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">force_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+</code></pre></div></div>
+
+<p>Uncomment the line 3 as above in your configuration.</p>
+
+<p>Generally speaking, Rails does not provide authentication by itself. However, most developers using Rails leverage libraries such as Devise or AuthLogic to provide authentication.</p>
+
+<p>To enable authentication it is possible to use Devise gem.</p>
+
+<p>Install it using:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gem <span class="s1">'devise'</span>
+</code></pre></div></div>
+
+<p>Then install it to the user model:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>rails generate devise:install
+</code></pre></div></div>
+
+<p>Next, specify which resources (routes) require authenticated access in routes:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">routes</span><span class="p">.</span><span class="nf">draw</span> <span class="k">do</span>
+  <span class="n">authenticate</span> <span class="ss">:user</span> <span class="k">do</span>
+    <span class="n">resources</span> <span class="ss">:something</span> <span class="k">do</span>  <span class="c1"># these resource require authentication</span>
+      <span class="o">...</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">devise_for</span> <span class="ss">:users</span> <span class="c1"># sign-up/-in/out routes</span>
+
+  <span class="n">root</span> <span class="ss">to: </span><span class="s1">'static#home'</span> <span class="c1"># no authentication required</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>To enforce password complexity, it is possible to use <a href="https://github.com/bitzesty/devise_zxcvbn">zxcvbn gem</a>. Configure your user model with it:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+  <span class="n">devise</span> <span class="ss">:database_authenticatable</span><span class="p">,</span>
+    <span class="c1"># other devise features, then</span>
+    <span class="ss">:zxcvbnable</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>And configure the required password complexity:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># in config/initializers/devise.rb</span>
+<span class="no">Devise</span><span class="p">.</span><span class="nf">setup</span> <span class="k">do</span> <span class="p">\</span><span class="o">|</span><span class="n">config</span><span class="p">\</span><span class="o">|</span>
+  <span class="c1"># zxcvbn score for devise</span>
+  <span class="n">config</span><span class="p">.</span><span class="nf">min_password_score</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># complexity score here.</span>
+  <span class="o">...</span>
+</code></pre></div></div>
+
+<p>You can try out <a href="https://github.com/qutorial/revise">this PoC</a>, to learn more about it.</p>
+
+<p>Next, <a href="https://github.com/omniauth/omniauth">omniauth gem</a> allows for multiple strategies for authentication. Using it one can configure secure authentication with Facebook, LDAP and many other providers. Read on <a href="https://github.com/omniauth/omniauth#integrating-omniauth-into-your-application">here</a>.</p>
+
+<h3 id="token-authentication">Token Authentication</h3>
+
+<p>Devise usually uses Cookies for authentication.</p>
+
+<p>In the case token authentication is wished instead, it could be implemented with a gem <a href="https://github.com/lynndylanhurley/devise_token_auth">devise_token_auth</a>.</p>
+
+<p>It supports multiple front end technologies, for example angular2-token.</p>
+
+<p>This gem is configured similar to the devise gem itself. It also requires omniauth as a dependency.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># token-based authentication</span>
+<span class="nv">$ </span>gem <span class="s1">'devise_token_auth'</span>
+<span class="nv">$ </span>gem <span class="s1">'omniauth'</span>
+</code></pre></div></div>
+
+<p>Then a route is defined:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mount_devise_token_auth_for</span><span class="err"> </span><span class="s1">'User'</span><span class="p">,</span><span class="err"> </span><span class="n">at</span><span class="p">:</span><span class="err"> </span><span class="s1">'auth'</span>
+</code></pre></div></div>
+
+<p>And the User model is modified accordingly.</p>
+
+<p>These actions can be done with one command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>rails g devise_token_auth:install [USER_CLASS] [MOUNT_PATH]
+</code></pre></div></div>
+
+<p>You may need to edit the generated migration to avoid unnecessary fields and/or field duplication depending on your use case.</p>
+
+<p>Note: when you use only token authentication, there is no more need in <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">CSRF</a> protection in controllers. If you use both ways: cookies and tokens, the paths where cookies are used for authentication still must be protected from forgery!</p>
+
+<p>There is an <a href="/cheatsheets/Authentication_Cheat_Sheet.html">Authentication Cheat Sheet</a>.</p>
+
+<h2 id="insecure-direct-object-reference-or-forceful-browsing">Insecure Direct Object Reference or Forceful Browsing</h2>
+
+<p>By default, Ruby on Rails apps use a RESTful uri structure. That means that paths are often intuitive and guessable. To protect against a user trying to access or modify data that belongs to another user, it is important to specifically control actions. Out of the gate on a vanilla Rails application, there is no such built in protection. It is possible to do this by hand at the controller level.</p>
+
+<p>It is also possible, and probably recommended, to consider resource-based access control libraries such as <a href="https://github.com/CanCanCommunity/cancancan">cancancan</a> (cancan replacement) or <a href="https://github.com/elabs/pundit">pundit</a> to do this. This ensures that all operations on a database object are authorized by the business logic of the application.</p>
+
+<p>More general information about this class of vulnerability is in the <a href="https://www.owasp.org/index.php/Top_10_2010-A4-Insecure_Direct_Object_References">OWASP Top 10 Page</a>.</p>
+
+<h2 id="csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</h2>
+
+<p>Ruby on Rails has specific, built in support for CSRF tokens. To enable it, or ensure that it is enabled, find the base <code class="language-plaintext highlighter-rouge">ApplicationController</code> and look for a directive such as the following:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
+    <span class="n">protect_from_forgery</span>
+</code></pre></div></div>
+
+<p>Note that the syntax for this type of control includes a way to add exceptions. Exceptions may be useful for API’s or other reasons - but should be reviewed and consciously included. In the example below, the Rails ProjectController will not provide <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">CSRF</a> protection for the show method.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ProjectController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+    <span class="n">protect_from_forgery</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="ss">:show</span>
+</code></pre></div></div>
+
+<p>Also note that by default Rails does not provide CSRF protection for any HTTP <code class="language-plaintext highlighter-rouge">GET</code> request.</p>
+
+<p><strong>Note:</strong> if you use token authentication only, there is no need to protect from CSRF in controllers like this. If cookie-based authentication is used on some paths, then the protections is still required on them.</p>
+
+<p>There is a top level OWASP page for <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">Cross-Site Request Forgery (CSRF)</a>.</p>
+
+<h2 id="mass-assignment-and-strong-parameters">Mass Assignment and Strong Parameters</h2>
+
+<p>Although the major issue with <a href="https://ropesec.com/articles/mass-assignment/">Mass Assignment</a> has been fixed by default in base Rails specifically when generating new projects, it still applies to older and upgraded projects so it is important to understand the issue and to ensure that only attributes that are intended to be modifiable are exposed.</p>
+
+<p>When working with a model, the attributes on the model will not be accessible to forms being posted unless a programmer explicitly indicates that:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Project</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+    <span class="n">attr_accessible</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:admin</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>With the admin attribute accessible based on the example above, the following could work:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl -d <span class="s2">"project[name]=triage&amp;project[admin]=1"</span> host:port/projects
+</code></pre></div></div>
+
+<p>Review accessible attributes to ensure that they should be accessible. If you are working in Rails &lt; 3.2.3 you should ensure that your attributes are whitelisted with the following:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">config</span><span class="p">.</span><span class="nf">active_record</span><span class="p">.</span><span class="nf">whitelist_attributes</span> <span class="o">=</span> <span class="kp">true</span>
+</code></pre></div></div>
+
+<p>In Rails 4.0 strong parameters will be the recommended approach for handling attribute visibility. It is also possible to use the strong_parameters gem with Rails 3.x, and the strong_parameters_rails2 gem for Rails 2.3.x applications.</p>
+
+<h2 id="redirects-and-forwards">Redirects and Forwards</h2>
+
+<p>Web applications often require the ability to dynamically redirect users based on client-supplied data. To clarify, dynamic redirection usually entails the client including a URL in a parameter within a request to the application. Once received by the application, the user is redirected to the URL specified in the request.</p>
+
+<p>For example:</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://www.example.com/redirect?url=http://www.example_commerce_site.com/checkout</code></p>
+
+<p>The above request would redirect the user to <code class="language-plaintext highlighter-rouge">http://www.example.com/checkout</code>. The security concern associated with this functionality is leveraging an organization’s trusted brand to phish users and trick them into visiting a malicious site, in our example, <code class="language-plaintext highlighter-rouge">badhacker.com</code>.</p>
+
+<p>Example:</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://www.example.com/redirect?url=http://badhacker.com</code></p>
+
+<p>The most basic, but restrictive protection is to use the <code class="language-plaintext highlighter-rouge">:only_path</code> option. Setting this to true will essentially strip out any host information. However, the <code class="language-plaintext highlighter-rouge">:only_path</code> option must be part of the first argument. If the first argument is not a hash table, then there is no way to pass in this option. In the absence of a custom helper or whitelist, this is one approach that can work:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">begin</span>
+  <span class="k">if</span> <span class="n">path</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="ss">:url</span><span class="p">]).</span><span class="nf">path</span>
+    <span class="n">redirect_to</span> <span class="n">path</span>
+  <span class="k">end</span>
+<span class="k">rescue</span> <span class="no">URI</span><span class="o">::</span><span class="no">InvalidURIError</span>
+  <span class="n">redirect_to</span> <span class="s1">'/'</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>If matching user input against a list of approved sites or TLDs against regular expression is a must, it makes sense to leverage a library such as <code class="language-plaintext highlighter-rouge">URI.parse()</code> to obtain the host and then take the host value and match it against regular expression patterns. Those regular expressions must, at a minimum, have anchors or there is a greater chance of an attacker bypassing the validation routine.</p>
+
+<p>Example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nb">require</span> <span class="s1">'uri'</span>
+  <span class="n">host</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"</span><span class="si">#{</span><span class="n">params</span><span class="p">[</span><span class="ss">:url</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">).</span><span class="nf">host</span>
+  <span class="c1"># this can be vulnerable to javascript://trusted.com/%0Aalert(0) </span>
+  <span class="c1"># so check .scheme and .port too</span>
+  <span class="n">validation_routine</span><span class="p">(</span><span class="n">host</span><span class="p">)</span> <span class="k">if</span> <span class="n">host</span>    
+  <span class="k">def</span> <span class="nf">validation_routine</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+      <span class="c1"># Validation routine where we use  \A and \z as anchors *not* ^ and $</span>
+      <span class="c1"># you could also check the host value against a whitelist</span>
+  <span class="k">end</span>
+</code></pre></div></div>
+
+<p>Also blind redirecting to user input parameter can lead to XSS.</p>
+
+<p>Example code:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redirect_to</span> <span class="n">params</span><span class="p">[</span><span class="ss">:to</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Will give this URL:</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://example.com/redirect?to[status]=200&amp;to[protocol]=javascript:alert(0)//</code></p>
+
+<p>The obvious fix for this type of vulnerability is to restrict to specific Top-Level Domains (TLDs), statically define specific sites, or map a key to it’s value.</p>
+
+<p>Example code:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">ACCEPTABLE_URLS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'our_app_1'</span> <span class="o">=&gt;</span> <span class="s2">"https://www.example_commerce_site.com/checkout"</span><span class="p">,</span>
+    <span class="s1">'our_app_2'</span> <span class="o">=&gt;</span> <span class="s2">"https://www.example_user_site.com/change_settings"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Will give this URL:</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://www.example.com/redirect?url=our_app_1</code></p>
+
+<p>Redirection handling code:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">redirect</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="no">ACCEPTABLE_URLS</span><span class="p">[</span><span class="s2">"</span><span class="si">#{</span><span class="n">params</span><span class="p">[</span><span class="ss">:url</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+    <span class="n">redirect_to</span> <span class="n">url</span> <span class="k">if</span> <span class="n">url</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>There is a more general OWASP resource about <a href="/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">unvalidated redirects and forwards</a>.</p>
+
+<h2 id="dynamic-render-paths">Dynamic Render Paths</h2>
+
+<p>In Rails, controller actions and views can dynamically determine which view or partial to render by calling the <code class="language-plaintext highlighter-rouge">render</code> method. If user input is used in or for the template name, an attacker could cause the application to render an arbitrary view, such as an administrative page.</p>
+
+<p>Care should be taken when using user input to determine which view to render. If possible, avoid any user input in the name or path to the view.</p>
+
+<h2 id="cross-origin-resource-sharing">Cross Origin Resource Sharing</h2>
+
+<p>Occasionally, a need arises to share resources with another domain. For example, a file-upload function that sends data via an AJAX request to another domain. In these cases, the same-origin rules followed by web browsers must be bent. Modern browsers, in compliance with HTML5 standards, will allow this to occur but in order to do this; a couple precautions must be taken.</p>
+
+<p>When using a nonstandard HTTP construct, such as an atypical Content-Type header, for example, the following applies:</p>
+
+<p>The receiving site should whitelist only those domains allowed to make such requests as well as set the <code class="language-plaintext highlighter-rouge">Access-Control-Allow-Origin</code> header in both the response to the <code class="language-plaintext highlighter-rouge">OPTIONS</code> request and <code class="language-plaintext highlighter-rouge">POST</code> request. This is because the OPTIONS request is sent first, in order to determine if the remote or receiving site allows the requesting domain. Next, a second request, a <code class="language-plaintext highlighter-rouge">POST</code> request, is sent. Once again, the header must be set in order for the transaction to be shown as successful.</p>
+
+<p>When standard HTTP constructs are used:</p>
+
+<p><em>The request is sent and the browser, upon receiving a response, inspects the response headers in order to determine if the response can and should be processed.</em></p>
+
+<p>Whitelist in Rails:</p>
+
+<p><strong>Gemfile</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gem <span class="s1">'rack-cors'</span>, :require <span class="o">=&gt;</span> <span class="s1">'rack/cors'</span>
+</code></pre></div></div>
+
+<p><strong>config/application.rb</strong></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nn">Sample</span>
+  <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">middleware</span><span class="p">.</span><span class="nf">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Cors</span> <span class="k">do</span>
+      <span class="n">allow</span> <span class="k">do</span>
+        <span class="n">origins</span> <span class="s1">'someserver.example.com'</span>
+        <span class="n">resource</span> <span class="sr">%r{/users/</span><span class="se">\d</span><span class="sr">+.json}</span><span class="p">,</span>
+        <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'Origin'</span><span class="p">,</span> <span class="s1">'Accept'</span><span class="p">,</span> <span class="s1">'Content-Type'</span><span class="p">],</span>
+        <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:post</span><span class="p">,</span> <span class="ss">:get</span><span class="p">]</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="security-related-headers">Security-related headers</h2>
+
+<p>To set a header value, simply access the response.headers object as a hash inside your controller (often in a before/after_filter).</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">response</span><span class="p">.</span><span class="nf">headers</span><span class="p">[</span><span class="s1">'X-header-name'</span><span class="p">]</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="s1">'value'</span>
+</code></pre></div></div>
+
+<p><strong>Rails 4</strong> provides the <code class="language-plaintext highlighter-rouge">default_headers</code> functionality that will automatically apply the values supplied. This works for most headers in almost all cases.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Response</span><span class="p">.</span><span class="nf">default_headers</span> <span class="o">=</span> <span class="p">{</span>	  	
+   <span class="s1">'X-Frame-Options'</span> <span class="o">=&gt;</span> <span class="s1">'SAMEORIGIN'</span><span class="p">,</span> 	
+   <span class="s1">'X-Content-Type-Options'</span> <span class="o">=&gt;</span> <span class="s1">'nosniff'</span><span class="p">,</span>	  	
+   <span class="s1">'X-XSS-Protection'</span> <span class="o">=&gt;</span> <span class="s1">'1;'</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><a href="https://www.owasp.org/index.php/OWASP_Secure_Headers_Project#hsts">Strict transport security</a> is a special case, it is set in an environment file (e.g. <code class="language-plaintext highlighter-rouge">production.rb</code>)</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">config</span><span class="p">.</span><span class="nf">force_ssl</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="kp">true</span>
+</code></pre></div></div>
+
+<p>For those not on the edge, there is a library (<a href="https://github.com/twitter/secureheaders">secure_headers</a>) for the same behavior with content security policy abstraction provided. It will automatically apply logic based on the user agent to produce a concise set of headers.</p>
+
+<h2 id="business-logic-bugs">Business Logic Bugs</h2>
+
+<p>Any application in any technology can contain business logic errors that result in security bugs. Business logic bugs are difficult to impossible to detect using automated tools. The best ways to prevent business logic security bugs are to do code review, pair program and write unit tests.</p>
+
+<h2 id="attack-surface">Attack Surface</h2>
+
+<p>Generally speaking, Rails avoids open redirect and path traversal types of vulnerabilities because of its /config/routes.rb file which dictates what URL’s should be accessible and handled by which controllers. The routes file is a great place to look when thinking about the scope of the attack surface.</p>
+
+<p>An example might be as follows:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># this is an example of what NOT to do</span>
+<span class="n">match</span><span class="err"> </span><span class="s1">':controller(/:action(/:id(.:format)))'</span><span class="err"> </span>
+</code></pre></div></div>
+
+<p>In this case, this route allows any public method on any controller to be called as an action. As a developer, you want to make sure that users can only reach the controller methods intended and in the way intended.</p>
+
+<h2 id="sensitive-files">Sensitive Files</h2>
+
+<p>Many Ruby on Rails apps are open source and hosted on publicly available source code repositories. Whether that is the case or the code is committed to a corporate source control system, there are certain files that should be either excluded or carefully managed.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/config/database.yml                 -  May contain production credentials.
+/config/initializers/secret_token.rb -  Contains a secret used to hash session cookie.
+/db/seeds.rb                         -  May contain seed data including bootstrap admin user.
+/db/development.sqlite3              -  May contain real data. 
+</code></pre></div></div>
+
+<h2 id="encryption">Encryption</h2>
+
+<p>Rails uses OS encryption. Generally speaking, it is always a bad idea to write your own encryption.</p>
+
+<p>Devise by default uses bcrypt for password hashing, which is an appropriate solution.</p>
+
+<p>Typically, the following config causes the 10 stretches for production: <code class="language-plaintext highlighter-rouge">/config/initializers/devise.rb</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">config</span><span class="p">.</span><span class="nf">stretches</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="no">Rails</span><span class="p">.</span><span class="nf">env</span><span class="p">.</span><span class="nf">test?</span><span class="err"> </span><span class="p">?</span><span class="err"> </span><span class="mi">1</span><span class="err"> </span><span class="p">:</span><span class="err"> </span><span class="mi">10</span>
+</code></pre></div></div>
+
+<h1 id="updating-rails-and-having-a-process-for-updating-dependencies">Updating Rails and Having a Process for Updating Dependencies</h1>
+
+<p>In early 2013, a number of critical vulnerabilities were identified in the Rails Framework. Organizations that had fallen behind current versions had more trouble updating and harder decisions along the way, including patching the source code for the framework itself.</p>
+
+<p>An additional concern with Ruby applications in general is that most libraries (gems) are not signed by their authors. It is literally impossible to build a Rails based project with libraries that come from trusted sources. One good practice might be to audit the gems you are using.</p>
+
+<p>In general, it is important to have a process for updating dependencies. An example process might define three mechanisms for triggering an update of response:</p>
+
+<ul>
+  <li>Every month/quarter dependencies in general are updated.</li>
+  <li>Every week important security vulnerabilities are taken into account and potentially trigger an update.</li>
+  <li>In EXCEPTIONAL conditions, emergency updates may need to be applied.</li>
+</ul>
+
+<h1 id="tools">Tools</h1>
+
+<p>Use <a href="http://brakemanscanner.org/">brakeman</a>, an open source code analysis tool for Rails applications, to identify many potential issues. It will not necessarily produce comprehensive security findings, but it can find easily exposed issues. A great way to see potential issues in Rails is to review the brakeman documentation of warning types.</p>
+
+<p>There are emerging tools that can be used to track security issues in dependency sets, like <a href="https://appcanary.com">this</a> and <a href="https://gemnasium.com">this</a>.</p>
+
+<p>Another area of tooling is the security testing tool <a href="http://gauntlt.org">Gauntlt</a> which is built on cucumber and uses gherkin syntax to define attack files.</p>
+
+<p>Launched in May 2013 and very similar to brakeman scanner, the <a href="https://github.com/thesp0nge/dawnscanner">dawnscanner</a> rubygem is a static analyzer for security issues that work with Rails, Sinatra and Padrino web applications. Version 0.60 has more than 30 ruby specific CVE security checks and future releases custom checks against Cross Site Scripting and SQL Injections will be added.</p>
+
+<h1 id="related-articles-and-references">Related Articles and References</h1>
+
+<ul>
+  <li><a href="http://guides.rubyonrails.org/security.html">The Official Rails Security Guide</a></li>
+  <li><a href="https://www.owasp.org/index.php/Category:OWASP_Ruby_on_Rails_Security_Guide_V2">OWASP Ruby on Rails Security Guide</a></li>
+  <li><a href="http://code.google.com/p/ruby-security/wiki/Guide">The Ruby Security Reviewers Guide</a></li>
+  <li><a href="https://groups.google.com/forum/?fromgroups#!forum/rubyonrails-security">The Ruby on Rails Security Mailing List</a></li>
+  <li><a href="http://blog.codeclimate.com/blog/2013/03/27/rails-insecure-defaults/">Rails Insecure Defaults</a></li>
+</ul>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>REST Security Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet">SAML Security Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Injection Prevention Cheat Sheet in Java on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Injection Prevention Cheat Sheet in Java on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Injection Prevention Cheat Sheet in Java | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Injection Prevention Cheat Sheet in Java | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Injection+Prevention+Cheat+Sheet+in+Java" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Injection Prevention Cheat Sheet in Java</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>Injection Prevention Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet">Input Validation Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p>This document has for objective to provide some tips to handle <em>Injection</em> into Java application code.</p>
+
+<p>Sample codes used in tips are located <a href="https://github.com/righettod/injection-cheat-sheets">here</a>.</p>
+
+<h1 id="what-is-injection-">What is Injection ?</h1>
+
+<p><a href="https://www.owasp.org/index.php/Top_10_2007-Injection_Flaws">Injection</a> in OWASP Top 10 is defined as following:</p>
+
+<p><em>Consider anyone who can send untrusted data to the system, including external users, internal users, and administrators.</em></p>
+
+<h1 id="general-advices-to-prevent-injection">General advices to prevent Injection</h1>
+
+<p>The following point can be applied, in a general way, to prevent <em>Injection</em> issue:</p>
+
+<ol>
+  <li>Apply <strong>Input Validation</strong> (using whitelist approach) combined with <strong>Output Sanitizing+Escaping</strong> on user input/output.</li>
+  <li>If you need to interact with system, try to use API features provided by your technology stack (Java / .Net / PHP…) instead of building command.</li>
+</ol>
+
+<p>Additional advices are provided on this <a href="/cheatsheets/Input_Validation_Cheat_Sheet.html">cheatsheet</a>.</p>
+
+<h1 id="specific-injection-types">Specific Injection types</h1>
+
+<p><em>Examples in this section will be provided in Java technology (see Maven project associated) but advices are applicable to others technologies like .Net / PHP / Ruby / Python…</em></p>
+
+<h2 id="sql">SQL</h2>
+
+<h3 id="symptom">Symptom</h3>
+
+<p>Injection of this type occur when the application use untrusted user input to build a SQL query using a String and execute it.</p>
+
+<h3 id="how-to-prevent">How to prevent</h3>
+
+<p>Use <em>Query Parameterization</em> in order to prevent injection.</p>
+
+<h3 id="example">Example</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*No DB framework used here in order to show the real use of 
+  Prepared Statement from Java API*/</span>
+<span class="cm">/*Open connection with H2 database and use it*/</span>
+<span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"org.h2.Driver"</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">jdbcUrl</span> <span class="o">=</span> <span class="s">"jdbc:h2:file:"</span> <span class="o">+</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"."</span><span class="o">).</span><span class="na">getAbsolutePath</span><span class="o">()</span> <span class="o">+</span> <span class="s">"/target/db"</span><span class="o">;</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">Connection</span> <span class="n">con</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">jdbcUrl</span><span class="o">))</span> <span class="o">{</span>
+
+    <span class="cm">/* Sample A: Select data using Prepared Statement*/</span>
+    <span class="nc">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">"select * from color where friendly_name = ?"</span><span class="o">;</span>
+    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">colors</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+    <span class="k">try</span> <span class="o">(</span><span class="nc">PreparedStatement</span> <span class="n">pStatement</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">query</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"yellow"</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">(</span><span class="nc">ResultSet</span> <span class="n">rSet</span> <span class="o">=</span> <span class="n">pStatement</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">rSet</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">colors</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rSet</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">colors</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">colors</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"yellow"</span><span class="o">));</span>
+
+    <span class="cm">/* Sample B: Insert data using Prepared Statement*/</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">"insert into color(friendly_name, red, green, blue) values(?, ?, ?, ?)"</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">insertedRecordCount</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">(</span><span class="nc">PreparedStatement</span> <span class="n">pStatement</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">query</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"orange"</span><span class="o">);</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">239</span><span class="o">);</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">125</span><span class="o">);</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">11</span><span class="o">);</span>
+        <span class="n">insertedRecordCount</span> <span class="o">=</span> <span class="n">pStatement</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">insertedRecordCount</span><span class="o">);</span>
+
+   <span class="cm">/* Sample C: Update data using Prepared Statement*/</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">"update color set blue = ? where friendly_name = ?"</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">updatedRecordCount</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">(</span><span class="nc">PreparedStatement</span> <span class="n">pStatement</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">query</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"orange"</span><span class="o">);</span>
+        <span class="n">updatedRecordCount</span> <span class="o">=</span> <span class="n">pStatement</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">updatedRecordCount</span><span class="o">);</span>
+
+   <span class="cm">/* Sample D: Delete data using Prepared Statement*/</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">"delete from color where friendly_name = ?"</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">deletedRecordCount</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">(</span><span class="nc">PreparedStatement</span> <span class="n">pStatement</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">query</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">pStatement</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"orange"</span><span class="o">);</span>
+        <span class="n">deletedRecordCount</span> <span class="o">=</span> <span class="n">pStatement</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">deletedRecordCount</span><span class="o">);</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="references">References</h3>
+
+<ul>
+  <li><a href="/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">SQL Injection Prevention Cheat Sheet</a></li>
+</ul>
+
+<h2 id="jpa">JPA</h2>
+
+<h3 id="symptom-1">Symptom</h3>
+
+<p>Injection of this type occur when the application use untrusted user input to build a JPA query using a String and execute it. It’s quite similar to SQL injection but here the altered language is not SQL but JPA QL.</p>
+
+<h3 id="how-to-prevent-1">How to prevent</h3>
+
+<p>Use Java Persistence Query Language <strong>Query Parameterization</strong> in order to prevent injection.</p>
+
+<h3 id="example-1">Example</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">EntityManager</span> <span class="n">entityManager</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="cm">/* Get a ref on EntityManager to access DB */</span>
+    <span class="n">entityManager</span> <span class="o">=</span> <span class="nc">Persistence</span><span class="o">.</span><span class="na">createEntityManagerFactory</span><span class="o">(</span><span class="s">"testJPA"</span><span class="o">).</span><span class="na">createEntityManager</span><span class="o">();</span>
+
+    <span class="cm">/* Define parameterized query prototype using named parameter to enhance readability */</span>
+    <span class="nc">String</span> <span class="n">queryPrototype</span> <span class="o">=</span> <span class="s">"select c from Color c where c.friendlyName = :colorName"</span><span class="o">;</span>
+
+    <span class="cm">/* Create the query, set the named parameter and execute the query */</span>
+    <span class="nc">Query</span> <span class="n">queryObject</span> <span class="o">=</span> <span class="n">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="n">queryPrototype</span><span class="o">);</span>
+    <span class="nc">Color</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Color</span><span class="o">)</span> <span class="n">queryObject</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="s">"colorName"</span><span class="o">,</span> <span class="s">"yellow"</span><span class="o">).</span><span class="na">getSingleResult</span><span class="o">();</span>
+
+    <span class="cm">/* Ensure that the object obtained is the right one */</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertNotNull</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getFriendlyName</span><span class="o">(),</span> <span class="s">"yellow"</span><span class="o">);</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getRed</span><span class="o">(),</span> <span class="mi">213</span><span class="o">);</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getGreen</span><span class="o">(),</span> <span class="mi">242</span><span class="o">);</span>
+    <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getBlue</span><span class="o">(),</span> <span class="mi">26</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">entityManager</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">entityManager</span><span class="o">.</span><span class="na">isOpen</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">entityManager</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="references-1">References</h3>
+
+<ul>
+  <li><a href="https://software-security.sans.org/developer-how-to/fix-sql-injection-in-java-persistence-api-jpa">SQLi and JPA</a></li>
+</ul>
+
+<h2 id="operating-system">Operating System</h2>
+
+<h3 id="symptom-2">Symptom</h3>
+
+<p>Injection of this type occur when the application use untrusted user input to build a Operating System command using a String and execute it.</p>
+
+<h3 id="how-to-prevent-2">How to prevent</h3>
+
+<p>Use technology stack <strong>API</strong> in order to prevent injection.</p>
+
+<h3 id="example-2">Example</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* The context taken is, for example, to perform a PING against a computer.
+* The prevention is to use the feature provided by the Java API instead of building
+* a system command as String and execute it */</span>
+<span class="nc">InetAddress</span> <span class="n">host</span> <span class="o">=</span> <span class="nc">InetAddress</span><span class="o">.</span><span class="na">getByName</span><span class="o">(</span><span class="s">"localhost"</span><span class="o">);</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">host</span><span class="o">.</span><span class="na">isReachable</span><span class="o">(</span><span class="mi">5000</span><span class="o">));</span>
+</code></pre></div></div>
+
+<h3 id="references-2">References</h3>
+
+<ul>
+  <li><a href="https://www.owasp.org/index.php/Command_Injection">Command Injection</a></li>
+</ul>
+
+<h2 id="xml-xpath-injection">XML: XPath Injection</h2>
+
+<h3 id="symptom-3">Symptom</h3>
+
+<p>Injection of this type occur when the application use untrusted user input to build a XPath query using a String and execute it.</p>
+
+<h3 id="how-to-prevent-3">How to prevent</h3>
+
+<p>Use <strong>XPath Variable Resolver</strong> in order to prevent injection.</p>
+
+<h3 id="example-3">Example</h3>
+
+<p><strong>Variable Resolver</strong> implementation.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Resolver in order to define parameter for XPATH expression.
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SimpleVariableResolver</span> <span class="kd">implements</span> <span class="nc">XPathVariableResolver</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">QName</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;</span> <span class="n">vars</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">QName</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;();</span>
+
+    <span class="cm">/**
+     * External methods to add parameter
+     *
+     * @param name Parameter name
+     * @param value Parameter value
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addVariable</span><span class="o">(</span><span class="nc">QName</span> <span class="n">name</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * {@inheritDoc}
+     *
+     * @see javax.xml.xpath.XPathVariableResolver#resolveVariable(javax.xml.namespace.QName)
+     */</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">resolveVariable</span><span class="o">(</span><span class="nc">QName</span> <span class="n">variableName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">variableName</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Code using it to perform XPath query.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*Create a XML document builder factory*/</span>
+<span class="nc">DocumentBuilderFactory</span> <span class="n">dbf</span> <span class="o">=</span> <span class="nc">DocumentBuilderFactory</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+
+<span class="cm">/*Disable External Entity resolution for differents cases*/</span>
+<span class="c1">//Do not performed here in order to focus on variable resolver code</span>
+<span class="c1">//but do it for production code !</span>
+
+<span class="cm">/*Load XML file*/</span>
+<span class="nc">DocumentBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">dbf</span><span class="o">.</span><span class="na">newDocumentBuilder</span><span class="o">();</span>
+<span class="nc">Document</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"src/test/resources/SampleXPath.xml"</span><span class="o">));</span>
+
+<span class="cm">/* Create and configure parameter resolver */</span>
+<span class="nc">String</span> <span class="n">bid</span> <span class="o">=</span> <span class="s">"bk102"</span><span class="o">;</span>
+<span class="nc">SimpleVariableResolver</span> <span class="n">variableResolver</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleVariableResolver</span><span class="o">();</span>
+<span class="n">variableResolver</span><span class="o">.</span><span class="na">addVariable</span><span class="o">(</span><span class="k">new</span> <span class="nc">QName</span><span class="o">(</span><span class="s">"bookId"</span><span class="o">),</span> <span class="n">bid</span><span class="o">);</span>
+
+<span class="cm">/*Create and configure XPATH expression*/</span>
+<span class="nc">XPath</span> <span class="n">xpath</span> <span class="o">=</span> <span class="nc">XPathFactory</span><span class="o">.</span><span class="na">newInstance</span><span class="o">().</span><span class="na">newXPath</span><span class="o">();</span>
+<span class="n">xpath</span><span class="o">.</span><span class="na">setXPathVariableResolver</span><span class="o">(</span><span class="n">variableResolver</span><span class="o">);</span>
+<span class="nc">XPathExpression</span> <span class="n">xPathExpression</span> <span class="o">=</span> <span class="n">xpath</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">"//book[@id=$bookId]"</span><span class="o">);</span>
+
+<span class="cm">/* Apply expression on XML document */</span>
+<span class="nc">Object</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">xPathExpression</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">XPathConstants</span><span class="o">.</span><span class="na">NODESET</span><span class="o">);</span>
+<span class="nc">NodeList</span> <span class="n">nodesList</span> <span class="o">=</span> <span class="o">(</span><span class="nc">NodeList</span><span class="o">)</span> <span class="n">nodes</span><span class="o">;</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertNotNull</span><span class="o">(</span><span class="n">nodesList</span><span class="o">);</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">nodesList</span><span class="o">.</span><span class="na">getLength</span><span class="o">());</span>
+<span class="nc">Element</span> <span class="n">book</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Element</span><span class="o">)</span><span class="n">nodesList</span><span class="o">.</span><span class="na">item</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">book</span><span class="o">.</span><span class="na">getTextContent</span><span class="o">().</span><span class="na">contains</span><span class="o">(</span><span class="s">"Ralls, Kim"</span><span class="o">));</span>
+</code></pre></div></div>
+
+<h3 id="references-3">References</h3>
+
+<ul>
+  <li><a href="https://www.owasp.org/index.php/XPATH_Injection">XPATH Injection</a></li>
+</ul>
+
+<h2 id="htmljavascriptcss">HTML/JavaScript/CSS</h2>
+
+<h3 id="symptom-4">Symptom</h3>
+
+<p>Injection of this type occur when the application use untrusted user input to build a HTTP response and sent it to browser.</p>
+
+<h3 id="how-to-prevent-4">How to prevent</h3>
+
+<p>Either apply strict input validation (whitelist approach) or use output sanitizing+escaping if input validation is not possible (combine both every time is possible).</p>
+
+<h3 id="example-4">Example</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+INPUT WAY: Receive data from user
+Here it's recommended to use strict input validation using whitelist approach.
+In fact, you ensure that only allowed characters are part of the input received.
+*/</span>
+
+<span class="nc">String</span> <span class="n">userInput</span> <span class="o">=</span> <span class="s">"You user login is owasp-user01"</span><span class="o">;</span>
+
+<span class="cm">/* First we check that the value contains only expected character*/</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="nc">Pattern</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="s">"[a-zA-Z0-9\\s\\-]{1,50}"</span><span class="o">,</span> <span class="n">userInput</span><span class="o">));</span>
+
+<span class="cm">/* If the first check pass then ensure that potential dangerous character 
+that we have allowed for business requirement are not used in a dangerous way.
+For example here we have allowed the character '-', and, this can 
+be used in SQL injection so, we
+ensure that this character is not used is a continuous form.
+Use the API COMMONS LANG v3 to help in String analysis...
+*/</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">countMatches</span><span class="o">(</span><span class="n">userInput</span><span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">" "</span><span class="o">,</span> <span class="s">""</span><span class="o">),</span> <span class="s">"--"</span><span class="o">));</span>
+
+<span class="cm">/*
+OUTPUT WAY: Send data to user
+Here we escape + sanitize any data sent to user
+Use the OWASP Java HTML Sanitizer API to handle sanitizing
+Use the OWASP Java Encoder API to handle HTML tag encoding (escaping)
+*/</span>
+
+<span class="nc">String</span> <span class="n">outputToUser</span> <span class="o">=</span> <span class="s">"You &lt;p&gt;user login&lt;/p&gt; is &lt;strong&gt;owasp-user01&lt;/strong&gt;"</span><span class="o">;</span>
+<span class="n">outputToUser</span> <span class="o">+=</span> <span class="s">"&lt;script&gt;alert(22);&lt;/script&gt;&lt;img src='#' onload='javascript:alert(23);'&gt;"</span><span class="o">;</span>
+
+<span class="cm">/* Create a sanitizing policy that only allow tag '&lt;p&gt;' and '&lt;strong&gt;'*/</span>
+<span class="nc">PolicyFactory</span> <span class="n">policy</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HtmlPolicyBuilder</span><span class="o">().</span><span class="na">allowElements</span><span class="o">(</span><span class="s">"p"</span><span class="o">,</span> <span class="s">"strong"</span><span class="o">).</span><span class="na">toFactory</span><span class="o">();</span>
+
+<span class="cm">/* Sanitize the output that will be sent to user*/</span>
+<span class="nc">String</span> <span class="n">safeOutput</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="na">sanitize</span><span class="o">(</span><span class="n">outputToUser</span><span class="o">);</span>
+
+<span class="cm">/* Encode HTML Tag*/</span>
+<span class="n">safeOutput</span> <span class="o">=</span> <span class="nc">Encode</span><span class="o">.</span><span class="na">forHtml</span><span class="o">(</span><span class="n">safeOutput</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">finalSafeOutputExpected</span> <span class="o">=</span> <span class="s">"You &lt;p&gt;user login&lt;/p&gt; is &lt;strong&gt;owasp-user01&lt;/strong&gt;"</span><span class="o">;</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">finalSafeOutputExpected</span><span class="o">,</span> <span class="n">safeOutput</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="references-4">References</h3>
+
+<ul>
+  <li><a href="https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29">XSS</a></li>
+  <li><a href="https://github.com/owasp/java-html-sanitizer">OWASP Java HTML Sanitizer</a></li>
+  <li><a href="https://github.com/owasp/owasp-java-encoder">OWASP Java Encoder</a></li>
+  <li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html">Java RegEx</a></li>
+</ul>
+
+<h2 id="ldap">LDAP</h2>
+
+<p>A dedicated <a href="/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">cheatsheet</a> has been created.</p>
+
+<h2 id="nosql">NoSQL</h2>
+
+<h3 id="symptom-5">Symptom</h3>
+
+<p>Injection of this type occur when the application use untrusted user input to build a NoSQL API call expression.</p>
+
+<h3 id="how-to-prevent-5">How to prevent</h3>
+
+<p>As there many NoSQL database system and each one use a API for call, it’s important to ensure that user input received and used to build the API call expression do not contains any character that have a special meaning in the target API syntax. This in order to avoid that it will be used to escape the initial call expression in order to create another one based on crafted user input. It’s also important to not use string concatenation to build API call expression but use the API to create the expression.</p>
+
+<h3 id="example---mongodb">Example - MongoDB</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="cm">/* Here use MongoDB as target NoSQL DB */</span>
+<span class="nc">String</span> <span class="n">userInput</span> <span class="o">=</span> <span class="s">"Brooklyn"</span><span class="o">;</span>
+
+<span class="cm">/* First ensure that the input do no contains any special characters 
+for the current NoSQL DB call API,
+here they are: ' " \ ; { } $
+*/</span>
+<span class="c1">//Avoid regexp this time in order to made validation code </span>
+<span class="c1">//more easy to read and understand...</span>
+<span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">specialCharsList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;()</span> <span class="o">{</span> <span class="o">{</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">"'"</span><span class="o">);</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">"\""</span><span class="o">);</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">"\\"</span><span class="o">);</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">";"</span><span class="o">);</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">"{"</span><span class="o">);</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">"}"</span><span class="o">);</span>
+    <span class="n">add</span><span class="o">(</span><span class="s">"$"</span><span class="o">);</span>
+<span class="o">}</span> <span class="o">};</span>
+<span class="n">specialCharsList</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">specChar</span> <span class="o">-&gt;</span> <span class="nc">Assert</span><span class="o">.</span><span class="na">assertFalse</span><span class="o">(</span><span class="n">userInput</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">specChar</span><span class="o">)));</span>
+<span class="c1">//Add also a check on input max size</span>
+<span class="nc">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">userInput</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="o">);</span>
+
+<span class="cm">/* Then perform query on database using API to build expression */</span>
+<span class="c1">//Connect to the local MongoDB instance</span>
+<span class="k">try</span><span class="o">(</span><span class="nc">MongoClient</span> <span class="n">mongoClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MongoClient</span><span class="o">()){</span>
+    <span class="nc">MongoDatabase</span> <span class="n">db</span> <span class="o">=</span> <span class="n">mongoClient</span><span class="o">.</span><span class="na">getDatabase</span><span class="o">(</span><span class="s">"test"</span><span class="o">);</span>
+    <span class="c1">//Use API query builder to create call expression</span>
+    <span class="c1">//Create expression</span>
+    <span class="nc">Bson</span> <span class="n">expression</span> <span class="o">=</span> <span class="n">eq</span><span class="o">(</span><span class="s">"borough"</span><span class="o">,</span> <span class="n">userInput</span><span class="o">);</span>
+    <span class="c1">//Perform call</span>
+    <span class="nc">FindIterable</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">bson</span><span class="o">.</span><span class="na">Document</span><span class="o">&gt;</span> <span class="n">restaurants</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getCollection</span><span class="o">(</span><span class="s">"restaurants"</span><span class="o">).</span><span class="na">find</span><span class="o">(</span><span class="n">expression</span><span class="o">);</span>
+    <span class="c1">//Verify result consistency</span>
+    <span class="n">restaurants</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="k">new</span> <span class="nc">Block</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">bson</span><span class="o">.</span><span class="na">Document</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">apply</span><span class="o">(</span><span class="kd">final</span> <span class="n">org</span><span class="o">.</span><span class="na">bson</span><span class="o">.</span><span class="na">Document</span> <span class="n">doc</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">restBorough</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span><span class="n">doc</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"borough"</span><span class="o">);</span>
+            <span class="nc">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="s">"Brooklyn"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">restBorough</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="references-5">References</h3>
+
+<ul>
+  <li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
+  <li><a href="https://ckarande.gitbooks.io/owasp-nodegoat-tutorial/content/tutorial/a1_-_sql_and_nosql_injection.html">SQL and NoSQL Injection</a></li>
+  <li><a href="https://arxiv.org/ftp/arxiv/papers/1506/1506.04082.pdf">No SQL, No Injection?</a></li>
+</ul>
+
+<h2 id="log-injection">Log Injection</h2>
+
+<h3 id="symptom-6">Symptom</h3>
+
+<p><a href="https://www.owasp.org/index.php/Log_Injection">Log Injection</a> occurs when an application includes untrusted data in an application log message (e.g., an attacker can cause an additional log entry that looks like it came from a completely different user, if they can inject CRLF characters in the untrusted data). More information about this attack is available on the OWASP <a href="https://www.owasp.org/index.php/Log_Injection">Log Injection</a> page.</p>
+
+<h3 id="how-to-prevent-6">How to prevent</h3>
+
+<p>To prevent an attacker from writing malicious content into the application log, apply defenses such as:</p>
+
+<ul>
+  <li>Filter the user input used to prevent injection of <strong>C</strong>arriage <strong>R</strong>eturn (CR) or <strong>L</strong>ine <strong>F</strong>eed (LF) characters.</li>
+  <li>Limit the size of the user input value used to create the log message.</li>
+  <li>Make sure <a href="/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">all XSS defenses</a> are applied when viewing log files in a web browser.</li>
+</ul>
+
+<h3 id="example-using-log4j2">Example using Log4j2</h3>
+
+<p>Configuration of a logging policy to roll on 10 files of 5MB each, and encode/limit the log message using the <a href="https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout\%7CLog4j2">Pattern <em>encode{}{CRLF}</em></a>, introduced in <a href="https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api">Log4j2 v2.10.0</a>, and the <em>-500m</em> message size limit.:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;Configuration</span> <span class="na">status=</span><span class="s">"error"</span> <span class="na">name=</span><span class="s">"SecureLoggingPolicy"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Appenders&gt;</span>
+        <span class="nt">&lt;RollingFile</span> <span class="na">name=</span><span class="s">"RollingFile"</span> <span class="na">fileName=</span><span class="s">"App.log"</span> <span class="na">filePattern=</span><span class="s">"App-%i.log"</span> <span class="na">ignoreExceptions=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;PatternLayout&gt;</span>
+                <span class="c">&lt;!-- Encode any CRLF chars in the message and limit its 
+                     maximum size to 500 characters --&gt;</span>
+                <span class="nt">&lt;Pattern&gt;</span>%d{ISO8601} %-5p - %encode{ %.-500m }{CRLF}%n<span class="nt">&lt;/Pattern&gt;</span>
+            <span class="nt">&lt;/PatternLayout&gt;</span>
+            <span class="nt">&lt;Policies&gt;</span>
+                <span class="nt">&lt;SizeBasedTriggeringPolicy</span> <span class="na">size=</span><span class="s">"5MB"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/Policies&gt;</span>
+            <span class="nt">&lt;DefaultRolloverStrategy</span> <span class="na">max=</span><span class="s">"10"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/RollingFile&gt;</span>
+    <span class="nt">&lt;/Appenders&gt;</span>
+    <span class="nt">&lt;Loggers&gt;</span>
+        <span class="nt">&lt;Root</span> <span class="na">level=</span><span class="s">"debug"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"RollingFile"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/Root&gt;</span>
+    <span class="nt">&lt;/Loggers&gt;</span>
+<span class="nt">&lt;/Configuration&gt;</span>
+</code></pre></div></div>
+
+<p>Usage of the logger at code level:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.logging.log4j.LogManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.logging.log4j.Logger</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="c1">// No special action needed because security actions are </span>
+<span class="c1">// performed at the logging policy level</span>
+<span class="nc">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="nc">LogManager</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">MyClass</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">logMessage</span><span class="o">);</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<h3 id="example-using-logback-with-the-owasp-security-logging-library">Example using Logback with the OWASP Security Logging library</h3>
+
+<p>Configuration of a logging policy to roll on 10 files of 5MB each, and encode/limit the log message using the <a href="https://github.com/javabeanz/owasp-security-logging/wiki/Log-Forging">CRLFConverter</a>, provided by the <a href="https://www.owasp.org/index.php/OWASP_Security_Logging_Project">OWASP Security Logging Project</a>, and the <em>-500msg</em> message size limit:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+    <span class="c">&lt;!-- Define the CRLFConverter --&gt;</span>
+    <span class="nt">&lt;conversionRule</span> <span class="na">conversionWord=</span><span class="s">"crlf"</span> <span class="na">converterClass=</span><span class="s">"org.owasp.security.logging.mask.CRLFConverter"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"RollingFile"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;file&gt;</span>App.log<span class="nt">&lt;/file&gt;</span>
+        <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.FixedWindowRollingPolicy"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;fileNamePattern&gt;</span>App-%i.log<span class="nt">&lt;/fileNamePattern&gt;</span>
+            <span class="nt">&lt;minIndex&gt;</span>1<span class="nt">&lt;/minIndex&gt;</span>
+            <span class="nt">&lt;maxIndex&gt;</span>10<span class="nt">&lt;/maxIndex&gt;</span>
+        <span class="nt">&lt;/rollingPolicy&gt;</span>
+        <span class="nt">&lt;triggeringPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;maxFileSize&gt;</span>5MB<span class="nt">&lt;/maxFileSize&gt;</span>
+        <span class="nt">&lt;/triggeringPolicy&gt;</span>
+        <span class="nt">&lt;encoder&gt;</span>
+            <span class="c">&lt;!-- Encode any CRLF chars in the message and limit 
+                 its maximum size to 500 characters --&gt;</span>
+            <span class="nt">&lt;pattern&gt;</span>%relative [%thread] %-5level %logger{35} - %crlf(%.-500msg) %n<span class="nt">&lt;/pattern&gt;</span>
+        <span class="nt">&lt;/encoder&gt;</span>
+    <span class="nt">&lt;/appender&gt;</span>
+    <span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"debug"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"RollingFile"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/root&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>You also have to add the <a href="https://github.com/javabeanz/owasp-security-logging/wiki/Usage-with-Logback">OWASP Security Logging</a> dependency to your project.</p>
+
+<p>Usage of the logger at code level:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="c1">// No special action needed because security actions </span>
+<span class="c1">// are performed at the logging policy level</span>
+<span class="nc">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">MyClass</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">logMessage</span><span class="o">);</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<h3 id="references-6">References</h3>
+
+<ul>
+  <li><a href="https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout">PatternLayout</a> (See the <code class="language-plaintext highlighter-rouge">encode{}{CRLF}</code> function)</li>
+</ul>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note that the default Log4j2 encode{} encoder is HTML, which does NOT prevent log injection. 
+
+It prevents XSS attacks against viewing logs using a browser. 
+
+OWASP recommends defending against XSS attacks in such situations in the log viewer application itself, 
+not by preencoding all the log messages with HTML encoding as such log entries may be used/viewed in many 
+other log viewing/analysis tools that don't expect the log data to be pre-HTML encoded.
+</code></pre></div></div>
+
+<ul>
+  <li><a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">LOG4J Configuration</a></li>
+  <li><a href="https://logging.apache.org/log4j/2.x/manual/appenders.html">LOG4J Appender</a></li>
+  <li><a href="https://github.com/javabeanz/owasp-security-logging/wiki/Log-Forging">Log Forging</a> - See the Logback section about the <code class="language-plaintext highlighter-rouge">CRLFConverter</code> this library provides.</li>
+  <li><a href="https://github.com/javabeanz/owasp-security-logging/wiki/Usage-with-Logback">Usage of OWASP Security Logging with Logback</a></li>
+</ul>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>Injection Prevention Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet">Input Validation Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Virtual Patching Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Virtual Patching Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Virtual Patching Cheat Sheet | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Virtual Patching Cheat Sheet | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Virtual_Patching_Cheat_Sheet.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Virtual+Patching+Cheat+Sheet" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Virtual Patching Cheat Sheet</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>User Privacy Protection Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet">Vulnerability Disclosure Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p>The goal with this cheat Sheet is to present a concise virtual patching framework that organizations can follow to maximize the timely implementation of mitigation protections.</p>
+
+<h1 id="definition-virtual-patching">Definition: Virtual Patching</h1>
+
+<p><strong>A security policy enforcement layer which prevents and reports the exploitation attempt of a known vulnerability.</strong></p>
+
+<p>The virtual patch works when the security enforcement layer analyzes transactions and intercepts attacks in transit, so malicious traffic never reaches the web application. The resulting impact of virtual patching is that, while the actual source code of the application itself has not been modified, the exploitation attempt does not succeed.</p>
+
+<h1 id="why-not-just-fix-the-code">Why Not Just Fix the Code?</h1>
+
+<p>From a purely technical perspective, the number one remediation strategy would be for an organization to correct the identified vulnerability within the source code of the web application. This concept is universally agreed upon by both web application security experts and system owners. Unfortunately, in real world business situations, there arise many scenarios where updating the source code of a web application is not easy such as:</p>
+
+<ul>
+  <li><strong>Lack of resources</strong> - Devs are already allocated to other projects.</li>
+  <li><strong>3rd Party Software</strong> - Code can not be modified by the user.</li>
+  <li><strong>Outsourced App Dev</strong> - Changes would require a new project.</li>
+</ul>
+
+<p>The important point is this - <strong>Code level fixes and Virtual Patching are NOT mutually exclusive</strong>. They are processes that are executed by different team (OWASP Builders/Devs vs. OWASP Defenders/OpSec) and can be run in tandem.</p>
+
+<h1 id="value-of-virtual-patching">Value of Virtual Patching</h1>
+
+<p>The two main goals of Virtual Patching are:</p>
+
+<ul>
+  <li><strong>Minimize Time-to-Fix</strong> - Fixing application source code takes time. The main purpose of a virtual patch is to implement a mitigation for the identified vulnerability as soon as possible. The urgency of this response may be different: for example if the vulnerability was identified in-house through code reviews or penetration testing vs. finding a vulnerability as part of live incident response.</li>
+  <li><strong>Attack Surface Reduction</strong> - Focus on minimizing the attack vector. In some cases, such as missing positive security input validation, it is possible to achieve 100% attack surface reduction. In other cases, such with missing output encoding for XSS flaws, you may only be able to limit the exposures. Keep in mind - 50% reduction in 10 minutes is better than 100% reduction in 48 hrs.</li>
+</ul>
+
+<h1 id="virtual-patching-tools">Virtual Patching Tools</h1>
+
+<p>Notice that the definition above did not list any specific tool as there are a number of different options that may be used for virtual patching efforts such as:</p>
+
+<ul>
+  <li>Intermediary devices such as a WAF or IPS appliance</li>
+  <li>Web server plugin such as ModSecurity</li>
+  <li>Application layer filter such as ESAPI WAF</li>
+</ul>
+
+<p>For example purposes, we will show virtual patching examples using the open source <a href="http://www.modsecurity.org">ModSecurity WAF tool</a>.</p>
+
+<h1 id="a-virtual-patching-methodology">A Virtual Patching Methodology</h1>
+
+<p>Virtual Patching, like most other security processes, is not something that should be approached haphazardly. Instead, a consistent, repeatable process should be followed that will provide the best chances of success. The following virtual patching workflow mimics the industry accepted practice for conducting IT Incident Response and consists of the following phases:</p>
+
+<ol>
+  <li>Preparation.</li>
+  <li>Identification.</li>
+  <li>Analysis.</li>
+  <li>Virtual Patch Creation.</li>
+  <li>Implementation/Testing.</li>
+  <li>Recovery/Follow Up.</li>
+</ol>
+
+<h1 id="example-public-vulnerability">Example Public Vulnerability</h1>
+
+<p>Let’s take the following <a href="https://packetstormsecurity.com/files/119217/WordPress-Shopping-Cart-8.1.14-Shell-Upload-SQL-Injection.html">SQL Injection vulnerability</a> as our example for the remainder of this article:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WordPress Shopping Cart Plugin for WordPress 
+/wp-content/plugins/levelfourstorefront/scripts/administration/exportsubscribers.php 
+reqID Parameter prone to SQL Injection.
+</code></pre></div></div>
+
+<p><strong>Description</strong>:</p>
+
+<p>WordPress Shopping Cart Plugin for WordPress contains a flaw that may allow an attacker to carry out an SQL injection attack.</p>
+
+<p>The issue is due to the <code class="language-plaintext highlighter-rouge">/wp-content/plugins/levelfourstorefront/scripts/administration/exportsubscribers.php</code> script not properly sanitizing user-supplied input to the <code class="language-plaintext highlighter-rouge">reqID</code> parameter.</p>
+
+<p>This may allow an attacker to inject or manipulate SQL queries in the back-end database, allowing for the manipulation or disclosure of arbitrary data.</p>
+
+<h1 id="preparation-phase">Preparation Phase</h1>
+
+<p>The importance of properly utilizing the preparation phase with regards to virtual patching cannot be overstated. You need to do a number of things to setup the virtual patching processes and framework <strong>prior</strong> to actually having to deal with an identified vulnerability, or worse yet, react to a live web application intrusion. The point is that during a live compromise is not the ideal time to be proposing installation of a web application firewall and the concept of a virtual patch. Tension is high during real incidents and time is of the essence, so lay the foundation of virtual patching when the waters are calm and get everything in place and ready to go when an incident does occur.</p>
+
+<p>Here are a few critical items that should be addressed during the preparation phase:</p>
+
+<ul>
+  <li><strong>Public/Vendor Vulnerability Monitoring</strong> - Ensure that you are signed up for all vendor alert mail-lists for commercial software that you are using. This will ensure that you will be notified in the event that the vendor releases vulnerability information and patching data.</li>
+  <li><strong>Virtual Patching Pre-Authorization</strong> – Virtual Patches need to be implemented quickly so the normal governance processes and authorizations steps for standard software patches need to be expedited. Since virtual patches are not actually modifying source code, they do not require the same amount of regression testing as normal software patches. Categorizing virtual patches in the same group as Anti-Virus updates or Network IDS signatures helps to speed up the authorization process and minimize extended testing phases.</li>
+  <li><strong>Deploy Virtual Patching Tool In Advance</strong> - As time is critical during incident response, it would be a poor time to have to get approvals to install new software. For instance, you can install ModSecurity WAF in embedded mode on your Apache servers, or an Apache reverse proxy server. The advantage with this deployment is that you can create fixes for non-Apache back-end servers. Even if you do not use ModSecurity under normal circumstances, it is best to have it “on deck” ready to be enabled if need be.</li>
+  <li><strong>Increase HTTP Audit Logging</strong> – The standard Common Log Format (CLF) utilized by most web servers does not provide adequate data for conducting proper incident response. You need to have access to the following HTTP data:
+    <ul>
+      <li>Request URI (including QUERY_STRING)</li>
+      <li>Full Request Headers (including Cookies)</li>
+      <li>Full Request Body (POST payload)</li>
+      <li>Full Response Headers</li>
+      <li>Full Response Body</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="identification-phase">Identification Phase</h1>
+
+<p>The Identification Phase occurs when an organization becomes aware of a vulnerability within their web application. There are generally two different methods of identifying vulnerabilities: <code class="language-plaintext highlighter-rouge">Proactive</code> and <code class="language-plaintext highlighter-rouge">Reactive</code>.</p>
+
+<h2 id="proactive-identification">Proactive Identification</h2>
+
+<p>This occurs when an organization takes it upon themselves to assess their web security posture and conducts the following tasks:</p>
+
+<ul>
+  <li><strong>Dynamic Application Assessments</strong> - Whitehat attackers conduct penetration tests or automated web assessment tools are run against the live web application to identify flaws.</li>
+  <li><strong>Source code reviews</strong> - Whitehat attackers use manual/automated means to analyze the source code of the web application to identify flaws.</li>
+</ul>
+
+<p>Due to the fact that custom coded web applications are unique, these proactive identification tasks are extremely important as you are not able to rely upon 3rd party vulnerability notifications.</p>
+
+<h2 id="reactive-identification">Reactive Identification</h2>
+
+<p>There are three main reactive methods for identifying vulnerabilities:</p>
+
+<ul>
+  <li><strong>Vendor contact (e.g. pre-warning)</strong> - Occurs when a vendor discloses a vulnerability for commercial web application software that you are using. Example is Microsoft’s <a href="https://www.microsoft.com/en-us/msrc/mapp">Active Protections Program (MAPP)</a></li>
+  <li><strong>Public disclosure</strong> - Public vulnerability disclosure for commercial/open source web application software that you are using. The threat level for public disclosure is increased as more people know about the vulnerability.</li>
+  <li><strong>Security incident</strong> – This is the most urgent situation as the attack is active. In these situations, remediation must be immediate.</li>
+</ul>
+
+<h1 id="analysis-phase">Analysis Phase</h1>
+
+<p>Here are the recommended steps to start the analysis phase:</p>
+
+<ol>
+  <li><strong>Determine Virtual Patching Applicability</strong> - Virtual patching is ideally suited for injection-type flaws but may not provide an adequate level of attack surface reduction for other attack types or categories. Thorough analysis of the underlying flaw should be conducted to determine if the virtual patching tool has adequate detection logic capabilities.</li>
+  <li><strong>Utilize Bug Tracking/Ticketing System</strong> - Enter the vulnerability information into a bug tracking system for tracking purposes and metrics. Recommend you use ticketing systems you already use such as Jira or you may use a specialized tool such as <a href="https://threadfix.it/">ThreadFix</a>.</li>
+  <li><strong>Verify the name of the vulnerability</strong> - This means that you need to have the proper public vulnerability identifier (such as CVE name/number) specified by the vulnerability announcement, vulnerability scan, etc. If the vulnerability is identified proactively rather than through public announcements, then you should assign your own unique identifier to each vulnerability.</li>
+  <li><strong>Designate the impact level</strong> - It is always important to understand the level of criticality involved with a web vulnerability. Information leakages may not be treated in the same manner as an SQL Injection issue.</li>
+  <li><strong>Specify which versions of software are impacted</strong> - You need to identify what versions of software are listed so that you can determine if the version(s) you have installed are affected.</li>
+  <li><strong>List what configuration is required to trigger the problem</strong> - Some vulnerabilities may only manifest themselves under certain configuration settings.</li>
+  <li><strong>List Proof of Concept (PoC) exploit code or payloads used during attacks/testing</strong> - Many vulnerability announcements have accompanying exploit code that shows how to demonstrate the vulnerability. If this data is available, make sure to download it for analysis. This will be useful later on when both developing and testing the virtual patch.</li>
+</ol>
+
+<h1 id="virtual-patch-creation-phase">Virtual Patch Creation Phase</h1>
+
+<p>The process of creating an accurate virtual patch is bound by two main tenants:</p>
+
+<ol>
+  <li><strong>No false positives</strong> - Do not ever block legitimate traffic under any circumstances.</li>
+  <li><strong>No false negatives</strong> - Do not ever miss attacks, even when the attacker intentionally tries to evade detection.</li>
+</ol>
+
+<p>Care should be taken to attempt to minimize either of these two rules. It may not be possible to adhere 100% to each of these goals but remember that virtual patching is about <strong>Risk Reduction</strong>. It should be understood by business owners that while you are gaining the advantage of shortening the Time-to-Fix metric, you may not be implementing a complete fix for the flaw.</p>
+
+<h2 id="manual-virtual-patch-creation">Manual Virtual Patch Creation</h2>
+
+<h3 id="positive-security-whitelist-virtual-patches-recommended-solution">Positive Security (Whitelist) Virtual Patches (<strong>Recommended Solution</strong>)</h3>
+
+<p>Positive security model (whitelist) is a comprehensive security mechanism that provides an independent input validation envelope to an application. The model specifies the characteristics of valid input (character set, length, etc…) and denies anything that does not conform. By defining rules for every parameter in every page in the application the application is protected by an additional security envelop independent from its code.</p>
+
+<h4 id="example-whitelist-modsecurity-virtual-patch">Example Whitelist ModSecurity Virtual Patch</h4>
+
+<p>In order to create a whitelist virtual patch, you must be able to verify what the normal, expected input values are. If you have implemented proper audit logging as part of the Preparation Phase, then you should be able to review audit logs to identify the format of expected input types. In this case, the <code class="language-plaintext highlighter-rouge">reqID</code> parameter is supposed to only hold integer characters so we can use this virtual patch:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
+# Verify we only receive 1 parameter called "reqID"
+#
+SecRule REQUEST_URI "@contains /wp-content/plugins/levelfourstorefront/scripts/administration/exportsubscribers.php" "chain,id:1,phase:2,t:none,t:Utf8toUnicode,t:urlDecodeUni,t:normalizePathWin,t:lowercase,block,msg:'Input Validation Error for \'reqID\' parameter - Duplicate Parameters Names Seen.',logdata:'%{matched_var}'"
+  SecRule &amp;ARGS:/reqID/ "!@eq 1"
+
+#
+# Verify reqID's payload only contains integers
+#
+SecRule REQUEST_URI "@contains /wp-content/plugins/levelfourstorefront/scripts/administration/exportsubscribers.php" "chain,id:2,phase:2,t:none,t:Utf8toUnicode,t:urlDecodeUni,t:normalizePathWin,t:lowercase,block,msg:'Input Validation Error for \'reqID\' parameter.',logdata:'%{args.reqid}'"
+  SecRule ARGS:/reqID/ "!@rx ^[0-9]+$"
+</code></pre></div></div>
+
+<p>This virtual patch will inspect the <code class="language-plaintext highlighter-rouge">reqID</code> parameter value on the specified page and prevent any characters other than integers as input.</p>
+
+<ul>
+  <li><strong>Note</strong> - You should make sure to assign rule IDs properly and track them in the bug tracking system.</li>
+  <li><strong>Caution</strong>: There are numerous evasion vectors when creating virtual patches. Please consult the <a href="https://www.owasp.org/index.php/Virtual_Patching_Best_Practices">OWASP Best Practices: Virtual Patching document</a> for a more thorough discussion on countering evasion methods.</li>
+</ul>
+
+<h3 id="negative-security-blacklist-virtual-patches">Negative Security (Blacklist) Virtual Patches</h3>
+
+<p>A negative security model (blacklist) is based on a set of rules that detect specific known attacks rather than allow only valid traffic.</p>
+
+<h4 id="example-blacklist-modsecurity-virtual-patch">Example Blacklist ModSecurity Virtual Patch</h4>
+
+<p>Here is the example <a href="https://packetstormsecurity.com/files/119217/WordPress-Shopping-Cart-8.1.14-Shell-Upload-SQL-Injection.html">PoC code</a> that was supplied by the public advisory:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/wordpress/wp-content/plugins/levelfourstorefront/scripts/administration/exportsubscribers.php?reqID=1' or 1='1
+</code></pre></div></div>
+
+<p>Looking at the payload, we can see that the attacker is inserting a single quote character and then adding additional SQL query logic to the end. Based on this data, we could disallow the single quote character like this:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SecRule REQUEST_URI "@contains /wp-content/plugins/levelfourstorefront/scripts/administration/exportsubscribers.php" "chain,id:1,phase:2,t:none,t:Utf8toUnicode,t:urlDecodeUni,t:normalizePathWin,t:lowercase,block,msg:'Input Validation Error for \'reqID\' parameter.',logdata:'%{args.reqid}'"
+  SecRule ARGS:/reqID/ "@pm '"
+</code></pre></div></div>
+
+<h3 id="which-method-is-better-for-virtual-patching--positive-or-negative-security">Which Method is Better for Virtual Patching – Positive or Negative Security?</h3>
+
+<p>A virtual patch may employ either a positive or negative security model. Which one you decide to use depends on the situation and a few different considerations. For example, negative security rules can usually be implemented more quickly, however the possible evasions are more likely.</p>
+
+<p>Positive security rules, only the other hand, provides better protection however it is often a manual process and thus is not scalable and difficult to maintain for large/dynamic sites. While manual positive security rules for an entire site may not be feasible, a positive security model can be selectively employed when a vulnerability alert identifies a specific location with a problem.</p>
+
+<h3 id="beware-of-exploit-specific-virtual-patches">Beware of Exploit-Specific Virtual Patches</h3>
+
+<p>You want to resist the urge to take the easy road and quickly create an <strong>exploit-specific virtual patch</strong>.</p>
+
+<p>For instance, if an authorized penetration test identified an XSS vulnerability on a page and used the following attack payload in the report:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script&gt;</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">XSS Test</span><span class="dl">'</span><span class="p">)</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>It would not be wise to implement a virtual patch that simply blocks that exact payload. While it may provide some immediate protection, its long term value is significantly decreased.</p>
+
+<h2 id="automated-virtual-patch-creation">Automated Virtual Patch Creation</h2>
+
+<p>Manual patch creation may become unfeasible as the number of vulnerabilities grow and automated means may become necessary. If the vulnerabilities were identified using automated tools and an XML report is available, it is possible to leverage automated processes to auto-convert this vulnerability data into virtual patches for protection systems.</p>
+
+<p>Three examples include:</p>
+
+<ul>
+  <li><strong>OWASP ModSecurity Core Rule Set (CRS) Scripts</strong> - The OWASP CRS includes scripts to auto-convert XML output from tools such as [OWASP ZAP into ModSecurity Virtual Patches]. Reference <a href="http://blog.spiderlabs.com/2012/03/modsecurity-advanced-topic-of-the-week-automated-virtual-patching-using-owasp-zed-attack-proxy.html">here</a>.</li>
+  <li><strong>ThreadFix Virtual Patching</strong> - ThreadFix also includes automated processes of converting imported vulnerability XML data into virtual patches for security tools such as ModSecurity. Reference <a href="https://github.com/denimgroup/threadfix/wiki/Waf-Types#mod_security">here</a>.</li>
+  <li><strong>Direct Importing to WAF Device</strong> - Many commercial WAF products have the capability to import DAST tool XML report data and automatically adjust their protection profiles.</li>
+</ul>
+
+<h1 id="implementationtesting-phase">Implementation/Testing Phase</h1>
+
+<p>In order to accurately test out the newly created virtual patches, it may be necessary to use an application other than a web browser. Some useful tools are:</p>
+
+<ul>
+  <li>Web browser.</li>
+  <li>Command line web clients such as Curl and Wget.</li>
+  <li>Local Proxy Servers such as <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">OWASP ZAP</a>.</li>
+  <li><a href="http://www.jwall.org/web/audit/viewer.jsp">ModSecurity AuditViewer</a> – which allows you to load a ModSecurity audit log file, manipulate it and then re-inject the data back into any web server.</li>
+</ul>
+
+<h2 id="testing-steps">Testing Steps</h2>
+
+<ul>
+  <li>Implement virtual patches initially in a “Log Only” configuration to ensure that you do not block any normal user traffic (false positives).</li>
+  <li>If the vulnerability was identified by a specific tool or assessment team - request a retest.</li>
+  <li>If retesting fails due to evasions, then you must go back to the Analysis phase to identify how to better fix the issue.</li>
+</ul>
+
+<h1 id="recoveryfollow-up-phase">Recovery/Follow-Up Phase</h1>
+
+<ul>
+  <li><strong>Update Data in Ticket System</strong> - Although you may need to expedite the implementation of virtual patches, you should still track them in your normal Patch Management processes. This means that you should create proper change request tickets, etc… so that their existence and functionality is documented. Updating the ticket system also helps to identify “time-to-fix” metrics for different vulnerability types. Make sure to properly log the virtual patch rule ID values.</li>
+  <li><strong>Periodic Re-assessments</strong> - You should also have periodic re-assessments to verify if/when you can remove previous virtual patches if the web application code has been updated with the real source code fix. I have found that many people opt to keep virtual patches in place due to better identification/logging vs. application or db capabilities.</li>
+  <li><strong>Running Virtual Patch Alert Reports</strong> - Run reports to identify if/when any of your virtual patches have triggered. This will show value for virtual patching in relation to windows of exposure for source code time-to-fix.</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li><a href="https://www.owasp.org/index.php/Virtual_Patching_Best_Practices">OWASP Virtual Patching Best Practices</a>.</li>
+  <li><a href="https://www.owasp.org/index.php/Category:OWASP_Securing_WebGoat_using_ModSecurity_Project">OWASP Securing WebGoat with ModSecurity</a>.</li>
+</ul>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>User Privacy Protection Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet">Vulnerability Disclosure Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+

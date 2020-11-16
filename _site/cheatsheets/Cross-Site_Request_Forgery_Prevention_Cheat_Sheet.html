@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Cross-Site Request Forgery Prevention Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Cross-Site Request Forgery Prevention Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Cross-Site Request Forgery Prevention Cheat Sheet | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Cross-Site Request Forgery Prevention Cheat Sheet | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Cross-Site+Request+Forgery+Prevention+Cheat+Sheet" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Cross-Site Request Forgery Prevention Cheat Sheet</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>Credential Stuffing Prevention Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet">Cross Site Scripting Prevention Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p><a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">Cross-Site Request Forgery (CSRF)</a> is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user’s web browser to perform an unwanted action on a trusted site when the user is authenticated. A CSRF attack works because browser requests automatically include any credentials associated with the site, such as the user’s session cookie, IP address, etc. Therefore, if the user is authenticated to the site, the site cannot distinguish between the forged or legitimate request sent by the victim. We would need a token/identifier that is not accessible to attacker and would not be sent along (like cookies) with forged requests that attacker initiates. For more information on CSRF, see OWASP <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">Cross-Site Request Forgery (CSRF) page</a>.</p>
+
+<p>The impact of a successful CSRF attack is limited to the capabilities exposed by the vulnerable application. For example, this attack could result in a transfer of funds, changing a password, or making a purchase with the user’s credentials. In effect, CSRF attacks are used by an attacker to make a target system perform a function via the target’s browser, without the user’s knowledge, at least until the unauthorized transaction has been committed.</p>
+
+<p>Impacts of successful CSRF exploits vary greatly based on the privileges of each victim. When targeting a normal user, a successful CSRF attack can compromise end-user data and their associated functions. If the targeted end user is an administrator account, a CSRF attack can compromise the entire web application. Using social engineering, an attacker can embed malicious HTML or JavaScript code into an email or website to request a specific ‘task URL’. The task then executes with or without the user’s knowledge, either directly or by using a Cross-Site Scripting flaw. For example, see <a href="https://en.wikipedia.org/wiki/Samy_%28computer_worm%29">Samy MySpace Worm</a>.</p>
+
+<h1 id="warning-no-cross-site-scripting-xss-vulnerabilities">Warning: No Cross-Site Scripting (XSS) Vulnerabilities</h1>
+
+<p><a href="https://www.owasp.org/index.php/Cross-Site_Scripting">Cross-Site Scripting</a> is not necessary for CSRF to work. However, any cross-site scripting vulnerability can be used to defeat all CSRF mitigation techniques available in the market today (except mitigation techniques that involve user interaction and described later in this cheatsheet). This is because an XSS payload can simply read any page on the site using an XMLHttpRequest (direct DOM access can be done, if on same page) and obtain the generated token from the response, and include that token with a forged request.  This technique is exactly how the <a href="https://en.wikipedia.org/wiki/Samy_%28computer_worm%29">MySpace (Samy) worm</a> defeated MySpace’s anti-CSRF defenses in 2005, which enabled the worm to propagate.</p>
+
+<p>It is imperative that no XSS vulnerabilities are present to ensure that CSRF defenses can’t be circumvented. Please see the OWASP <a href="/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">XSS Prevention Cheat Sheet</a> for detailed guidance on how to prevent XSS flaws.</p>
+
+<h1 id="resources-that-need-to-be-protected-from-csrf-vulnerability">Resources that need to be protected from CSRF vulnerability</h1>
+
+<p>The following list assumes that you are not violating <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.1.1">RFC2616</a>, section 9.1.1, by using GET requests for state changing operations.</p>
+
+<p><strong>Note:</strong> If for any reason you violate, you would also need to protect those resources, which is mostly achieved with default <code class="language-plaintext highlighter-rouge">form</code> <code class="language-plaintext highlighter-rouge">tag</code> <code class="language-plaintext highlighter-rouge">[GET method]</code>, <code class="language-plaintext highlighter-rouge">href</code>, and <code class="language-plaintext highlighter-rouge">src</code> attributes.</p>
+
+<ul>
+  <li>Form tags with POST</li>
+  <li>Ajax/XHR calls</li>
+</ul>
+
+<h1 id="csrf-defense-recommendations-summary">CSRF Defense Recommendations Summary</h1>
+
+<p>We recommend token based CSRF defense (either stateful/stateless) as a primary defense to mitigate CSRF in your applications. Only for highly sensitive operations, we also recommend a user interaction based protection (either re-authentication/one-time token, detailed in section 6.5) along with token based mitigation.</p>
+
+<p>As a defense-in-depth measure, consider implementing one mitigation from Defense in Depth Mitigations section (you can choose the mitigation that fits your ecosystem considering the issues mentioned under them). These defense-in-depth mitigation techniques are not recommended to be used by themselves (without token based mitigation) for mitigating CSRF in your applications.</p>
+
+<h1 id="primary-defense-technique">Primary Defense Technique</h1>
+
+<h2 id="token-based-mitigation">Token Based Mitigation</h2>
+
+<p>This defense is one of the most popular and recommended methods to mitigate CSRF. It can be achieved either with state (synchronizer token pattern) or stateless (encrypted/hash based token pattern). See section 4.3 on how to mitigate login CSRF in your applications. For all the mitigations, it is implicit that general security principles should be adhered</p>
+
+<ul>
+  <li>Strong encryption/HMAC functions should be adhered to.</li>
+</ul>
+
+<p><strong>Note:</strong> You can select any algorithm per your organizational needs. We recommend AES256-GCM for encryption and SHA256/512 for HMAC.</p>
+
+<ul>
+  <li>Strict key rotation and token lifetime policies should be maintained. Policies can be set according to your organizational needs. Generic key management guidance from OWASP can be found <a href="/cheatsheets/Key_Management_Cheat_Sheet.html">here</a>.</li>
+</ul>
+
+<h3 id="synchronizer-token-pattern">Synchronizer Token Pattern</h3>
+
+<p>Any state changing operation requires a secure random token (e.g., CSRF token) to prevent CSRF attacks. A CSRF token should be:</p>
+
+<ul>
+  <li>unique per user session;</li>
+  <li>large random value;</li>
+  <li>generated by a Cryptographically Secure Pseudo-Random Number Generator (CSPRNG).</li>
+</ul>
+
+<p>The CSRF token can be added through hidden fields, headers, and can be used with forms, and AJAX calls. Make sure that the token is not leaked in the server logs, or <a href="#disclosure-of-token-in-url">in the URL</a>. The server must reject the requested action if the CSRF token fails validation.</p>
+
+<p>Inserting the CSRF token in the HTTP request header via JavaScript is considered more secure than adding the token in the hidden field form parameter. In this situation, even if the CSRF token is weak, predictable or leaked but still an attacker cannot forge the POST request directly by setting the custom request header through XMLHttpRequest. As per the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Preflighted_requests">MDN documentation</a> when the attacker tries to set any custom header through any XMLHttpRequest, the browser sends the OPTIONS (pre-flight) request. Moreover, when the attacker tries to spoof the header through flash, the browser initiates the GET request for crossdomain.xml. In both cases, the browser prevents the forged request to be sent.</p>
+
+<p>In order to facilitate a “transparent but visible” CSRF solution, developers are encouraged to adopt a pattern similar to <a href="http://www.corej2eepatterns.com/Design/PresoDesign.htm">Synchronizer Token Pattern</a> (The original intention of this synchronizer token pattern was to detect duplicate submissions in forms). The synchronizer token pattern requires the generation of random “challenge” tokens that are associated with the user’s current session. These challenge tokens are then inserted within the HTML forms and calls associated with sensitive server-side operations. It is the responsibility of the server application to verify the existence and correctness of this token. By including a challenge token with each request, the developer has a strong control to verify that the user actually intended to submit the desired requests. Inclusion of a required security token in HTTP requests associated with sensitive business functions helps mitigate CSRF attacks as successful exploitation assumes the attacker knows the randomly generated token for the target victim’s session.</p>
+
+<p><strong>Note:</strong> These tokens aren’t like cookies that are automatically sent with forged requests made from your browser from the attacker website.</p>
+
+<p>This is analogous to the attacker being able to guess the target victim’s session identifier.</p>
+
+<p>The following describes a general approach to incorporate challenge tokens within the request.</p>
+
+<p>When a Web application formulates a request, the application should include a hidden input parameter with a common name such as “CSRFToken” (for forms)/ as header/parameter value for Ajax calls. The value of this token must be randomly generated such that it cannot be guessed by an attacker. Consider leveraging the java.security.SecureRandom class for Java applications to generate a sufficiently long random token. Alternative generation algorithms include the use of 256-bit BASE64 encoded hashes. Developers that choose this generation algorithm must make sure that there is randomness and uniqueness utilized in the data that is hashed to generate the random token.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/transfer.do"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"CSRFToken"</span>
+<span class="na">value=</span><span class="s">"OWY4NmQwODE4ODRjN2Q2NTlhMmZlYWEwYzU1YWQwMTVhM2JmNGYxYjJiMGI4MjJjZDE1ZDZMGYwMGEwOA=="</span><span class="nt">&gt;</span>
+...
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>In general, developers need only generate this token once for the current session. After initial generation of this token, the value is stored in the session and is used for each subsequent request until the session expires. When a request is issued by the end-user, the server-side component must verify the existence and validity of the token in the request compared to the token found in the user session. If the token was not found within the request, or the value provided does not match the value within the user session, then the request should be aborted, and the event logged as a potential CSRF attack in progress.</p>
+
+<p>To further enhance the security of this proposed design, consider randomizing the CSRF token parameter name and/or value for each request. Implementing this approach results in the generation of per-request tokens as opposed to per-session tokens. This is more secure than per-session tokens as the time range for an attacker to exploit the stolen tokens is minimal. However, this may result in usability concerns. For example, the “Back” button browser capability is often hindered as the previous page may contain a token that is no longer valid. Interaction with this previous page will result in a CSRF false positive security event at the server. Few applications that need high security typically implement this approach (such as banks). You have to check what suits your needs. Regardless of the approach taken, developers are encouraged to protect the CSRF token the same way they protect authenticated session identifiers, such as the use of TLS.</p>
+
+<p><strong>Existing Synchronizer Implementations</strong></p>
+
+<p>Synchronizer token defenses have been built into many frameworks, so we strongly recommend using them first when they are available. External components that add CSRF defenses to existing applications are also recommended. OWASP has the following:</p>
+
+<ul>
+  <li>For Java: OWASP <a href="https://www.owasp.org/index.php/CSRF_Guard">CSRF Guard</a></li>
+  <li>For PHP and Apache: <a href="https://www.owasp.org/index.php/CSRFProtector_Project">CSRFProtector Project</a></li>
+</ul>
+
+<h4 id="disclosure-of-token-in-url">Disclosure of Token in URL</h4>
+
+<p>Some implementations of synchronizer tokens include the challenge token in GET (URL) requests as well as POST requests. This is often implemented as a result of sensitive server-side operations being invoked as a result of embedded links in the page or other general design patterns. While this control does help mitigate the risk of CSRF attacks, the unique per-session token is being exposed for GET requests. CSRF tokens in GET requests are potentially leaked at several locations: browser history, log files, network appliances that make a point to log the first line of an HTTP request, and Referer headers if the protected site links to an external site. In the latter case (leaked CSRF token due to the Referer header being parsed by a linked site), it is trivially easy for the linked site to launch a CSRF attack on the protected site, and they will be able to target this attack very effectively, since the Referer header tells them the site as well as the CSRF token.</p>
+
+<p>The ideal solution is to only include the CSRF token in POST requests and modify server-side actions that have state changing affect to only respond to POST requests. This is in fact what the RFC 2616 requires for GET requests. If sensitive server-side actions are guaranteed to only ever respond to POST requests, then there is no need to include the token in GET requests.</p>
+
+<h3 id="encryption-based-token-pattern">Encryption based Token Pattern</h3>
+
+<p>The Encrypted Token Pattern leverages an encryption, rather than comparison method of Token-validation. It is most suitable for applications that do not want to maintain any state at server side.</p>
+
+<p>Server generates a token comprised of the user’s session ID and a timestamp (to prevent replay attacks) using a unique key available only on the server (AES256-with GCM mode/GCM-SIV is recommended. Usage of ECB mode is strictly not recommended. If you would like to use any other block cipher mode of operation, refer <a href="/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">here</a> and <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation">here</a> for more information). This token is returned to the client and embedded in a hidden field for forms, in the request-header/parameter for AJAX requests. On receipt of this request, the server reads and decrypts the token value with the same key used to create the token. Inability to correctly decrypt suggest an intrusion attempt (recommend to block and log the attack for incident response purposes). Once decrypted, the users sessionId and timestamp contained within the token are validated; session-id is compared against the currently logged in user, and the timestamp is compared against the current time to verify that its not beyond the defined token expiry time. If session-id matches and the timestamp is under the defined token expiry time, request can be allowed.</p>
+
+<p>Refer <a href="/cheatsheets/Key_Management_Cheat_Sheet.html#key-management-lifecycle-best-practices">here</a> to learn best practices about managing your encryption key.</p>
+
+<h3 id="hmac-based-token-pattern">HMAC Based Token Pattern</h3>
+
+<p>HMAC Based Token Pattern mitigation is also achieved without maintaining any state at the server. <a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> based CSRF protection works similar to encryption based CSRF protection with a couple of minor differences</p>
+<ol>
+  <li>Use strong HMAC function (SHA256 or stronger algorithms are recommended) instead of an encryption function to generate the token</li>
+  <li>Token is HMAC+timestamp</li>
+</ol>
+
+<p>Below are the steps for the proper implementation of the HMAC based CSRF protection:</p>
+<ol>
+  <li>Generate the token<br />
+Using key K, generate HMAC(usersessionID+timestamp) and append the same timestamp value to it which results in your CSRF token.</li>
+  <li>Include the token (<em>i.e.</em> HMAC+timestamp)<br />
+Include token in a hidden field for forms and in the request-header field/request body parameter for AJAX requests.</li>
+  <li>Validating the token<br />
+When the request is received at the server, re-generate the token with same key K (parameters are sessionID from the request and timestamp in the received token). If the HMAC in the received token and the one generated in this step match, verify if timestamp received is less than defined token expiry time. If both of them are success, then request is treated as legitimate and can be allowed. If not, block the request and log the attack for incident response purposes.</li>
+</ol>
+
+<p>Refer <a href="/cheatsheets/Key_Management_Cheat_Sheet.html#key-management-lifecycle-best-practices">here</a> to learn best practices about managing your HMAC key.</p>
+
+<h2 id="auto-csrf-mitigation-techniques">Auto CSRF Mitigation Techniques</h2>
+
+<p>Though the technique of mitigating tokens is widely used (stateful with synchronizer token and stateless with encrypted/HMAC token), the major problem associated with these techniques is the human tendency to forget things at times. If a developer forgets to add the token to any state changing operation, they are making the application vulnerable to CSRF. To avoid this, you can try to automate the process of adding tokens to CSRF vulnerable resources (mentioned earlier in this document). You can achieve this by doing the following:</p>
+
+<ul>
+  <li>Write wrappers (that would auto add tokens when used) around default form tags/ajax calls and educate your developers to use those wrappers instead of standard tags. Though this approach is better than depending purely on developers to add tokens, it still is vulnerable to the issue of human tendency to forget things. <a href="https://docs.spring.io/spring-security/site/docs/3.2.0.CI-SNAPSHOT/reference/html/csrf.html">Spring Security</a> uses this technique to add CSRF tokens by default when a custom <code class="language-plaintext highlighter-rouge">&lt;form:form&gt;</code> tag is used, you can opt to use after verifying that its enabled and properly configured in the Spring Security version you are using.</li>
+  <li>Write a hook (that would capture the traffic and add tokens to CSRF vulnerable resources before rendering to customers) in your organizational web rendering frameworks. Because it is hard to analyze when a particular response is doing any state change (and thus needing a token), you might want to include tokens in all CSRF vulnerable resources (ex: include tokens in all POST responses). This is one recommended approach, but you need to consider the performance costs it might incur.</li>
+  <li>Get the tokens automatically added on the client side when the page is being rendered in user’s browser, with help of a client side script (this approach is used by <a href="https://www.owasp.org/index.php/CSRF_Guard">CSRF Guard</a>). You need to consider any possible JavaScript hijacking attacks.</li>
+</ul>
+
+<p>We recommend researching if the framework you are using has an option to achieve CSRF protection by default before trying to build your custom token generating system. For example, .NET has <a href="https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.1">built-in protection</a> that adds a token to CSRF vulnerable resources. You are responsible for proper configuration (such as key management and token management) before using these built-in CSRF protections that generate tokens to guard CSRF vulnerable resources.</p>
+
+<h2 id="login-csrf">Login CSRF</h2>
+
+<p>Most developers tend to ignore CSRF vulnerability on login forms as they assume that CSRF would not be applicable on login forms because user is not authenticated at that stage. That assumption is false. CSRF vulnerability can still occur on login forms where the user is not authenticated, but the impact/risk view for it is quite different from the impact/risk view of a general CSRF vulnerability (when a user is authenticated).</p>
+
+<p>With a CSRF vulnerability on login form, an attacker can make a victim login as them and learn behavior from their searches. For more information about login CSRF and other risks, see section 3 of <a href="https://seclab.stanford.edu/websec/csrf/csrf.pdf">this</a> paper.</p>
+
+<p>Login CSRF can be mitigated by creating pre-sessions (sessions before a user is authenticated) and including tokens in login form. You can use any of the techniques mentioned above to generate tokens. Pre-sessions can be transitioned to real sessions once the user is authenticated. This technique is described in <a href="https://seclab.stanford.edu/websec/csrf/csrf.pdf">Robust Defenses for Cross-Site Request Forgery section 4.1</a>.</p>
+
+<p>If sub-domains under your master domain are treated as not trusty in your threat model, it is difficult to mitigate login CSRF. A strict subdomain and path level referrer header (because most login pages are served on HTTPS - no stripping of referrer - and are also linked from home pages) validation (detailed in section 6.1) can be used in these cases for mitigating CSRF on login forms to an extent.</p>
+
+<h1 id="defense-in-depth-techniques">Defense In Depth Techniques</h1>
+
+<h2 id="samesite-cookie-attribute">Samesite Cookie Attribute</h2>
+
+<p>SameSite is a cookie attribute (similar to HTTPOnly, Secure etc.) which aims to mitigate CSRF attacks. It is defined in <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02#section-5.3.7">RFC6265bis</a>. This attribute helps the browser decide whether to send cookies along with cross-site requests. Possible values for this attribute are <code class="language-plaintext highlighter-rouge">Lax</code>, <code class="language-plaintext highlighter-rouge">Strict</code>, or <code class="language-plaintext highlighter-rouge">None</code>.</p>
+
+<p>The Strict value will prevent the cookie from being sent by the browser to the target site in all cross-site browsing context, even when following a regular link. For example, for a GitHub-like website this would mean that if a logged-in user follows a link to a private GitHub project posted on a corporate discussion forum or email, GitHub will not receive the session cookie and the user will not be able to access the project. A bank website however doesn’t want to allow any transactional pages to be linked from external sites, so the Strict flag would be most appropriate.</p>
+
+<p>The default Lax value provides a reasonable balance between security and usability for websites that want to maintain user’s logged-in session after the user arrives from an external link. In the above GitHub scenario, the session cookie would be allowed when following a regular link from an external website while blocking it in CSRF-prone request methods such as POST. Only cross-site-requests that are allowed in Lax mode are the ones that have top-level navigations and are also <a href="https://tools.ietf.org/html/rfc7231#section-4.2.1">safe</a> HTTP methods.</p>
+
+<p>For more details on the <code class="language-plaintext highlighter-rouge">SameSite</code> values, check the following <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02#section-5.3.7.1">section</a> from the <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02">rfc</a>.</p>
+
+<p>Example of cookies using this attribute:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Set-Cookie: JSESSIONID=xxxxx; SameSite=Strict
+Set-Cookie: JSESSIONID=xxxxx; SameSite=Lax
+</code></pre></div></div>
+
+<p>All desktop browsers and almost all mobile browsers now support the <code class="language-plaintext highlighter-rouge">SameSite</code> attribute. To keep track of the browsers implementing it and the usage of the attribute, refer to the following <a href="https://caniuse.com/#feat=same-site-cookie-attribute">service</a>.</p>
+
+<p>It is important to note that this attribute should be implemented as an additional layer <em>defense in depth</em> concept. This attribute protects the user through the browsers supporting it, and it contains as well 2 ways to bypass it as mentioned in the following <a href="https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02#section-5.3.7.1">section</a>. This attribute should not replace having a CSRF Token. Instead, it should co-exist with that token in order to protect the user in a more robust way.</p>
+
+<h2 id="verifying-origin-with-standard-headers">Verifying origin with standard headers</h2>
+
+<p>This defense technique is specifically proposed in section 5.0 of <a href="https://seclab.stanford.edu/websec/csrf/csrf.pdf">Robust Defenses for Cross-Site Request Forgery</a>. This paper proposes the first creation of the Origin header and its use as a CSRF defense mechanism.</p>
+
+<p>There are two steps to this mitigation, both of which rely on examining an HTTP request header value.</p>
+
+<ol>
+  <li>
+    <p>Determining the origin the request is coming from (source origin). Can be done via Origin and/or referer header.</p>
+  </li>
+  <li>
+    <p>Determining the origin the request is going to (target origin).</p>
+  </li>
+</ol>
+
+<p>At server side we verify if both of them match. If they do, we accept the request as legitimate (meaning it’s the same origin request) and if they don’t, we discard the request (meaning that the request originated from cross-domain). Reliability on these headers comes from the fact that they cannot be altered programmatically (using JavaScript in an XSS) as they fall under <a href="https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name">forbidden headers</a> list (i.e., only browsers can set them).</p>
+
+<h3 id="identifying-source-origin-via-originreferer-header">Identifying Source Origin (via Origin/Referer header)</h3>
+
+<p><strong>Checking the Origin Header</strong></p>
+
+<p>If the Origin header is present, verify that its value matches the target origin. Unlike the Referer, the Origin header will be present in HTTP requests that originate from an HTTPS URL.</p>
+
+<p><strong>Checking the Referer Header</strong></p>
+
+<p>If the Origin header is not present, verify the hostname in the Referer header matches the target origin. This method of CSRF mitigation is also commonly used with unauthenticated requests, such as requests made prior to establishing a session state, which is required to keep track of a synchronization token.</p>
+
+<p>In both cases, make sure the target origin check is strong. For example, if your site is <code class="language-plaintext highlighter-rouge">site.com</code> make sure <code class="language-plaintext highlighter-rouge">site.com.attacker.com</code> does not pass your origin check (i.e., match through the trailing / after the origin to make sure you are matching against the entire origin).</p>
+
+<p>If neither of these headers are present, you can either accept or block the request. We recommend <strong>blocking</strong>. Alternatively, you might want to log all such instances, monitor their use cases/behavior, and then start blocking requests only after you get enough confidence.</p>
+
+<h3 id="identifying-the-target-origin">Identifying the Target Origin</h3>
+
+<p>You might think it’s easy to determine the target origin, but it’s frequently not. The first thought is to simply grab the target origin (i.e., its hostname and port <code class="language-plaintext highlighter-rouge">#</code>) from the URL in the request. However, the application server is frequently sitting behind one or more proxies and the original URL is different from the URL the app server actually receives. If your application server is directly accessed by its users, then using the origin in the URL is fine and you’re all set.</p>
+
+<p>If you are behind a proxy, there are a number of options to consider.</p>
+
+<ul>
+  <li>
+    <p><strong>Configure your application to simply know its target origin:</strong> It’s your application, so you can find its target origin and set that value in some server configuration entry. This would be the most secure approach as its defined server side, so it is a trusted value. However, this might be problematic to maintain if your application is deployed in many places, e.g., dev, test, QA, production, and possibly multiple production instances. Setting the correct value for each of these situations might be difficult, but if you can do it via some central configuration and providing your instances to grab value from it, that’s great! (<strong>Note:</strong> Make sure the centralized configuration store is maintained securely because major part of your CSRF defense depends on it.)</p>
+  </li>
+  <li>
+    <p><strong>Use the Host header value:</strong> If you prefer that the application find its own target so it doesn’t have to be configured for each deployed instance, we recommend using the Host family of headers. The Host header’s purpose is to contain the target origin of the request. But, if your app server is sitting behind a proxy, the Host header value is most likely changed by the proxy to the target origin of the URL behind the proxy, which is different than the original URL. This modified Host header origin won’t match the source origin in the original Origin or Referer headers.</p>
+  </li>
+  <li>
+    <p><strong>Use the X-Forwarded-Host header value:</strong> To avoid the issue of proxy altering the host header, there is another header called X-Forwarded-Host, whose purpose is to contain the original Host header value the proxy received. Most proxies will pass along the original Host header value in the X-Forwarded-Host header. So that header value is likely to be the target origin value you need to compare to the source origin in the Origin or Referer header.</p>
+  </li>
+</ul>
+
+<p>This mitigation is working properly when origin or referrer headers are present in the requests. Though these headers are included <strong>majority</strong> of the time, there are few use cases where they are not included (most of them are for legitimate reasons to safeguard users privacy/to tune to browsers ecosystem). The following lists some use cases:</p>
+
+<ul>
+  <li>Internet Explorer 11 does not add the Origin header on a CORS request across sites of a trusted zone. The Referer header will remain the only indication of the UI origin. See the following references in stackoverflow <a href="https://stackoverflow.com/questions/20784209/internet-explorer-11-does-not-add-the-origin-header-on-a-cors-request">here</a> and <a href="https://github.com/silverstripe/silverstripe-graphql/issues/118">here</a>.</li>
+  <li>In an instance following a <a href="https://stackoverflow.com/questions/22397072/are-there-any-browsers-that-set-the-origin-header-to-null-for-privacy-sensitiv">302 redirect cross-origin</a>, Origin is not included in the redirected request because that may be considered sensitive information that should not be sent to the other origin.</li>
+  <li>There are some <a href="https://wiki.mozilla.org/Security/Origin#Privacy-Sensitive_Contexts">privacy contexts</a> where Origin is set to “null” For example, see the following <a href="https://www.google.com/search?q=origin+header+sent+null+value+site%3Astackoverflow.com&amp;oq=origin+header+sent+null+value+site%3Astackoverflow.com">here</a>.</li>
+  <li>Origin header is included for all cross origin requests but for same origin requests, in most browsers it is only included in POST/DELETE/PUT <strong>Note:</strong> Although it is not ideal, many developers use GET requests to do state changing operations.</li>
+  <li>Referer header is no exception. There are multiple use cases where referrer header is omitted as well (<a href="https://stackoverflow.com/questions/6880659/in-what-cases-will-http-referer-be-empty">1</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer">2</a>, <a href="https://en.wikipedia.org/wiki/HTTP_referer#Referer_hiding">3</a>, <a href="https://seclab.stanford.edu/websec/csrf/csrf.pdf">4</a> and <a href="https://www.google.com/search?q=referrer+header+sent+null+value+site:stackoverflow.com">5</a>). Load balancers, proxies and embedded network devices are also well known to strip the referrer header due to privacy reasons in logging them.</li>
+</ul>
+
+<p>Usually, a minor percentage of traffic does fall under above categories (<a href="http://homakov.blogspot.com/2012/04/playing-with-referer-origin-disquscom.html">1-2%</a>) and no enterprise would want to lose even this minor % of traffic. One of the popular technique used across Internet to make this technique more usable is to accept the request if the Origin/referrer matches your configured list of domains “OR” a null value (Examples <a href="http://homakov.blogspot.com/2012/04/playing-with-referer-origin-disquscom.html">here</a>. null value is to cover the edge cases mentioned above where these headers are not sent). Please note that, attackers can exploit this but people prefer to use this technique as a defense in depth measure because of minor effort involved in deploying it</p>
+
+<h2 id="double-submit-cookie">Double Submit Cookie</h2>
+
+<p>If maintaining the state for CSRF token at server side is problematic, an alternative defense is to use the double submit cookie technique. This technique is easy to implement and is stateless. In this technique, we send a random value in both a cookie and as a request parameter, with the server verifying if the cookie value and request value match. When a user visits (even before authenticating to prevent login CSRF), the site should generate a (cryptographically strong) pseudorandom value and set it as a cookie on the user’s machine separate from the session identifier. The site then requires that every transaction request include this pseudorandom value as a hidden form value (or other request parameter/header). If both of them match at server side, the server accepts it as legitimate request and if they don’t, it would reject the request.</p>
+
+<p><strong>This technique works as long as you are sure that your subdomains are fully secured and only accept HTTPS connections</strong> 
+The problem of “trusting of sub domains and proper configuration of whole site in general to accept HTTPS connections only”. The <a href="https://media.blackhat.com/eu-13/briefings/Lundeen/bh-eu-13-deputies-still-confused-lundeen-wp.pdf">Blackhat talk</a> by Rich Lundeen references these drawbacks.</p>
+
+<p>“<em>With double submit, if an attacker can write a cookie they can obviously defeat the protection. And again, writing cookies is significantly easier then reading them. The fact that cookies can be written is difficult for many people to understand. After all, doesn’t the same origin policy specify that one domain cannot access cookies from another domain? However, there are two common scenarios where writing cookies across domains is possible:</em></p>
+
+<p><em>a)   While it’s true that hellokitty.marketing.example.com cannot read cookies or access the DOM from secure.example.com because of the same origin policy, hellokitty.marketing.example.com can write cookies to the parent domain (example.com), and these cookies are then consumed by secure.example.com (secure.example.com has no good way to distinguish which site set the cookie). Additionally, there are methods of forcing secure.example.com to always accept your cookie first. What this means is that XSS in hellokitty.marketing.example.com is able to overwrite cookies in secure.example.com.</em></p>
+
+<p><em>b)   If an attacker is in the middle, they can usually force a request to the same domain over HTTP. If an application is hosted at <code class="language-plaintext highlighter-rouge">https://secure.example.com</code>, even if the cookies are set with the secure flag, a man in the middle can force connections to <code class="language-plaintext highlighter-rouge">http://secure.example.com</code> and set (overwrite) any arbitrary cookies (even though the secure flag prevents the attacker from reading those cookies). Even if the HSTS header is set on the server and the browser visiting the site supports HSTS (this would prevent a man in the middle from forcing plaintext HTTP requests) unless the HSTS header is set in a way that includes all subdomains, a man in the middle can simply force a request to a separate subdomain and overwrite cookies similar to 1. In other words, as long as <code class="language-plaintext highlighter-rouge">http://hellokitty.marketing.example.com</code> doesn’t force https, then an attacker can overwrite cookies on any <code class="language-plaintext highlighter-rouge">example.com</code> subdomain.</em>”</p>
+
+<p>Scenarios a and b mentioned above are possible only if the CSRF token is not derived/tied to the session in which case an attacker can overwrite the token in the parent domain cookie with XSS in child domain. A variant of how this can be mitigated by linking token and session/auth cookie is explained below.</p>
+
+<p>Including the token in an encrypted cookie - other than the authentication cookie (since they are often shared within subdomains) - and then at the server side matching it (after decrypting the encrypted cookie) with the token in hidden form field or parameter/header for ajax calls mitigates both the issues mentioned above. This works because a sub domain has no way to over-write an properly crafted encrypted cookie without the necessary information such as encryption key.</p>
+
+<p>A simpler alternative to an encrypted cookie is to hash the token with a secret salt known only by the server and place this value in a cookie. This is similar to an encrypted cookie (both require knowledge only the server holds), but is less computationally intensive than encrypting and decrypting the cookie. Whether encryption or a salted-hash is used, an attacker won’t be able to recreate the cookie value from the plain token without knowledge of the server secrets.</p>
+
+<p><strong>Note about Triple Submit Cookie</strong></p>
+
+<p>This mitigation is proposed by John Wilander in 2012 at OWASP Appsec Research. This technique adds an additional step to double submit cookie approach by verifying if the request contains two cookies with same name (please note, attacker need to write an additional cookie to bypass double submit cookie mitigation). Though it mitigates the issues discussed in bypass of double submit cookie, it introduces new problems such as cookie jar overflow (in-details and more issue details <a href="https://media.blackhat.com/eu-13/briefings/Lundeen/bh-eu-13-deputies-still-confused-lundeen-wp.pdf">here</a> and <a href="https://webstersprodigy.net/2012/08/03/analysis-of-john-wilanders-triple-submit-cookies/">here</a></p>
+
+<h2 id="use-of-custom-request-headers">Use of Custom Request Headers</h2>
+
+<p>Adding CSRF tokens, a double submit cookie and value, encrypted token, or other defense that involves changing the UI can frequently be complex or otherwise problematic. An alternate defense that is particularly well suited for AJAX/XHR endpoints is the use of a custom request header. This defense relies on the <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin policy (SOP)</a> restriction that only JavaScript can be used to add a custom header, and only within its origin. By default, browsers do not allow JavaScript to make cross origin requests.</p>
+
+<p>A particularly attractive custom header and value to use is “X-Requested-With: XMLHttpRequest” because most JavaScript libraries already add this header to requests they generate by default. However, some do not. For example, AngularJS used to, but does not anymore. For more information, see <a href="https://github.com/angular/angular.js/commit/3a75b1124d062f64093a90b26630938558909e8d">their rationale</a> and how to add it back.</p>
+
+<p>If this is the case for your system, you can simply verify the presence of this header and value on all your server side AJAX endpoints in order to protect against CSRF attacks. This approach has the double advantage of usually requiring no UI changes and not introducing any server side state, which is particularly attractive to REST services. You can always add your own custom header and value if that is preferred.</p>
+
+<p>This defense technique is specifically discussed in section 4.3 of <a href="https://seclab.stanford.edu/websec/csrf/csrf.pdf">Robust Defenses for Cross-Site Request Forgery</a>. However, bypasses of this defense using Flash were documented as early as 2008 and again as recently as 2015 by Mathias Karlsson to <a href="https://hackerone.com/reports/44146">exploit a CSRF flaw in Vimeo</a>. Riyaz Walikar from <a href="https://appsecco.com/">Appsecco Labs</a> was able to exploit this even in early 2019 <a href="https://blog.appsecco.com/exploiting-csrf-on-json-endpoints-with-flash-and-redirects-681d4ad6b31b">using older versions of Firefox</a> and also in some recent versions of Chrome (with a bit of <a href="https://github.com/sp1d3r/swf_json_csrf/blob/master/read.html">user involvement</a>). Since we cannot the control the versions of browser end user uses nor depend on it for their security, this technique is not recommended as a primary defense in measure.</p>
+
+<p>This technique obviously works for Ajax calls and you have to still need protect <code class="language-plaintext highlighter-rouge">&lt;form&gt;</code> tags with approaches described in this document such as tokens. Also, CORS configuration should also be robust to make this solution work effectively (as custom headers for requests coming from other domains trigger a pre-flight CORS check).</p>
+
+<p><strong>Note about Content-Type Header Validation</strong></p>
+
+<p>Do not use Content-Type Header as a CSRF mitigation. For more information why, see <a href="https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2017/september/common-csrf-prevention-misconceptions/">Common CSRF Prevention Misconceptions</a></p>
+
+<h2 id="user-interaction-based-csrf-defense">User Interaction Based CSRF Defense</h2>
+
+<p>While all the techniques referenced here do not require any user interaction, sometimes it’s easier or more appropriate to involve the user in the transaction to prevent unauthorized operations (forged via CSRF or otherwise). The following are some examples of techniques that can act as strong CSRF defense when implemented correctly.</p>
+
+<ul>
+  <li>Re-Authentication (password or stronger)</li>
+  <li>One-time Token</li>
+  <li>CAPTCHA</li>
+</ul>
+
+<p>While these are a very strong CSRF defense, it does create a huge impact on the user experience. For applications that are in need of high security for some operations (password change, money transfer etc.), these techniques should be used along with token based mitigation. Please note that tokens by themselves can mitigate CSRF, developers should use these techniques only to achieve additional security for their high sensitive operations.</p>
+
+<h1 id="implementation-reference-example">Implementation reference example</h1>
+
+<p>The following JEE web filter provides an example reference for some of the concepts described in this cheatsheet. It implements the following stateless mitigations (<a href="https://github.com/aramrami/OWASP-CSRFGuard">OWASP CSRFGuard</a>, cover a stateful approach).</p>
+
+<ul>
+  <li>Verifying same origin with standard headers</li>
+  <li>Double submit cookie</li>
+  <li>SameSite cookie attribute</li>
+</ul>
+
+<p><strong>Please note</strong> that it only acts a reference sample and is not complete (for example: it doesn’t have a block to direct the control flow when origin and referrer header check succeeds nor it has a port/host/protocol level validation for referrer header). Developers are recommended to build their complete mitigation on top of this reference sample. Developers should also implement standard authentication or authorization checks before checking for CSRF.</p>
+
+<p>Source is also located <a href="https://github.com/righettod/poc-csrf">here</a> and provides a runnable POC.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.Filter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.FilterChain</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.FilterConfig</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.ServletException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.ServletRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.ServletResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.annotation.WebFilter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.Cookie</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponseWrapper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.xml.bind.DatatypeConverter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.MalformedURLException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URL</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.security.SecureRandom</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="cm">/**
+ * Filter in charge of validating each incoming HTTP request about Headers 
+ * and CSRF token.
+ * It is called for all requests to backend destination.
+ *
+ * We use the approach in which:
+ * - The CSRF token is changed after each valid HTTP exchange
+ * - The custom Header name for the CSRF token transmission is fixed
+ * - A CSRF token is associated to a backend service URI in order to enable 
+ *   the support for multiple parallel Ajax request from the same application
+ * - The CSRF cookie name is the backend service name prefixed with a fixed prefix
+ *
+ * Here for the POC we show the "access denied" reason in the response but in 
+ * production code only return a generic message !
+ *
+ * @see "https://wiki.mozilla.org/Security/Origin"
+ * @see "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie"
+ * @see "https://chloe.re/2016/04/13/goodbye-csrf-samesite-to-the-rescue/"
+ */</span>
+<span class="nd">@WebFilter</span><span class="o">(</span><span class="s">"/backend/*"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CSRFValidationFilter</span> <span class="kd">implements</span> <span class="nc">Filter</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * JVM param name used to define the target origin
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">TARGET_ORIGIN_JVM_PARAM_NAME</span> <span class="o">=</span> <span class="s">"target.origin"</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Name of the custom HTTP header used to transmit the CSRF token and also to prefix
+     * the CSRF cookie for the expected backend service
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">CSRF_TOKEN_NAME</span> <span class="o">=</span> <span class="s">"X-TOKEN"</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Logger
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">CSRFValidationFilter</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * Application expected deployment domain: named "Target Origin" in OWASP CSRF article
+     */</span>
+    <span class="kd">private</span> <span class="no">URL</span> <span class="n">targetOrigin</span><span class="o">;</span>
+
+    <span class="cm">/***
+     * Secure generator
+     */</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">SecureRandom</span> <span class="n">secureRandom</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SecureRandom</span><span class="o">();</span>
+
+
+    <span class="cm">/**
+     * {@inheritDoc}
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="nc">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="nc">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">chain</span><span class="o">)</span> 
+    <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ServletException</span> <span class="o">{</span>
+        <span class="nc">HttpServletRequest</span> <span class="n">httpReq</span> <span class="o">=</span> <span class="o">(</span><span class="nc">HttpServletRequest</span><span class="o">)</span> <span class="n">request</span><span class="o">;</span>
+        <span class="nc">HttpServletResponse</span> <span class="n">httpResp</span> <span class="o">=</span> <span class="o">(</span><span class="nc">HttpServletResponse</span><span class="o">)</span> <span class="n">response</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">accessDeniedReason</span><span class="o">;</span>
+
+        <span class="cm">/* STEP 1: Verifying Same Origin with Standard Headers */</span>
+        <span class="c1">//Try to get the source from the "Origin" header</span>
+        <span class="nc">String</span> <span class="n">source</span> <span class="o">=</span> <span class="n">httpReq</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Origin"</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">source</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">//If empty then fallback on "Referer" header</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">httpReq</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Referer"</span><span class="o">);</span>
+            <span class="c1">//If this one is empty too then we trace the event and we block the request </span>
+            <span class="c1">//(recommendation of the article)...</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">source</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">accessDeniedReason</span> <span class="o">=</span> <span class="s">"CSRFValidationFilter: ORIGIN and REFERER request"</span> <span class="o">+</span> 
+                <span class="s">"headers are both absent/empty so we block the request !"</span><span class="o">;</span>
+                <span class="no">LOG</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="n">accessDeniedReason</span><span class="o">);</span>
+                <span class="n">httpResp</span><span class="o">.</span><span class="na">sendError</span><span class="o">(</span><span class="nc">HttpServletResponse</span><span class="o">.</span><span class="na">SC_FORBIDDEN</span><span class="o">,</span> <span class="n">accessDeniedReason</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">//Compare the source against the expected target origin</span>
+        <span class="no">URL</span> <span class="n">sourceURL</span> <span class="o">=</span> <span class="k">new</span> <span class="no">URL</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="na">targetOrigin</span><span class="o">.</span><span class="na">getProtocol</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">sourceURL</span><span class="o">.</span><span class="na">getProtocol</span><span class="o">())</span> <span class="o">||</span> 
+            <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="na">targetOrigin</span><span class="o">.</span><span class="na">getHost</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">sourceURL</span><span class="o">.</span><span class="na">getHost</span><span class="o">())</span>
+        <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="na">targetOrigin</span><span class="o">.</span><span class="na">getPort</span><span class="o">()</span> <span class="o">!=</span> <span class="n">sourceURL</span><span class="o">.</span><span class="na">getPort</span><span class="o">())</span> <span class="o">{</span>
+            <span class="c1">//One the part do not match so we trace the event and we block the request</span>
+            <span class="n">accessDeniedReason</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"CSRFValidationFilter: Protocol/Host/Port "</span> <span class="o">+</span> 
+            <span class="s">"do not fully matches so we block the request! (%s != %s) "</span><span class="o">,</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">targetOrigin</span><span class="o">,</span> <span class="n">sourceURL</span><span class="o">);</span>
+            <span class="no">LOG</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="n">accessDeniedReason</span><span class="o">);</span>
+            <span class="n">httpResp</span><span class="o">.</span><span class="na">sendError</span><span class="o">(</span><span class="nc">HttpServletResponse</span><span class="o">.</span><span class="na">SC_FORBIDDEN</span><span class="o">,</span> <span class="n">accessDeniedReason</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="cm">/* STEP 2: Verifying CSRF token using "Double Submit Cookie" approach */</span>
+        <span class="c1">//If CSRF token cookie is absent from the request then we provide one </span>
+        <span class="c1">//in response but we stop the process at this stage.</span>
+        <span class="c1">//Using this way we implement the first providing of token</span>
+        <span class="nc">Cookie</span> <span class="n">tokenCookie</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">httpReq</span><span class="o">.</span><span class="na">getCookies</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">csrfCookieExpectedName</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">determineCookieName</span><span class="o">(</span><span class="n">httpReq</span><span class="o">);</span>
+            <span class="n">tokenCookie</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">httpReq</span><span class="o">.</span><span class="na">getCookies</span><span class="o">()).</span><span class="na">filter</span><span class="o">(</span><span class="n">c</span> 
+            <span class="o">-&gt;</span> <span class="n">c</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">csrfCookieExpectedName</span><span class="o">)).</span><span class="na">findFirst</span><span class="o">().</span><span class="na">orElse</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">tokenCookie</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">tokenCookie</span><span class="o">.</span><span class="na">getValue</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"CSRFValidationFilter: CSRF cookie absent or value"</span> <span class="o">+</span> 
+            <span class="s">" is null/empty so we provide one and return an HTTP NO_CONTENT response !"</span><span class="o">);</span>
+            <span class="c1">//Add the CSRF token cookie and header</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">addTokenCookieAndHeader</span><span class="o">(</span><span class="n">httpReq</span><span class="o">,</span> <span class="n">httpResp</span><span class="o">);</span>
+            <span class="c1">//Set response state to "204 No Content" in order to allow the requester to </span>
+            <span class="c1">//clearly identify an initial response providing the initial CSRF token</span>
+            <span class="n">httpResp</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">HttpServletResponse</span><span class="o">.</span><span class="na">SC_NO_CONTENT</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="c1">//If the cookie is present then we pass to validation phase</span>
+            <span class="c1">//Get token from the custom HTTP header (part under control of the requester)</span>
+            <span class="nc">String</span> <span class="n">tokenFromHeader</span> <span class="o">=</span> <span class="n">httpReq</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="no">CSRF_TOKEN_NAME</span><span class="o">);</span>
+            <span class="c1">//If empty then we trace the event and we block the request</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">tokenFromHeader</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">accessDeniedReason</span> <span class="o">=</span> <span class="s">"CSRFValidationFilter: Token provided via HTTP Header"</span><span class="o">+</span> 
+                <span class="s">" is absent/empty so we block the request !"</span><span class="o">;</span>
+                <span class="no">LOG</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="n">accessDeniedReason</span><span class="o">);</span>
+                <span class="n">httpResp</span><span class="o">.</span><span class="na">sendError</span><span class="o">(</span><span class="nc">HttpServletResponse</span><span class="o">.</span><span class="na">SC_FORBIDDEN</span><span class="o">,</span> <span class="n">accessDeniedReason</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">tokenFromHeader</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">tokenCookie</span><span class="o">.</span><span class="na">getValue</span><span class="o">()))</span> <span class="o">{</span>
+                <span class="c1">//Verify that token from header and one from cookie are the same</span>
+                <span class="c1">//Here is not the case so we trace the event and we block the request</span>
+                <span class="n">accessDeniedReason</span> <span class="o">=</span> <span class="s">"CSRFValidationFilter: Token provided via HTTP Header"</span><span class="o">+</span> 
+                <span class="s">"and via Cookie are not equals so we block the request !"</span><span class="o">;</span>
+                <span class="no">LOG</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="n">accessDeniedReason</span><span class="o">);</span>
+                <span class="n">httpResp</span><span class="o">.</span><span class="na">sendError</span><span class="o">(</span><span class="nc">HttpServletResponse</span><span class="o">.</span><span class="na">SC_FORBIDDEN</span><span class="o">,</span> <span class="n">accessDeniedReason</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">//Verify that token from header and one from cookie matches</span>
+                <span class="c1">//Here is the case so we let the request reach the target component </span>
+                <span class="c1">//(ServiceServlet, jsp...) and add a new token when we get back the bucket</span>
+                <span class="nc">HttpServletResponseWrapper</span> <span class="n">httpRespWrapper</span> <span class="o">=</span> 
+                                            <span class="k">new</span> <span class="nf">HttpServletResponseWrapper</span><span class="o">(</span><span class="n">httpResp</span><span class="o">);</span>
+                <span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">httpRespWrapper</span><span class="o">);</span>
+                <span class="c1">//Add the CSRF token cookie and header</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">addTokenCookieAndHeader</span><span class="o">(</span><span class="n">httpReq</span><span class="o">,</span> <span class="n">httpRespWrapper</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * {@inheritDoc}
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="nc">FilterConfig</span> <span class="n">filterConfig</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">ServletException</span> <span class="o">{</span>
+        <span class="c1">//To easier the configuration, we load the target expected origin from </span>
+        <span class="c1">//an JVM property</span>
+        <span class="c1">//Reconfiguration only require an application restart that is generally acceptable</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">targetOrigin</span> <span class="o">=</span> <span class="k">new</span> <span class="no">URL</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="no">TARGET_ORIGIN_JVM_PARAM_NAME</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">MalformedURLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="no">LOG</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Cannot init the filter !"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ServletException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"CSRFValidationFilter: Filter init, set expected target origin to '{}'."</span><span class="o">,</span> 
+                 <span class="k">this</span><span class="o">.</span><span class="na">targetOrigin</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * {@inheritDoc}
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"CSRFValidationFilter: Filter shutdown"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Check if a string is null or empty (including containing only spaces)
+     *
+     * @param s Source string
+     * @return TRUE if source string is null or empty (including containing only spaces)
+     */</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isBlank</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">trim</span><span class="o">().</span><span class="na">isEmpty</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Generate a new CSRF token
+     *
+     * @return The token a string
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">generateToken</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">byte</span><span class="o">[]</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">50</span><span class="o">];</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">secureRandom</span><span class="o">.</span><span class="na">nextBytes</span><span class="o">(</span><span class="n">buffer</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">DatatypeConverter</span><span class="o">.</span><span class="na">printHexBinary</span><span class="o">(</span><span class="n">buffer</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Determine the name of the CSRF cookie for the targeted backend service
+     *
+     * @param httpRequest Source HTTP request
+     * @return The name of the cookie as a string
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="nf">determineCookieName</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">httpRequest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">backendServiceName</span> <span class="o">=</span> <span class="n">httpRequest</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">().</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"/"</span><span class="o">,</span> <span class="s">"-"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="no">CSRF_TOKEN_NAME</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="n">backendServiceName</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Add the CSRF token cookie and header to the provided HTTP response object
+     *
+     * @param httpRequest  Source HTTP request
+     * @param httpResponse HTTP response object to update
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">addTokenCookieAndHeader</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">httpRequest</span><span class="o">,</span> 
+                                         <span class="nc">HttpServletResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//Get new token</span>
+        <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">generateToken</span><span class="o">();</span>
+        <span class="c1">//Add cookie manually because the current Cookie class implementation </span>
+        <span class="c1">//do not support the "SameSite" attribute</span>
+        <span class="c1">//We let the adding of the "Secure" cookie attribute to the reverse proxy rewriting...</span>
+        <span class="c1">//Here we lock the cookie from JS access and we use the SameSite new attribute protection</span>
+        <span class="nc">String</span> <span class="n">cookieSpec</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"%s=%s; Path=%s; HttpOnly; SameSite=Strict"</span><span class="o">,</span> 
+                            <span class="k">this</span><span class="o">.</span><span class="na">determineCookieName</span><span class="o">(</span><span class="n">httpRequest</span><span class="o">),</span> <span class="n">token</span><span class="o">,</span> <span class="n">httpRequest</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
+        <span class="n">httpResponse</span><span class="o">.</span><span class="na">addHeader</span><span class="o">(</span><span class="s">"Set-Cookie"</span><span class="o">,</span> <span class="n">cookieSpec</span><span class="o">);</span>
+        <span class="c1">//Add cookie header to give access to the token to the JS code</span>
+        <span class="n">httpResponse</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="no">CSRF_TOKEN_NAME</span><span class="o">,</span> <span class="n">token</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h1 id="javascript-guidance-for-auto-inclusion-of-csrf-tokens-as-an-ajax-request-header">JavaScript Guidance for Auto-inclusion of CSRF tokens as an AJAX Request header</h1>
+
+<p>The following guidance considers <strong>GET</strong>, <strong>HEAD</strong> and <strong>OPTIONS</strong> methods are safe operations. Therefore <strong>GET</strong>, <strong>HEAD</strong>, and <strong>OPTIONS</strong> method AJAX calls need not be appended with a CSRF token header. However, if the verbs are used to perform state changing operations, they will also require a CSRF token header.</p>
+
+<p><strong>POST</strong>, <strong>PUT</strong>, <strong>PATCH</strong>, <strong>DELETE</strong> and <strong>TRACE</strong> verbs, being state changing verbs, should have a CSRF token attached to the request. The following guidance will demonstrate how to create overrides in JavaScript libraries to have CSRF tokens included automatically with every AJAX request for the state changing methods mentioned above.</p>
+
+<h2 id="storing-the-csrf-token-value-in-the-dom">Storing the CSRF Token Value in the DOM</h2>
+
+<p>A CSRF token can be included in the <code class="language-plaintext highlighter-rouge">&lt;meta&gt;</code> tag as shown below. All subsequent calls in the page can extract the CSRF token from this <code class="language-plaintext highlighter-rouge">&lt;meta&gt;</code> tag. It can also be stored in a JS variable / anywhere on the DOM. However, it is not recommended to store it in cookies or browser local storage.</p>
+
+<p>The following code snippet can be used to include a CSRF token as a <code class="language-plaintext highlighter-rouge">&lt;meta&gt;</code> tag:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"csrf-token"</span> <span class="na">content=</span><span class="s">""</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>The exact syntax of populating the content attribute would depend on your web application’s backend programming language.</p>
+
+<h2 id="overriding-defaults-to-set-custom-header">Overriding Defaults to Set Custom Header</h2>
+
+<p>Several JavaScript libraries allow for overriding default settings to have a header added automatically to all AJAX requests.</p>
+
+<h3 id="xmlhttprequest-native-javascript">XMLHttpRequest (Native JavaScript)</h3>
+
+<p>XMLHttpRequest’s open() method can be overridden to set the <code class="language-plaintext highlighter-rouge">anti-csrf-token</code> header whenever the <code class="language-plaintext highlighter-rouge">open()</code> method is invoked next. The function <code class="language-plaintext highlighter-rouge">csrfSafeMethod()</code> defined below will filter out the safe HTTP methods and only add the header to unsafe HTTP methods.</p>
+
+<p>This can be done as demonstrated in the following code snippet:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+    <span class="kd">var</span> <span class="nx">csrf_token</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">meta[name='csrf-token']</span><span class="dl">"</span><span class="p">).</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">content</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">function</span> <span class="nx">csrfSafeMethod</span><span class="p">(</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// these HTTP methods do not require CSRF protection</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sr">/^</span><span class="se">(</span><span class="sr">GET|HEAD|OPTIONS</span><span class="se">)</span><span class="sr">$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">method</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">XMLHttpRequest</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">open</span><span class="p">;</span>
+    <span class="nx">XMLHttpRequest</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">open</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">csrfSafeMethod</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">anti-csrf-token</span><span class="dl">'</span><span class="p">,</span> <span class="nx">csrf_token</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+    <span class="p">};</span>
+ <span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h3 id="angularjs">AngularJS</h3>
+
+<p>AngularJS allows for setting default headers for HTTP operations. Further documentation can be found at AngularJS’s documentation for <a href="https://docs.angularjs.org/api/ng/provider/$httpProvider#defaults">$httpProvider</a>.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script&gt;</span>
+    <span class="kd">var</span> <span class="nx">csrf_token</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">meta[name='csrf-token']</span><span class="dl">"</span><span class="p">).</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">content</span><span class="dl">"</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="dl">"</span><span class="s2">app</span><span class="dl">"</span><span class="p">,</span> <span class="p">[]);</span>
+
+    <span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="dl">'</span><span class="s1">$httpProvider</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">post</span><span class="p">[</span><span class="dl">"</span><span class="s2">anti-csrf-token</span><span class="dl">"</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+        <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">put</span><span class="p">[</span><span class="dl">"</span><span class="s2">anti-csrf-token</span><span class="dl">"</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+        <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">patch</span><span class="p">[</span><span class="dl">"</span><span class="s2">anti-csrf-token</span><span class="dl">"</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+        <span class="c1">// AngularJS does not create an object for DELETE and TRACE methods by default, and has to be manually created.</span>
+        <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="k">delete</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">application/json;charset=utf-8</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">anti-csrf-token</span><span class="dl">"</span> <span class="p">:</span> <span class="nx">csrf_token</span>
+        <span class="p">};</span>
+        <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">trace</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">application/json;charset=utf-8</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">anti-csrf-token</span><span class="dl">"</span> <span class="p">:</span> <span class="nx">csrf_token</span>
+        <span class="p">};</span>
+      <span class="p">}]);</span>
+ <span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>This code snippet has been tested with AngularJS version 1.7.7.</p>
+
+<h3 id="axios">Axios</h3>
+
+<p><a href="https://github.com/axios/axios">Axios</a> allows us to set default headers for the POST, PUT, DELETE and PATCH actions.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+    <span class="kd">var</span> <span class="nx">csrf_token</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">meta[name='csrf-token']</span><span class="dl">"</span><span class="p">).</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">content</span><span class="dl">"</span><span class="p">);</span>
+
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">post</span><span class="p">[</span><span class="dl">'</span><span class="s1">anti-csrf-token</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">put</span><span class="p">[</span><span class="dl">'</span><span class="s1">anti-csrf-token</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">[</span><span class="dl">'</span><span class="s1">anti-csrf-token</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">patch</span><span class="p">[</span><span class="dl">'</span><span class="s1">anti-csrf-token</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span><span class="p">;</span>
+
+    <span class="c1">// Axios does not create an object for TRACE method by default, and has to be created manually.</span>
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">trace</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nx">axios</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">trace</span><span class="p">[</span><span class="dl">'</span><span class="s1">anti-csrf-token</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">csrf_token</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>This code snippet has been tested with Axios version 0.18.0.</p>
+
+<h3 id="jquery">JQuery</h3>
+
+<p>JQuery exposes an API called $.ajaxSetup() which can be used to add the <code class="language-plaintext highlighter-rouge">anti-csrf-token</code> header to the AJAX request. API documentation for <code class="language-plaintext highlighter-rouge">$.ajaxSetup()</code> can be found here. The function <code class="language-plaintext highlighter-rouge">csrfSafeMethod()</code> defined below will filter out the safe HTTP methods and only add the header to unsafe HTTP methods.</p>
+
+<p>You can configure JQuery to automatically add the token to all request headers by adopting the following code snippet. This provides a simple and convenient CSRF protection for your AJAX based applications:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+    <span class="kd">var</span> <span class="nx">csrf_token</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">meta[name="csrf-token"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="kd">function</span> <span class="nx">csrfSafeMethod</span><span class="p">(</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// these HTTP methods do not require CSRF protection</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sr">/^</span><span class="se">(</span><span class="sr">GET|HEAD|OPTIONS</span><span class="se">)</span><span class="sr">$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">method</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
+        <span class="na">beforeSend</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">csrfSafeMethod</span><span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">crossDomain</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">anti-csrf-token</span><span class="dl">"</span><span class="p">,</span> <span class="nx">csrf_token</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>This code snippet has been tested with jQuery version 3.3.1.</p>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>Credential Stuffing Prevention Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet">Cross Site Scripting Prevention Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+
