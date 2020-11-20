@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Authorization Testing Automation on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Authorization Testing Automation on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Authorization Testing Automation | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Authorization Testing Automation | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Authorization_Testing_Automation.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Authorization+Testing+Automation" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Authorization Testing Automation</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>Authentication Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet">Bean Validation Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p>Authorizations definition and implementation is one of the important protection measure of an application. They are defined in the creation phase of the project and, even if authorization issues are found when the application is initially released and submitted to a security audit before to go live, the most significant number of issues related to authorization came in the maintenance lifetime of the application.</p>
+
+<p>This situation is often explained by the fact that features are added/modified and no review of the authorizations was performed on the application before the publishing of the new release, for cost or time issue reason.</p>
+
+<h1 id="context">Context</h1>
+
+<p>In order to try to address this situation, it’s can be interesting to automate the evaluation of the authorizations definition and implementation on the application. This, to constantly ensure that implementation of the authorizations in the application is consistent with the authorizations definition.</p>
+
+<p>An authorization is often composed by 2 elements (also named dimensions): The <strong>Feature</strong> and the <strong>Logical Role</strong> that can access it (sometime a third dimension named <strong>Data</strong> is added in order to define a access that include a filtering at business data level).</p>
+
+<p>The representation of the different combinations of these 2 dimensions is often named an <strong>Authorization matrix</strong> and is often formalized in an Microsoft Excel file.</p>
+
+<p>During a test of an authorization, a <strong>Logical Role</strong> is also called a <strong>Point Of View</strong>.</p>
+
+<h1 id="objective">Objective</h1>
+
+<p>This article describe a proposition of implementation in order to automate the tests of an <em>authorization matrix</em>.</p>
+
+<p>This article use the assumption that 2 dimensions are used to represents an authorization for the technical proposition described and take as example a application exposing REST services.</p>
+
+<p>The objective is to provide starting ideas/hints in order to create a tailored way of testing of the authorization matrix for the target application.</p>
+
+<h1 id="proposition">Proposition</h1>
+
+<p>In order to achieve the full automation of the evaluation of the <em>authorization matrix</em>, the following actions has been performed:</p>
+
+<ol>
+  <li>Formalize the authorization matrix in a pivot format file allowing:
+    <ol>
+      <li>The processing by a program in a easy way.</li>
+      <li>To be read and updated by a human for the follow-up of the authorization combinations.</li>
+      <li>Hierarchy in the information in order to easily materialize the different combinations.</li>
+      <li>The maximum possible of independence from the technology and design used to implements the application exposing the features.</li>
+    </ol>
+  </li>
+  <li>Create a set of integration tests that fully use the authorization matrix pivot file as input source in order to evaluate the different combinations with:
+    <ol>
+      <li>The minimum possible of maintenance when the authorization matrix pivot file is updated.</li>
+      <li>A clear indication, in case of failed test, of the source authorization combination that do not respect the authorization matrix.</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="authorization-matrix-pivot-file">Authorization matrix pivot file</h2>
+
+<p>The XML format has been used to formalize the authorization matrix.</p>
+
+<p>The XML structure contains 3 main sections:</p>
+
+<ul>
+  <li>Node <strong>roles</strong>: This node describe the possible logical roles used in the system, is used to provide a list and the explanation of the different roles (authorization level).</li>
+  <li>Node <strong>services</strong>: This node list and describe the available services exposed by the system and the associated logical role(s) that can call them.</li>
+  <li>Node <strong>services-testing</strong>: This node provide a test payload for each service if the service use input data other than coming from url or path.</li>
+</ul>
+
+<p>This is an example of the XML used to represents the authorization:</p>
+
+<p><em>Placeholders (values between {}) are used to mark location where test value must be placed by the integration tests if needed</em></p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+  <span class="c">&lt;!--
+      This file materialize the authorization matrix for the different 
+      services exposed by the system.
+
+      It will be used by the tests as a input sources for the different tests cases:
+      1) Evaluate legitimate access and is correct implementation
+      2) Identify not legitimate access (authorization definition issue 
+      on service implementation)
+
+      The "name" attribute is used for identify uniquely a SERVICE or a ROLE.
+  --&gt;</span>
+  <span class="nt">&lt;authorization-matrix&gt;</span>
+
+      <span class="c">&lt;!-- Describe the possible logical roles used in the system, is used here to 
+      provide a list+explanation
+      of the different roles (authorization level) --&gt;</span>
+      <span class="nt">&lt;roles&gt;</span>
+          <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ANONYMOUS"</span> 
+          <span class="na">description=</span><span class="s">"Indicate that no authorization is needed"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"BASIC"</span> 
+          <span class="na">description=</span><span class="s">"Role affected to a standard user (lowest access right just above anonymous)"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ADMIN"</span> 
+          <span class="na">description=</span><span class="s">"Role affected to a administrator user (highest access right)"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/roles&gt;</span>
+
+      <span class="c">&lt;!-- List and describe the available services exposed by the system and the associated 
+      logical role(s) that can call them --&gt;</span>
+      <span class="nt">&lt;services&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"ReadSingleMessage"</span> <span class="na">uri=</span><span class="s">"/{messageId}"</span> <span class="na">http-method=</span><span class="s">"GET"</span> 
+          <span class="na">http-response-code-for-access-allowed=</span><span class="s">"200"</span> <span class="na">http-response-code-for-access-denied=</span><span class="s">"403"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ANONYMOUS"</span><span class="nt">/&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"BASIC"</span><span class="nt">/&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ADMIN"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"ReadAllMessages"</span> <span class="na">uri=</span><span class="s">"/"</span> <span class="na">http-method=</span><span class="s">"GET"</span> 
+          <span class="na">http-response-code-for-access-allowed=</span><span class="s">"200"</span> <span class="na">http-response-code-for-access-denied=</span><span class="s">"403"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ANONYMOUS"</span><span class="nt">/&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"BASIC"</span><span class="nt">/&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ADMIN"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"CreateMessage"</span> <span class="na">uri=</span><span class="s">"/"</span> <span class="na">http-method=</span><span class="s">"PUT"</span> 
+          <span class="na">http-response-code-for-access-allowed=</span><span class="s">"200"</span> <span class="na">http-response-code-for-access-denied=</span><span class="s">"403"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"BASIC"</span><span class="nt">/&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ADMIN"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"DeleteMessage"</span> <span class="na">uri=</span><span class="s">"/{messageId}"</span> <span class="na">http-method=</span><span class="s">"DELETE"</span> 
+          <span class="na">http-response-code-for-access-allowed=</span><span class="s">"200"</span> <span class="na">http-response-code-for-access-denied=</span><span class="s">"403"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;role</span> <span class="na">name=</span><span class="s">"ADMIN"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+      <span class="nt">&lt;/services&gt;</span>
+
+      <span class="c">&lt;!-- Provide a test payload for each service if needed --&gt;</span>
+      <span class="nt">&lt;services-testing&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"ReadSingleMessage"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;payload/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"ReadAllMessages"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;payload/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"CreateMessage"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;payload</span> <span class="na">content-type=</span><span class="s">"application/json"</span><span class="nt">&gt;</span>
+                  {"content":"test"}
+              <span class="nt">&lt;/payload&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+          <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">"DeleteMessage"</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;payload/&gt;</span>
+          <span class="nt">&lt;/service&gt;</span>
+      <span class="nt">&lt;/services-testing&gt;</span>
+
+  <span class="nt">&lt;/authorization-matrix&gt;</span>
+</code></pre></div></div>
+
+<h2 id="integration-tests">Integration tests</h2>
+
+<p>Integration tests are implemented using a maximum of factorized code and one test case by <strong>Point Of View (POV)</strong> has been created in order to group the verifications by profile of access level (logical role) and facilitate the rendering/identification of the errors.</p>
+
+<p>Parsing, object mapping and access to the authorization matrix information has been implemented using XML marshalling/unmarshalling built-in features provided by the technology used to implements the tests (JAXB here) in order to limit the code to the one in charge of performing the tests.</p>
+
+<p>This the implementation of the integration tests case class:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">import</span> <span class="nn">org.owasp.pocauthztesting.enumeration.SecurityRole</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.owasp.pocauthztesting.service.AuthService</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.owasp.pocauthztesting.vo.AuthorizationMatrix</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.client.methods.CloseableHttpResponse</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpDelete</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpGet</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpPut</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpRequestBase</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.impl.client.CloseableHttpClient</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClients</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.junit.Assert</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.junit.BeforeClass</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.xml.sax.InputSource</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">javax.xml.bind.JAXBContext</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">javax.xml.parsers.SAXParserFactory</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">javax.xml.transform.Source</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">javax.xml.transform.sax.SAXSource</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">java.io.FileInputStream</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">java.util.Optional</span><span class="o">;</span>
+
+  <span class="cm">/**
+   * Integration Test cases in charge of validate the correct implementation of the authorization matrix.
+   * Create on test case by logical role that will test access on all services exposed by the system.
+   * Implements here focus on readability
+   */</span>
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthorizationMatrixIT</span> <span class="o">{</span>
+
+      <span class="cm">/**
+       * Object representation of the authorization matrix
+       */</span>
+      <span class="kd">private</span> <span class="kd">static</span> <span class="nc">AuthorizationMatrix</span> <span class="no">AUTHZ_MATRIX</span><span class="o">;</span>
+
+      <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">BASE_URL</span> <span class="o">=</span> <span class="s">"http://localhost:8080"</span><span class="o">;</span>
+
+
+      <span class="cm">/**
+       * Load the authorization matrix in objects tree
+       *
+       * @throws Exception If any error occurs
+       */</span>
+      <span class="nd">@BeforeClass</span>
+      <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">globalInit</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="k">try</span> <span class="o">(</span><span class="nc">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"authorization-matrix.xml"</span><span class="o">)))</span> <span class="o">{</span> 
+              <span class="nc">SAXParserFactory</span> <span class="n">spf</span> <span class="o">=</span> <span class="nc">SAXParserFactory</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+              <span class="n">spf</span><span class="o">.</span><span class="na">setFeature</span><span class="o">(</span><span class="s">"http://xml.org/sax/features/external-general-entities"</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+              <span class="n">spf</span><span class="o">.</span><span class="na">setFeature</span><span class="o">(</span><span class="s">"http://xml.org/sax/features/external-parameter-entities"</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+              <span class="n">spf</span><span class="o">.</span><span class="na">setFeature</span><span class="o">(</span><span class="s">"http://apache.org/xml/features/nonvalidating/load-external-dtd"</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+              <span class="nc">Source</span> <span class="n">xmlSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SAXSource</span><span class="o">(</span><span class="n">spf</span><span class="o">.</span><span class="na">newSAXParser</span><span class="o">().</span><span class="na">getXMLReader</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">InputSource</span><span class="o">(</span><span class="n">fis</span><span class="o">));</span>
+              <span class="nc">JAXBContext</span> <span class="n">jc</span> <span class="o">=</span> <span class="nc">JAXBContext</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="nc">AuthorizationMatrix</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+              <span class="no">AUTHZ_MATRIX</span> <span class="o">=</span> <span class="o">(</span><span class="nc">AuthorizationMatrix</span><span class="o">)</span> <span class="n">jc</span><span class="o">.</span><span class="na">createUnmarshaller</span><span class="o">().</span><span class="na">unmarshal</span><span class="o">(</span><span class="n">xmlSource</span><span class="o">);</span>
+          <span class="o">}</span>
+      <span class="o">}</span>
+
+      <span class="cm">/**
+       * Test access to the services from a anonymous user.
+       *
+       * @throws Exception
+       */</span>
+      <span class="nd">@Test</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testAccessUsingAnonymousUserPointOfView</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="c1">//Run the tests - No access token here</span>
+          <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">executeTestWithPointOfView</span><span class="o">(</span><span class="nc">SecurityRole</span><span class="o">.</span><span class="na">ANONYMOUS</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+          <span class="c1">//Verify the test results</span>
+          <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="s">"Access issues detected using the ANONYMOUS USER point of view:\n"</span> <span class="o">+</span> <span class="n">formatErrorsList</span><span class="o">(</span><span class="n">errors</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="n">errors</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+      <span class="o">}</span>
+
+      <span class="cm">/**
+       * Test access to the services from a basic user.
+       *
+       * @throws Exception
+       */</span>
+      <span class="nd">@Test</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testAccessUsingBasicUserPointOfView</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="c1">//Get access token representing the authorization for the associated point of view</span>
+          <span class="nc">String</span> <span class="n">accessToken</span> <span class="o">=</span> <span class="n">generateTestCaseAccessToken</span><span class="o">(</span><span class="s">"basic"</span><span class="o">,</span> <span class="nc">SecurityRole</span><span class="o">.</span><span class="na">BASIC</span><span class="o">);</span>
+          <span class="c1">//Run the tests</span>
+          <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">executeTestWithPointOfView</span><span class="o">(</span><span class="nc">SecurityRole</span><span class="o">.</span><span class="na">BASIC</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">);</span>
+          <span class="c1">//Verify the test results</span>
+          <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="s">"Access issues detected using the BASIC USER point of view:\n "</span> <span class="o">+</span> <span class="n">formatErrorsList</span><span class="o">(</span><span class="n">errors</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="n">errors</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+      <span class="o">}</span>
+
+      <span class="cm">/**
+       * Test access to the services from a administrator user.
+       *
+       * @throws Exception
+       */</span>
+      <span class="nd">@Test</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testAccessUsingAdministratorUserPointOfView</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="c1">//Get access token representing the authorization for the associated point of view</span>
+          <span class="nc">String</span> <span class="n">accessToken</span> <span class="o">=</span> <span class="n">generateTestCaseAccessToken</span><span class="o">(</span><span class="s">"admin"</span><span class="o">,</span> <span class="nc">SecurityRole</span><span class="o">.</span><span class="na">ADMIN</span><span class="o">);</span>
+          <span class="c1">//Run the tests</span>
+          <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">executeTestWithPointOfView</span><span class="o">(</span><span class="nc">SecurityRole</span><span class="o">.</span><span class="na">ADMIN</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">);</span>
+          <span class="c1">//Verify the test results</span>
+          <span class="nc">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="s">"Access issues detected using the ADMIN USER point of view:\n"</span> <span class="o">+</span> <span class="n">formatErrorsList</span><span class="o">(</span><span class="n">errors</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="n">errors</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+      <span class="o">}</span>
+
+      <span class="cm">/**
+       * Evaluate the access to all service using the point of view (POV) specified.
+       *
+       * @param pointOfView Point of view to use
+       * @param accessToken Access token that is linked to the point of view in terms of authorization.
+       * @return List of errors detected
+       * @throws Exception If any error occurs
+       */</span>
+      <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">executeTestWithPointOfView</span><span class="o">(</span><span class="nc">SecurityRole</span> <span class="n">pointOfView</span><span class="o">,</span> <span class="nc">String</span> <span class="n">accessToken</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">errors</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+          <span class="nc">String</span> <span class="n">errorMessageTplForUnexpectedReturnCode</span> <span class="o">=</span> <span class="s">"The service '%s' when called with POV '%s' return a response code %s that is not the expected one in allowed or denied case."</span><span class="o">;</span>
+          <span class="nc">String</span> <span class="n">errorMessageTplForIncorrectReturnCode</span> <span class="o">=</span> <span class="s">"The service '%s' when called with POV '%s' return a response code %s that is not the expected one (%s expected)."</span><span class="o">;</span>
+          <span class="nc">String</span> <span class="n">fatalErrorMessageTpl</span> <span class="o">=</span> <span class="s">"The service '%s' when called with POV %s meet the error: %s"</span><span class="o">;</span>
+
+          <span class="c1">//Get the list of services to call</span>
+          <span class="nc">List</span><span class="o">&lt;</span><span class="nc">AuthorizationMatrix</span><span class="o">.</span><span class="na">Services</span><span class="o">.</span><span class="na">Service</span><span class="o">&gt;</span> <span class="n">services</span> <span class="o">=</span> <span class="no">AUTHZ_MATRIX</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">();</span>
+
+          <span class="c1">//Get the list of services test payload to use</span>
+          <span class="nc">List</span><span class="o">&lt;</span><span class="nc">AuthorizationMatrix</span><span class="o">.</span><span class="na">ServicesTesting</span><span class="o">.</span><span class="na">Service</span><span class="o">&gt;</span> <span class="n">servicesTestPayload</span> <span class="o">=</span> <span class="no">AUTHZ_MATRIX</span><span class="o">.</span><span class="na">getServicesTesting</span><span class="o">().</span><span class="na">getService</span><span class="o">();</span>
+
+          <span class="c1">//Call all services sequentially (no special focus on performance here)</span>
+          <span class="n">services</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">service</span> <span class="o">-&gt;</span> <span class="o">{</span>
+              <span class="c1">//Get the service test payload for the current service</span>
+              <span class="nc">String</span> <span class="n">payload</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+              <span class="nc">String</span> <span class="n">payloadContentType</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+              <span class="nc">Optional</span><span class="o">&lt;</span><span class="nc">AuthorizationMatrix</span><span class="o">.</span><span class="na">ServicesTesting</span><span class="o">.</span><span class="na">Service</span><span class="o">&gt;</span> <span class="n">serviceTesting</span> <span class="o">=</span> <span class="n">servicesTestPayload</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">filter</span><span class="o">(</span><span class="n">srvPld</span> <span class="o">-&gt;</span> <span class="n">srvPld</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">service</span><span class="o">.</span><span class="na">getName</span><span class="o">())).</span><span class="na">findFirst</span><span class="o">();</span>
+              <span class="k">if</span> <span class="o">(</span><span class="n">serviceTesting</span><span class="o">.</span><span class="na">isPresent</span><span class="o">())</span> <span class="o">{</span>
+                  <span class="n">payload</span> <span class="o">=</span> <span class="n">serviceTesting</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getPayload</span><span class="o">().</span><span class="na">getValue</span><span class="o">();</span>
+                  <span class="n">payloadContentType</span> <span class="o">=</span> <span class="n">serviceTesting</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getPayload</span><span class="o">().</span><span class="na">getContentType</span><span class="o">();</span>
+              <span class="o">}</span>
+              <span class="c1">//Call the service and verify if the response is consistent</span>
+              <span class="k">try</span> <span class="o">{</span>
+                  <span class="c1">//Call the service</span>
+                  <span class="kt">int</span> <span class="n">serviceResponseCode</span> <span class="o">=</span> <span class="n">callService</span><span class="o">(</span><span class="n">service</span><span class="o">.</span><span class="na">getUri</span><span class="o">(),</span> <span class="n">payload</span><span class="o">,</span> <span class="n">payloadContentType</span><span class="o">,</span> <span class="n">service</span><span class="o">.</span><span class="na">getHttpMethod</span><span class="o">(),</span> <span class="n">accessToken</span><span class="o">);</span>
+                  <span class="c1">//Check if the role represented by the specified point of view is defined for the current service</span>
+                  <span class="nc">Optional</span><span class="o">&lt;</span><span class="nc">AuthorizationMatrix</span><span class="o">.</span><span class="na">Services</span><span class="o">.</span><span class="na">Service</span><span class="o">.</span><span class="na">Role</span><span class="o">&gt;</span> <span class="n">role</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">getRole</span><span class="o">().</span><span class="na">stream</span><span class="o">().</span><span class="na">filter</span><span class="o">(</span><span class="n">r</span> <span class="o">-&gt;</span> <span class="n">r</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">pointOfView</span><span class="o">.</span><span class="na">name</span><span class="o">())).</span><span class="na">findFirst</span><span class="o">();</span>
+                  <span class="kt">boolean</span> <span class="n">accessIsGrantedInAuthorizationMatrix</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="na">isPresent</span><span class="o">();</span>
+                  <span class="c1">//Verify behavior consistency according to the response code returned and the authorization configured in the matrix</span>
+                  <span class="k">if</span> <span class="o">(</span><span class="n">serviceResponseCode</span> <span class="o">==</span> <span class="n">service</span><span class="o">.</span><span class="na">getHttpResponseCodeForAccessAllowed</span><span class="o">())</span> <span class="o">{</span>
+                      <span class="c1">//Roles is not in the list of role allowed to access to the service so it's an error</span>
+                      <span class="k">if</span> <span class="o">(!</span><span class="n">accessIsGrantedInAuthorizationMatrix</span><span class="o">)</span> <span class="o">{</span>
+                          <span class="n">errors</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">errorMessageTplForIncorrectReturnCode</span><span class="o">,</span> <span class="n">service</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">pointOfView</span><span class="o">.</span><span class="na">name</span><span class="o">(),</span> <span class="n">serviceResponseCode</span><span class="o">,</span>
+                           <span class="n">service</span><span class="o">.</span><span class="na">getHttpResponseCodeForAccessDenied</span><span class="o">()));</span>
+                      <span class="o">}</span>
+                  <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">serviceResponseCode</span> <span class="o">==</span> <span class="n">service</span><span class="o">.</span><span class="na">getHttpResponseCodeForAccessDenied</span><span class="o">())</span> <span class="o">{</span>
+                      <span class="c1">//Roles is in the list of role allowed to access to the service so it's an error</span>
+                      <span class="k">if</span> <span class="o">(</span><span class="n">accessIsGrantedInAuthorizationMatrix</span><span class="o">)</span> <span class="o">{</span>
+                          <span class="n">errors</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">errorMessageTplForIncorrectReturnCode</span><span class="o">,</span> <span class="n">service</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">pointOfView</span><span class="o">.</span><span class="na">name</span><span class="o">(),</span> <span class="n">serviceResponseCode</span><span class="o">,</span>
+                           <span class="n">service</span><span class="o">.</span><span class="na">getHttpResponseCodeForAccessAllowed</span><span class="o">()));</span>
+                      <span class="o">}</span>
+                  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                      <span class="n">errors</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">errorMessageTplForUnexpectedReturnCode</span><span class="o">,</span> <span class="n">service</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">pointOfView</span><span class="o">.</span><span class="na">name</span><span class="o">(),</span> <span class="n">serviceResponseCode</span><span class="o">));</span>
+                  <span class="o">}</span>
+              <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                  <span class="n">errors</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">fatalErrorMessageTpl</span><span class="o">,</span> <span class="n">service</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">pointOfView</span><span class="o">.</span><span class="na">name</span><span class="o">(),</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">()));</span>
+              <span class="o">}</span>
+
+
+          <span class="o">});</span>
+
+          <span class="k">return</span> <span class="n">errors</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="cm">/**
+       * Call a service with a specific payload and return the HTTP response code received.
+       * Delegate this step in order to made the test cases more easy to maintain.
+       *
+       * @param uri                URI of the target service
+       * @param payloadContentType Content type of the payload to send
+       * @param payload            Payload to send
+       * @param httpMethod         HTTP method to use
+       * @param accessToken        Access token to specify to represent the identity of the caller
+       * @return The HTTP response code received
+       * @throws Exception If any error occurs
+       */</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="nf">callService</span><span class="o">(</span><span class="nc">String</span> <span class="n">uri</span><span class="o">,</span> <span class="nc">String</span> <span class="n">payload</span><span class="o">,</span> <span class="nc">String</span> <span class="n">payloadContentType</span><span class="o">,</span> <span class="nc">String</span> <span class="n">httpMethod</span><span class="o">,</span> <span class="nc">String</span> <span class="n">accessToken</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="kt">int</span> <span class="n">rc</span><span class="o">;</span>
+
+          <span class="c1">//Build the request - Use Apache HTTP Client in order to be more flexible in the combination</span>
+          <span class="nc">HttpRequestBase</span> <span class="n">request</span><span class="o">;</span>
+          <span class="nc">String</span> <span class="n">url</span> <span class="o">=</span> <span class="o">(</span><span class="no">BASE_URL</span> <span class="o">+</span> <span class="n">uri</span><span class="o">).</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"\\{messageId\\}"</span><span class="o">,</span> <span class="s">"1"</span><span class="o">);</span>
+          <span class="k">switch</span> <span class="o">(</span><span class="n">httpMethod</span><span class="o">)</span> <span class="o">{</span>
+              <span class="k">case</span> <span class="s">"GET"</span><span class="o">:</span>
+                  <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HttpGet</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+                  <span class="k">break</span><span class="o">;</span>
+              <span class="k">case</span> <span class="s">"DELETE"</span><span class="o">:</span>
+                  <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HttpDelete</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+                  <span class="k">break</span><span class="o">;</span>
+              <span class="k">case</span> <span class="s">"PUT"</span><span class="o">:</span>
+                  <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HttpPut</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+                  <span class="k">if</span> <span class="o">(</span><span class="n">payload</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                      <span class="n">request</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">"Content-Type"</span><span class="o">,</span> <span class="n">payloadContentType</span><span class="o">);</span>
+                      <span class="o">((</span><span class="nc">HttpPut</span><span class="o">)</span> <span class="n">request</span><span class="o">).</span><span class="na">setEntity</span><span class="o">(</span><span class="k">new</span> <span class="nc">StringEntity</span><span class="o">(</span><span class="n">payload</span><span class="o">.</span><span class="na">trim</span><span class="o">()));</span>
+                  <span class="o">}</span>
+                  <span class="k">break</span><span class="o">;</span>
+              <span class="k">default</span><span class="o">:</span>
+                  <span class="k">throw</span> <span class="k">new</span> <span class="nf">UnsupportedOperationException</span><span class="o">(</span><span class="n">httpMethod</span> <span class="o">+</span> <span class="s">" not supported !"</span><span class="o">);</span>
+          <span class="o">}</span>
+          <span class="n">request</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">,</span> <span class="o">(</span><span class="n">accessToken</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="n">accessToken</span> <span class="o">:</span> <span class="s">""</span><span class="o">);</span>
+
+
+          <span class="c1">//Send the request and get the HTTP response code</span>
+          <span class="k">try</span> <span class="o">(</span><span class="nc">CloseableHttpClient</span> <span class="n">httpClient</span> <span class="o">=</span> <span class="nc">HttpClients</span><span class="o">.</span><span class="na">createDefault</span><span class="o">())</span> <span class="o">{</span>
+              <span class="k">try</span> <span class="o">(</span><span class="nc">CloseableHttpResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="n">httpClient</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">))</span> <span class="o">{</span>
+                  <span class="c1">//Don't care here about the response content...</span>
+                  <span class="n">rc</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">();</span>
+              <span class="o">}</span>
+          <span class="o">}</span>
+
+          <span class="k">return</span> <span class="n">rc</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="cm">/**
+       * Generate a JWT token the user and role specified.
+       *
+       * @param login User login
+       * @param role  Authorization logical role
+       * @return The JWT token
+       * @throws Exception If any error occurs during the creation
+       */</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="nf">generateTestCaseAccessToken</span><span class="o">(</span><span class="nc">String</span> <span class="n">login</span><span class="o">,</span> <span class="nc">SecurityRole</span> <span class="n">role</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="k">new</span> <span class="nf">AuthService</span><span class="o">().</span><span class="na">issueAccessToken</span><span class="o">(</span><span class="n">login</span><span class="o">,</span> <span class="n">role</span><span class="o">);</span>
+      <span class="o">}</span>
+
+
+      <span class="cm">/**
+       * Format a list of errors to a printable string
+       *
+       * @param errors Error list
+       * @return Printable string
+       */</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="nf">formatErrorsList</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">errors</span><span class="o">)</span> <span class="o">{</span>
+          <span class="nc">StringBuilder</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+          <span class="n">errors</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="n">buffer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">e</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">"\n"</span><span class="o">));</span>
+          <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>In case of detection of a authorization issue(s) the output is the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>testAccessUsingAnonymousUserPointOfView(org.owasp.pocauthztesting.AuthorizationMatrixIT)  
+Time elapsed: 1.009 s  ### FAILURE
+java.lang.AssertionError:
+Access issues detected using the ANONYMOUS USER point of view:
+    The service 'DeleteMessage' when called with POV 'ANONYMOUS' return 
+    a response code 200 that is not the expected one (403 expected).
+    
+    The service 'CreateMessage' when called with POV 'ANONYMOUS' return 
+    a response code 200 that is not the expected one (403 expected).
+
+testAccessUsingBasicUserPointOfView(org.owasp.pocauthztesting.AuthorizationMatrixIT)  
+Time elapsed: 0.05 s  ### FAILURE!
+java.lang.AssertionError:
+Access issues detected using the BASIC USER point of view:
+    The service 'DeleteMessage' when called with POV 'BASIC' return 
+    a response code 200 that is not the expected one (403 expected).
+</code></pre></div></div>
+
+<h1 id="rendering-of-the-authorization-matrix-for-audit--review">Rendering of the authorization matrix for audit / review</h1>
+
+<p>Even if the authorization matrix is stored in a human readable format (XML), it can be interesting to provide an on-the-fly rendering representation of the XML file in order to facilitate the review, audit and discussion about the authorization matrix in order to spot potential inconsistencies.</p>
+
+<p>The Following XSL stylesheet can be used:</p>
+
+<pre><code class="language-xslt">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;Authorization Matrix&lt;/title&gt;
+        &lt;link rel="stylesheet" 
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" 
+        integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" 
+        crossorigin="anonymous" /&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;h3&gt;Roles&lt;/h3&gt;
+        &lt;ul&gt;
+          &lt;xsl:for-each select="authorization-matrix/roles/role"&gt;
+            &lt;xsl:choose&gt;
+              &lt;xsl:when test="@name = 'ADMIN'"&gt;
+                &lt;div class="alert alert-warning" role="alert"&gt;
+                  &lt;strong&gt;
+                    &lt;xsl:value-of select="@name" /&gt;
+                  &lt;/strong&gt;
+                  :
+                  &lt;xsl:value-of select="@description" /&gt;
+                &lt;/div&gt;
+              &lt;/xsl:when&gt;
+              &lt;xsl:when test="@name = 'BASIC'"&gt;
+                &lt;div class="alert alert-info" role="alert"&gt;
+                  &lt;strong&gt;
+                    &lt;xsl:value-of select="@name" /&gt;
+                  &lt;/strong&gt;
+                  :
+                  &lt;xsl:value-of select="@description" /&gt;
+                &lt;/div&gt;
+              &lt;/xsl:when&gt;
+              &lt;xsl:otherwise&gt;
+                &lt;div class="alert alert-danger" role="alert"&gt;
+                  &lt;strong&gt;
+                    &lt;xsl:value-of select="@name" /&gt;
+                  &lt;/strong&gt;
+                  :
+                  &lt;xsl:value-of select="@description" /&gt;
+                &lt;/div&gt;
+              &lt;/xsl:otherwise&gt;
+            &lt;/xsl:choose&gt;
+          &lt;/xsl:for-each&gt;
+        &lt;/ul&gt;
+        &lt;h3&gt;Authorizations&lt;/h3&gt;
+        &lt;table class="table table-hover table-sm"&gt;
+          &lt;thead class="thead-inverse"&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Service&lt;/th&gt;
+              &lt;th&gt;URI&lt;/th&gt;
+              &lt;th&gt;Method&lt;/th&gt;
+              &lt;th&gt;Role&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;xsl:for-each select="authorization-matrix/services/service"&gt;
+              &lt;xsl:variable name="service-name" select="@name" /&gt;
+              &lt;xsl:variable name="service-uri" select="@uri" /&gt;
+              &lt;xsl:variable name="service-method" select="@http-method" /&gt;
+              &lt;xsl:for-each select="role"&gt;
+                &lt;tr&gt;
+                  &lt;td scope="row"&gt;
+                    &lt;xsl:value-of select="$service-name" /&gt;
+                  &lt;/td&gt;
+                  &lt;td&gt;
+                    &lt;xsl:value-of select="$service-uri" /&gt;
+                  &lt;/td&gt;
+                  &lt;td&gt;
+                    &lt;xsl:value-of select="$service-method" /&gt;
+                  &lt;/td&gt;
+                  &lt;td&gt;
+                    &lt;xsl:variable name="service-role-name" select="@name" /&gt;
+                    &lt;xsl:choose&gt;
+                      &lt;xsl:when test="@name = 'ADMIN'"&gt;
+                        &lt;div class="alert alert-warning" role="alert"&gt;
+                          &lt;xsl:value-of select="@name" /&gt;
+                        &lt;/div&gt;
+                      &lt;/xsl:when&gt;
+                      &lt;xsl:when test="@name = 'BASIC'"&gt;
+                        &lt;div class="alert alert-info" role="alert"&gt;
+                          &lt;xsl:value-of select="@name" /&gt;
+                        &lt;/div&gt;
+                      &lt;/xsl:when&gt;
+                      &lt;xsl:otherwise&gt;
+                        &lt;div class="alert alert-danger" role="alert"&gt;
+                          &lt;xsl:value-of select="@name" /&gt;
+                        &lt;/div&gt;
+                      &lt;/xsl:otherwise&gt;
+                    &lt;/xsl:choose&gt;
+                  &lt;/td&gt;
+                &lt;/tr&gt;
+              &lt;/xsl:for-each&gt;
+            &lt;/xsl:for-each&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</code></pre>
+
+<p>Example of the rendering:</p>
+
+<p><img src="../assets/Authorization_Testing_Automation_AutomationRendering.png" alt="RenderingExample" /></p>
+
+<h1 id="sources-of-the-prototype">Sources of the prototype</h1>
+
+<p><a href="https://github.com/righettod/poc-authz-testing">Github repository</a></p>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>Authentication Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet">Bean Validation Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+

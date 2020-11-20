@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<meta name="description" content="Server Side Request Forgery Prevention Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta property="og:description" content="Server Side Request Forgery Prevention Cheat Sheet on the main website for The OWASP Foundation. OWASP is a nonprofit foundation that works to improve the security of software.">
+<meta propery="og:title" content="cheat sheets | Server Side Request Forgery Prevention Cheat Sheet | OWASP Foundation">
+<meta property="og:url" content="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<meta property="og:locale" content="en_US">
+
+<!-- should probably look at using article at some point for www-community at least -->
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://owasp.org/www--site-theme/favicon.ico" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+
+<link rel="canonical" href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4531126-1"></script> -->
+<!-- <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-4531126-1');
+</script> -->
+<!-- Google Analytics -->
+
+
+<script src="https://owasp.org/www--site-theme/assets/js/js.cookie.js"></script>
+<script>
+  if(Cookies.get('cookies-ok') == 'true' && window.ga === undefined)
+  {
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-4531126-1', 'auto');
+    ga('send', 'pageview');
+  }
+  else if (Cookies.get('cookies-ok') == 'true')
+  {
+    ga('send', 'pageview');
+  }
+
+  function handleOutboundLinkClicks(event) {
+    var href = '';
+    if(event.target.href == undefined)
+      href = event.target.parentElement.href;
+    else
+      href = event.target.href
+  if(Cookies.get('cookies-ok') == 'true'){  
+    
+    ga('send', 'event', {
+      eventCategory: 'Outbound Link',
+      eventAction: 'click',
+      eventLabel: href,
+      transport: 'beacon'
+    });
+  }
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+<link rel="stylesheet" href="https://owasp.org/www--site-theme/assets/css/styles.css">
+<link rel="shortcut icon" type="images/x-icon" href="https://owasp.org/www--site-theme/favicon.ico">
+
+<script src="https://owasp.org/www--site-theme/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/util.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/yaml.min.js"></script>
+<script src="https://owasp.org/www--site-theme/assets/js/luxon.min.js"></script>
+<title>Server Side Request Forgery Prevention Cheat Sheet | OWASP</title>
+
+    <script type="text/javascript">
+      $(function(){
+        var baseurl = "https://github.com/OWASP/www-chapter-ankara/blob/master/";
+        var path = "cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.md";
+        $('.repo').html('<a href=' + baseurl + path + '><div class="reset-3c756112--menuItemIcon-206eb252" style="float: left;"><svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.549 438.549" stroke="none" class="icon-7f6730be--text-3f89f380"><g><path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 0 1-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z"></path></g></svg><span style="padding-left:8px;">Edit on GitHub</span></div></a>');
+      });
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+  <body class="base-grid col-sidebar">
+
+    <div id="blocker"></div>
+
+    <noscript>For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="https://www.enable-javascript.com/"> instructions how to enable JavaScript in your web browser</a>.</noscript>
+    <header role="banner">
+  <div id="banner" class="notice" aria-label="announcement">
+  <!--
+	<p>Consider <a href="/membership">becoming a Member</a> of the OWASP Foundation. It's affordable and your contributions make a difference.</p>
+  -->
+ 
+	<p>Please support the OWASP mission to improve sofware security through open source initiatives and community education. <a href="https://owasp.org/donate/">Donate Now!</a></p>
+	
+	<a href="#" id="close-banner" aria-label="close announcement">
+          <i class="fa fa-times"></i>
+       </a>	  
+</div>
+
+<style>
+  #banner img {
+    max-width: 30em;
+  }
+
+  @media (max-width: 1131px) {
+    #banner img{
+      max-width: 30em;
+    }
+	}
+
+@media (max-width: 800px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 600px) {
+	#banner img{
+      max-width: 20em;
+    }
+}
+
+@media (max-width: 450px) {
+	#banner img{
+      max-width: 250px;
+  }
+}
+</style>
+
+  <div class="header-wrapper" aria-label="main navigation">
+    <nav class="alt-nav">
+      <a href="#" class="menu-toggler" aria-hidden="true">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="/" class="alt-logo" aria-label="go to homepage">
+          <img src="/assets/images/logo.png" alt="OWASP logo">
+      </a>
+      <div id="overlay" class="remove-el">
+
+      </div>
+      <!-- jekyll menu stuff -->
+    </nav>
+    
+    <nav class="top-nav" role="navigation" aria-label="primary navigation">
+      <a href="/" class="desktop-logo" aria-label="go to homepage">
+        <img src="/assets/images/logo.png" alt="">
+      </a>
+      <!-- jekyll menu stuff -->
+      
+      <div class="interactive-wrapper">
+        <form role="search" method="get" action="/search">   
+          <div class='search-div'>
+            <input id="searchString" name="searchString" class="search-bar" type="search" placeholder="Search OWASP.org" required="true">
+            <button id="search-button" type="submit" class="fa fa-search">
+                <!--<span id="search-icon" tabindex="0"><i class="fa fa-search"></i></span>-->
+            </button>
+          </div>  
+        </form>
+        <div class="nav-button" aria-label="donate to or join OWASP">
+        
+          <a href="/donate?reponame=www-chapter-ankara&title=Server+Side+Request+Forgery+Prevention+Cheat+Sheet" class="cta-button green">Donate</a>
+          <a href="/membership" class="cta-button">Join</a>
+        </div>
+      </div>
+    </nav>
+    <div id='disclaimer-container'>
+<div id="disclaimer">
+    <p>This website uses cookies to analyze our traffic and only share that information with our analytics partners.</p><a class="disclaimerOK">Accept</a>
+</div>
+<div id="close-disclaimer">x</div>
+</div>
+  </div>
+  
+
+
+
+<script type="text/javascript">
+  $(function(){
+      
+      url = $(location).attr('href');
+      if(url.includes('www2'))
+      {
+        url = url.replace(/www2./, '');
+        $(location).attr('href',url);
+        return;
+      }
+    // this works to get data from a json file NOT in data
+      $.getJSON("https://owasp.org/www--site-theme/assets/sitedata/menus.json", function(data) {
+         var listr = "<ul aria-label='header menu'>";
+         
+         var mlistr = "<ul class='mobile-menu hide-el' role='navigation' aria-label='mobile primary navigation'>";
+
+          mlistr += "<li><a href='#' class='menu-toggler' aria-hidden='true'><i class='fa fa-times'></i></a></li>";
+          mlistr += "<li>";
+          mlistr += "<form role='search' method='get' action='/search'>";   
+          mlistr += "<div class='search-div'>";
+          mlistr += "<input id='searchString' aria-label='search input' name='searchString' class='search-bar' type='search' placeholder='Search OWASP.org' required='true'>";
+          mlistr += "<button id='search-button' aria-label='search button' type='submit' class='fa fa-search' style='padding-left: 8px;'></button></div></form>";
+          mlistr += "</li>";
+          $.each(data.menus, function (ndx, menu){
+              listr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+
+              if(!menu.items)
+              {
+                  mlistr += "<li><a href='" + menu.url + "'>" + menu.title + "</a>";
+              }
+              
+              if(menu.items){
+                  listr += "<ul class='dropdown-menu'>";
+                  mlistr += "<button class='accordion'>" + menu.title + "</button>";
+                  mlistr += "<div class='panel'>";
+                  mlistr += "<ul>";
+                $.each(menu.items, function(ndx, item){
+                
+                  if(item.separator)
+                  {
+                      listr += "<li class='separator'>";
+                      mlistr += "<li class='separator'>";
+                  }
+                  else
+                  {
+                      listr += "<li>";
+                      mlistr += "<li>";
+                  }
+                  listr += "<a href='" + item.url + "'";
+                  mlistr += "<a href='" + item.url + "'";
+                  if(item.opentab)
+                  {
+                    listr += " target='_blank' rel='noopener noreferrer'";
+                    mlistr += " target='_blank' rel='noopener noreferrer'";
+                  }
+
+                  listr += ">" + item.title + "</a></li>";
+                  mlistr += ">" + item.title + "</a></li>";
+                });
+                listr += "</ul>";
+                mlistr += "</ul>";
+                mlistr += "</div>"
+              }
+              
+              listr += "</li>";
+              mlistr += "</li>";
+          });
+          listr += "</ul>";
+          mlistr += "<li><a href='/donate'>MAKE A DONATION</a></li>";
+          mlistr += "<li><a href='/membership'>BECOME A MEMBER</a></li>";
+          mlistr += "<li><a href='/sitemap'>SITEMAP</a></li>";
+          mlistr += "</ul>";
+          
+          $('.desktop-logo').after(listr);
+          $('#overlay').after(mlistr);
+
+          $(".accordion").click(function () {
+              $(this).toggleClass("active");
+              if($(this).next('.panel').css('display') == 'block'){
+                $(this).next('.panel').css('display', 'none');
+              }
+              else {
+                $(this).next('.panel').css('display', 'block');
+              }
+            });
+            $(".menu-toggler").click(function() {
+              $(".mobile-menu").toggleClass('hide-el');
+            });
+      });
+    });
+  </script>
+</header>
+
+
+    <main role="main">
+      <div class="main-wrapper document">
+        
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+                
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+        
+        
+        <div id="main" class="page-body tab" role="tabpanel" aria-labelledby="main-link" tabindex="0">
+          <div class="doc-title">cheat sheets</div>
+          <h1 class="page-title">Server Side Request Forgery Prevention Cheat Sheet</h1>
+          
+          <nav role="navigation" aria-label="navigate page">
+              <ol>
+              
+                
+                <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-left"></i>
+                  </span>Securing Cascading Style Sheets Cheat Sheet</a></li>
+              
+              
+                
+                <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet">Session Management Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                    <i class="fas fa-angle-right"></i>
+                  </span></a></li>
+              
+              </ol>
+          </nav>
+          
+          <section id='div-main' class='page-body tab'>
+          <h1 id="introduction">Introduction</h1>
+
+<p>The objective of the cheat sheet is to provide advices regarding the protection against <a href="https://www.acunetix.com/blog/articles/server-side-request-forgery-vulnerability/">Server Side Request Forgery</a> (SSRF) attack.</p>
+
+<p>This cheat sheet will focus on the defensive point of view and will not explain how to perform this attack. This <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_Orange_Tsai_Talk.pdf">talk</a> from the security researcher <a href="https://twitter.com/orange_8361">Orange Tsai</a> as well as this <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Bible.pdf">document</a> provide techniques on how to perform this kind of attack.</p>
+
+<h1 id="context">Context</h1>
+
+<p>SSRF is an attack vector that abuses an application to interact with the internal/external network or the machine itself. One of the enablers for this vector is the mishandling of URLs, as showcased in the following examples:</p>
+<ul>
+  <li>Image on external server (<em>e.g.</em> user enters image URL of their avatar for the application to download and use).</li>
+  <li>Custom <a href="https://en.wikipedia.org/wiki/Webhook">WebHook</a> (user have to specify WebHook handlers or Callback URLs).</li>
+  <li>Internal requests to interact with another service to serve a certain functionality. Most of the times, user data is sent along to be processed, and if badly handled, can perform certain injection attacks.</li>
+</ul>
+
+<h2 id="overview-of-a-ssrf-common-flow">Overview of a SSRF common flow</h2>
+
+<p><img src="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Common_Flow.png" alt="SSRF Common Flow" /></p>
+
+<p><em>Notes:</em></p>
+
+<ul>
+  <li>SSRF is not limited to the HTTP protocol, despite the fact that in general the first request leverages it, yet the second request is performed by the application itself, and thus it could be using different protocols (<em>e.g.</em> FTP, SMB, SMTP, etc.) and schemes (<em>e.g.</em> <code class="language-plaintext highlighter-rouge">file://</code>, <code class="language-plaintext highlighter-rouge">phar://</code>, <code class="language-plaintext highlighter-rouge">gopher://</code>, <code class="language-plaintext highlighter-rouge">data://</code>, <code class="language-plaintext highlighter-rouge">dict://</code>, etc.). The protocol/scheme usage is highly dependent on the application’s requirements.</li>
+  <li>If the application is vulnerable to <a href="https://portswigger.net/web-security/xxe">XML eXternal Entity (XXE) injection</a> then it can by exploited to perform a <a href="https://portswigger.net/web-security/xxe#exploiting-xxe-to-perform-ssrf-attacks">SSRF attack</a>, take a look at the <a href="/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">XXE cheat sheet</a> to learn how to prevent the exposure to XXE.</li>
+</ul>
+
+<h1 id="cases">Cases</h1>
+
+<p>Depending on the application’s functionality and requirements, there are two basic cases in which SSRF can happen:</p>
+<ul>
+  <li>Application can send request only to <strong>identified and trusted applications</strong>: Case when <a href="https://en.wikipedia.org/wiki/Whitelisting">whitelist</a> approach is available.</li>
+  <li>Application can send requests to <strong>ANY external IP address or domain name</strong>: Case when <a href="https://en.wikipedia.org/wiki/Whitelisting">whitelist</a> approach is not available.</li>
+</ul>
+
+<p>Because these two cases are very different, this cheat sheet will describe defences against them separately.</p>
+
+<h2 id="case-1---application-can-send-request-only-to-identified-and-trusted-applications">Case 1 - Application can send request only to identified and trusted applications</h2>
+
+<p>Sometimes, an application need to perform request to another application, often located on another network, to perform a specific task. Depending of the business case, it can happen that information from the user are needed to perform the action.</p>
+
+<h3 id="example">Example</h3>
+
+<blockquote>
+  <p>Take the example of a web application that receives and uses personal information from a user, such as their firstname/lastname/birthdate to create a profile in an internal HR system. By design, that web application will have to communicate using a protocol that the HR system understands in order to process that data.</p>
+</blockquote>
+
+<blockquote>
+  <p>Basically, the user cannot reach the HR system directly, but, if the web application in charge of receiving the user information is vulnerable to SSRF then the user can leverage it to access the HR system.</p>
+</blockquote>
+
+<blockquote>
+  <p>The user leverages the web application as a proxy to the HR system.</p>
+</blockquote>
+
+<p>The whitelist approach is a viable option in this case since the internal application called by the <em>VulnerableApplication</em> is clearly identified in the technical/business flow. It can be stated that the required calls will only be targeted between those identified and trusted applications.</p>
+
+<h3 id="available-protections">Available protections</h3>
+
+<p>Several protective measures are possible at the <strong>Application</strong> and <strong>Network</strong> layers. In order to apply the <strong>defense in depth</strong> principle, both layers will be hardened against such attacks.</p>
+
+<h4 id="application-layer">Application layer</h4>
+
+<p>The first level of protection that comes to mind is <a href="/cheatsheets/Input_Validation_Cheat_Sheet.html">Input validation</a>.</p>
+
+<p>Based on that point, the following question comes to mind: <em>How to perform this input validation?</em></p>
+
+<p>As <a href="https://twitter.com/orange_8361">Orange Tsai</a> shows in his <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_Orange_Tsai_Talk.pdf">talk</a>, depending on the programming language used, parsers can be abused. One possible countermeasure is to apply the <a href="/cheatsheets/Input_Validation_Cheat_Sheet.html#whitelisting-vs-blacklisting">whitelisting approach</a> when input validation is used because, most of the time, the format of the information expected from the user is globally know.</p>
+
+<p>The request sent to the internal application will be based on the following information:</p>
+<ul>
+  <li>String containing business data.</li>
+  <li>IP address (V4 or V6).</li>
+  <li>Domain name.</li>
+  <li>URL.</li>
+</ul>
+
+<p><strong>Note:</strong> Disable the support for the following of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections">redirection</a> in your web client in order to prevent the bypass of the input validation described in the section <code class="language-plaintext highlighter-rouge">Exploitation tricks &gt; Bypassing restrictions &gt; Input validation &gt; Unsafe redirect</code> of this <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Bible.pdf">document</a>.</p>
+
+<h5 id="string">String</h5>
+
+<p>In the context of SSRF, checks can be put in place to ensure that the string respects the business/technical format expected.</p>
+
+<p>A <a href="https://www.regular-expressions.info/">regex</a> can be used to ensure that data received is valid from a security point of view if the input data have a simple format (<em>e.g.</em> token, zip code, etc.). Otherwise, validation should be conducted using the libraries available from the <code class="language-plaintext highlighter-rouge">string</code> object because regex for complex formats are difficult to maintain and are highly error prone.</p>
+
+<p>User input is assumed to be non-network related and consists of the user’s personal information.</p>
+
+<p>Example:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//Regex validation for a data having a simple format</span>
+<span class="k">if</span><span class="o">(</span><span class="nc">Pattern</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="s">"[a-zA-Z0-9\\s\\-]{1,50}"</span><span class="o">,</span> <span class="n">userInput</span><span class="o">)){</span>
+    <span class="c1">//Continue the processing because the input data is valid</span>
+<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+    <span class="c1">//Stop the processing and reject the request</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="ip-address">IP address</h5>
+
+<p>In the context of SSRF, there are 2 possible validations to perform:</p>
+
+<ol>
+  <li>Ensure that the data provided is a valid IP V4 or V6 address.</li>
+  <li>Ensure that the IP address provided belongs to one of the IP addresses of the identified and trusted applications.</li>
+</ol>
+
+<p>The first layer of validation can be applied using libraries that ensure the security of the IP address format, based on the technology used (library option is proposed here in order to delegate the managing of the IP address format and leverage battle tested validation function):</p>
+
+<blockquote>
+  <p>Verification of the proposed libraries has been performed regarding the exposure to bypasses (Hex, Octal, Dword, URL and Mixed encoding) described in this <a href="https://medium.com/@vickieli/bypassing-ssrf-protection-e111ae70727b">article</a>.</p>
+</blockquote>
+
+<ul>
+  <li><strong>JAVA:</strong> Method <a href="http://commons.apache.org/proper/commons-validator/apidocs/org/apache/commons/validator/routines/InetAddressValidator.html#isValid(java.lang.String)">InetAddressValidator.isValid</a> from the <a href="http://commons.apache.org/proper/commons-validator/">Apache Commons Validator</a> library.
+    <ul>
+      <li><strong>It is NOT exposed</strong> to bypass using Hex, Octal, Dword, URL and Mixed encoding.</li>
+    </ul>
+  </li>
+  <li><strong>.NET</strong>: Method <a href="https://docs.microsoft.com/en-us/dotnet/api/system.net.ipaddress.tryparse?view=netframework-4.8">IPAddress.TryParse</a> from the SDK.
+    <ul>
+      <li><strong>It is exposed</strong> to bypass using Hex, Octal, Dword and Mixed encoding but <strong>NOT</strong> the URL encoding.</li>
+      <li>As whitelisting is used here, any bypass tentative will be blocked during the comparison against the allowed list of IP addresses.</li>
+    </ul>
+  </li>
+  <li><strong>JavaScript</strong>: Library <a href="https://www.npmjs.com/package/ip-address">ip-address</a>.
+    <ul>
+      <li><strong>It is NOT exposed</strong> to bypass using Hex, Octal, Dword, URL and Mixed encoding.</li>
+    </ul>
+  </li>
+  <li><strong>Python</strong>: Module <a href="https://docs.python.org/3/library/ipaddress.html">ipaddress</a> from the SDK.
+    <ul>
+      <li><strong>It is NOT exposed</strong> to bypass using Hex, Octal, Dword, URL and Mixed encoding.</li>
+    </ul>
+  </li>
+  <li><strong>Ruby</strong>: Class <a href="https://ruby-doc.org/stdlib-2.0.0/libdoc/ipaddr/rdoc/IPAddr.html">IPAddr</a> from the SDK.
+    <ul>
+      <li><strong>It is NOT exposed</strong> to bypass using Hex, Octal, Dword, URL and Mixed encoding.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><strong>Use the output value of the method/library as the IP address to compare against the whitelist.</strong></p>
+</blockquote>
+
+<p>After ensuring the validity of the incoming IP address, the second layer of validation is applied. A whitelist is created after determining all the IP addresses (v4 and v6 in order to avoid bypasses) of the identified and trusted applications. The valid IP is cross checked with that list to ensure its communication with the internal application (string strict comparison with case sensitive).</p>
+
+<h5 id="domain-name">Domain name</h5>
+
+<p>In the attempt of validating domain names, it is apparent to do a DNS resolution in order to verify the existence of the domain. In general, it is not a bad idea, yet it opens up the application to attacks depending on the configuration used regarding the DNS servers used for the domain name resolution:</p>
+<ul>
+  <li>It can disclose information to external DNS resolvers.</li>
+  <li>It can be used by an attacker to bind a legit domain name to an internal IP address. See the section <code class="language-plaintext highlighter-rouge">Exploitation tricks &gt; Bypassing restrictions &gt; Input validation &gt; DNS pinning</code> of this <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Bible.pdf">document</a>.</li>
+  <li>It can be used, by an attacker, to deliver a malicious payload to the internal DNS resolvers as well as to the API (SDK or third-party) used by the application to handle the DNS communication and then, potentially, trigger a vulnerability in one of these components.</li>
+</ul>
+
+<p>In the context of SSRF, there are 2 validations to perform:</p>
+
+<ol>
+  <li>Ensure that the data provided is a valid domain name.</li>
+  <li>Ensure that the domain name provided belongs to one of the domain names of the identified and trusted applications (the whitelisting comes to action here).</li>
+</ol>
+
+<p>Similar to the IP address validation, the first layer of validation can be applied using libraries that ensure the security of the domain name format, based on the technology used (library option is proposed here in order to delegate the managing of the domain name format and leverage battle tested validation function):</p>
+
+<blockquote>
+  <p>Verification of the proposed libraries has been performed to ensure that the proposed functions do not perform any DNS resolution query.</p>
+</blockquote>
+
+<ul>
+  <li><strong>JAVA:</strong> Method <a href="https://commons.apache.org/proper/commons-validator/apidocs/org/apache/commons/validator/routines/DomainValidator.html#isValid(java.lang.String)">DomainValidator.isValid</a> from the <a href="http://commons.apache.org/proper/commons-validator/">Apache Commons Validator</a> library.</li>
+  <li><strong>.NET</strong>: Method <a href="https://docs.microsoft.com/en-us/dotnet/api/system.uri.checkhostname?view=netframework-4.8">Uri.CheckHostName</a> from the SDK.</li>
+  <li><strong>JavaScript</strong>: Library <a href="https://www.npmjs.com/package/is-valid-domain">is-valid-domain</a>.</li>
+  <li><strong>Python</strong>: Module <a href="https://validators.readthedocs.io/en/latest/#module-validators.domain">validators.domain</a>.</li>
+  <li><strong>Ruby</strong>: No valid dedicated gem has been found.
+    <ul>
+      <li><a href="https://github.com/mhuggins/domainator">domainator</a>, <a href="https://github.com/weppos/publicsuffix-ruby">public_suffix</a> and <a href="https://github.com/sporkmonger/addressable">addressable</a> has been tested but unfortunately they all consider <code class="language-plaintext highlighter-rouge">&lt;script&gt;alert(1)&lt;/script&gt;.owasp.org</code> as a valid domain name.</li>
+      <li>This regex, taken from <a href="https://stackoverflow.com/a/26987741">here</a>, can be used: <code class="language-plaintext highlighter-rouge">^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Example of execution of the proposed regex for Ruby:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">domain_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"owasp.org"</span><span class="p">,</span><span class="s2">"owasp-test.org"</span><span class="p">,</span><span class="s2">"doc-test.owasp.org"</span><span class="p">,</span><span class="s2">"doc.owasp.org"</span><span class="p">,</span> 
+                <span class="s2">"&lt;script&gt;alert(1)&lt;/script&gt;"</span><span class="p">,</span><span class="s2">"&lt;script&gt;alert(1)&lt;/script&gt;.owasp.org"</span><span class="p">]</span>
+<span class="n">domain_names</span><span class="p">.</span><span class="nf">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">domain_name</span><span class="o">|</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">domain_name</span> <span class="o">=~</span> <span class="sr">/^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$/</span> <span class="p">)</span>
+        <span class="nb">puts</span> <span class="s2">"[i] </span><span class="si">#{</span><span class="n">domain_name</span><span class="si">}</span><span class="s2"> is VALID"</span>
+    <span class="k">else</span>
+        <span class="nb">puts</span> <span class="s2">"[!] </span><span class="si">#{</span><span class="n">domain_name</span><span class="si">}</span><span class="s2"> is INVALID"</span>
+    <span class="k">end</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ruby test.rb
+<span class="o">[</span>i] owasp.org is VALID
+<span class="o">[</span>i] owasp-test.org is VALID
+<span class="o">[</span>i] doc-test.owasp.org is VALID
+<span class="o">[</span>i] doc.owasp.org is VALID
+<span class="o">[!]</span> &lt;script&gt;alert<span class="o">(</span>1<span class="o">)</span>&lt;/script&gt; is INVALID
+<span class="o">[!]</span> &lt;script&gt;alert<span class="o">(</span>1<span class="o">)</span>&lt;/script&gt;.owasp.org is INVALID
+</code></pre></div></div>
+
+<p>After ensuring the validity of the incoming domain name, the second layer of validation is applied:</p>
+
+<ol>
+  <li>Build a whitelist with all the domain names of every identified and trusted applications.</li>
+  <li>Verify that the domain name received is part of this whitelist (string strict comparison with case sensitive).</li>
+</ol>
+
+<p>Unfortunately here, the application is still vulnerable to the <code class="language-plaintext highlighter-rouge">DNS pinning</code> bypass mentioned in this <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Bible.pdf">document</a>. Indeed, a DNS resolution will be made when the business code will be executed. To address that issue, the following action must be taken in addition of the validation on the domain name:</p>
+<ol>
+  <li>Ensure that the domains that are part of your organization are resolved by your internal DNS server first in the chains of DNS resolvers.</li>
+  <li>Monitor the domains whitelist in order to detect when any of them resolves to a/an:
+    <ul>
+      <li>Local IP address (V4 + V6).</li>
+      <li>Internal IP of your organization (expected to be in private IP ranges) for the domain that are not part of your organization.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>The following Python3 script can be used, as a starting point, for the monitoring mentioned above:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Dependencies: pip install ipaddress dnspython
+</span><span class="kn">import</span> <span class="nn">ipaddress</span>
+<span class="kn">import</span> <span class="nn">dns.resolver</span>
+
+<span class="c1"># Configure the whitelist to check
+</span><span class="n">DOMAINS_WHITELIST</span> <span class="o">=</span> <span class="p">[</span><span class="s">"owasp.org"</span><span class="p">,</span> <span class="s">"labslinux"</span><span class="p">]</span>
+
+<span class="c1"># Configure the DNS resolver to use for all DNS queries
+</span><span class="n">DNS_RESOLVER</span> <span class="o">=</span> <span class="n">dns</span><span class="p">.</span><span class="n">resolver</span><span class="p">.</span><span class="n">Resolver</span><span class="p">()</span>
+<span class="n">DNS_RESOLVER</span><span class="p">.</span><span class="n">nameservers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"1.1.1.1"</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">verify_dns_records</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">records</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+    <span class="s">"""
+    Verify if one of the DNS records resolve to a non public IP address.
+    Return a boolean indicating if any error has been detected.
+    """</span>
+    <span class="n">error_detected</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">records</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="p">.</span><span class="n">to_text</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ip</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="p">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="c1"># See https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address.is_global
+</span>                <span class="k">if</span> <span class="ow">not</span> <span class="n">ip</span><span class="p">.</span><span class="n">is_global</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">"[!] DNS record type '%s' for domain name '%s' resolve to 
+                    a non public IP address '%s'!"</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+                    <span class="n">error_detected</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+                <span class="n">error_detected</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">"[!] '%s' is not valid IP address!"</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">error_detected</span>
+            
+<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+    <span class="s">"""
+    Perform the check of the whitelist of domains.
+    Return a boolean indicating if any error has been detected.
+    """</span>
+    <span class="n">error_detected</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="n">DOMAINS_WHITELIST</span><span class="p">:</span>    
+        <span class="c1"># Get the IPs of the current domain
+</span>        <span class="c1"># See https://en.wikipedia.org/wiki/List_of_DNS_record_types
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># A = IPv4 address record        
+</span>            <span class="n">ip_v4_records</span> <span class="o">=</span> <span class="n">DNS_RESOLVER</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="s">"A"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">ip_v4_records</span> <span class="o">=</span> <span class="bp">None</span>            
+            <span class="k">print</span><span class="p">(</span><span class="s">"[i] Cannot get A record for domain '%s': %s</span><span class="se">\n</span><span class="s">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">domain</span><span class="p">,</span><span class="n">e</span><span class="p">))</span>        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># AAAA = IPv6 address record
+</span>            <span class="n">ip_v6_records</span> <span class="o">=</span> <span class="n">DNS_RESOLVER</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="s">"AAAA"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">ip_v6_records</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"[i] Cannot get AAAA record for domain '%s': %s</span><span class="se">\n</span><span class="s">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">domain</span><span class="p">,</span><span class="n">e</span><span class="p">))</span>
+        <span class="c1"># Verify the IPs obtained
+</span>        <span class="k">if</span> <span class="n">verify_dns_records</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">ip_v4_records</span><span class="p">,</span> <span class="s">"A"</span><span class="p">)</span> 
+        <span class="ow">or</span> <span class="n">verify_dns_records</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">ip_v6_records</span><span class="p">,</span> <span class="s">"AAAA"</span><span class="p">):</span>
+            <span class="n">error_detected</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">error_detected</span>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">check</span><span class="p">():</span>
+        <span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h5 id="url">URL</h5>
+
+<p>Do not accept complete URLs from the user because URL are difficult to validate and the parser can be abused depending on the technology used as showcased by the following <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_Orange_Tsai_Talk.pdf">talk</a> of <a href="https://twitter.com/orange_8361">Orange Tsai</a>.</p>
+
+<p>If network related information is really needed then only accept a valid IP address or domain name.</p>
+
+<h4 id="network-layer">Network layer</h4>
+
+<p>The objective of the Network layer security is to prevent the <em>VulnerableApplication</em> from performing calls to arbitrary applications. Only allowed <em>routes</em> will be available for this application in order to limit its network access to only those that it should communicate with.</p>
+
+<p>The Firewall component, as a specific device or using the one provided within the operating system, will be used here to define the legitimate flows.</p>
+
+<p>In the schema below, a Firewall component is leveraged to limit the application’s access, and in turn, limit the impact of an application vulnerable to SSRF:</p>
+
+<p><img src="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_Case1_NetworkLayer_PreventFlow.png" alt="Case 1 for Network layer protection about flows that we want to prevent" /></p>
+
+<p><a href="https://www.mwrinfosecurity.com/our-thinking/making-the-case-for-network-segregation">Network segregation</a> (see this set of <a href="https://www.cyber.gov.au/publications/network-segmentation-and-segregation">implementation advices</a>) can also be leveraged and <strong>is highly recommended in order to block illegitimate calls directly at network level itself</strong>.</p>
+
+<h2 id="case-2---application-can-send-requests-to-any-external-ip-address-or-domain-name">Case 2 - Application can send requests to ANY external IP address or domain name</h2>
+
+<p>This case happens when a user can control an URL to an <strong>External</strong> resource and the application makes a request to this URL (e.g. in case of <a href="https://en.wikipedia.org/wiki/Webhook">WebHooks</a>). Whitelist cannot be used here because the list of IPs/domains is often unknown upfront and is dynamically changing.</p>
+
+<p>In this scenario, <em>External</em> refers to any IP that doesn’t belong to the internal network, and should be reached by going over the public internet.</p>
+
+<p>Thus, the call from the <em>Vulnerable Application</em>:</p>
+<ul>
+  <li><strong>Is NOT</strong> targeting one of the IP/domain <em>located inside</em> the company’s global network.</li>
+  <li>Uses a convention defined between the <em>VulnerableApplication</em> and the expected IP/domain in order to <em>prove</em> that the call has been legitimately initiated.</li>
+</ul>
+
+<h3 id="challenges-in-blocking-urls-at-application-layer">Challenges in blocking URLs at application layer</h3>
+
+<p>Based on the business requirements of the above mentioned applications, the whitelist approach is not a valid solution. Despite knowing that the blacklist approach is not an impenetrable wall, it is the best solution in this scenario. It is informing the application what it should <strong>not</strong> do.</p>
+
+<p>Here is why filtering URLs is hard at the Application layer:</p>
+
+<ul>
+  <li>It implies that the application must be able to detect, at the code level, that the provided IP (V4 + V6) is not part of the official <a href="https://en.wikipedia.org/wiki/Private_network">private networks ranges</a> including also <em>localhost</em> and <em>IPv4/v6 Link-Local</em> addresses. Not every SDK provides a built-in feature for this kind of verification, and leaves the handling up to the developer to understand all of its pitfalls and possible values, which makes it a demanding task.</li>
+  <li>Same remark for domain name: The company must maintain a list of all internal domain names and provide a centralized service to allow an application to verify if a provided domain name is an internal one. For this verification, an internal DNS resolver can be queried by the application but this internal DNS resolver must not resolve external domain names.</li>
+</ul>
+
+<h3 id="available-protections-1">Available protections</h3>
+
+<p>Taking into consideration the same assumption in the following <a href="/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#example">example</a> for the following sections.</p>
+
+<h4 id="application-layer-1">Application layer</h4>
+
+<p>Like for the case <a href="/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#case-1---application-can-send-request-only-to-identified-and-trusted-applications">n°1</a>, it is assumed that the <code class="language-plaintext highlighter-rouge">IP Address</code> or <code class="language-plaintext highlighter-rouge">domain name</code> is required to create the request that will be sent to the <em>TargetApplication</em>.</p>
+
+<p>The first validation on the input data presented in the case <a href="/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#application-layer">n°1</a> on the 3 types of data will be the same for this case <strong>BUT the second validation will differ</strong>. Indeed, here we must use the blacklist approach.</p>
+
+<blockquote>
+  <p><strong>Regarding the proof of legitimacy of the request</strong>: The <em>TargetedApplication</em> that will receive the request must generate a random token (ex: alphanumeric of 20 characters) that is expected to be passed by the caller (in body via a parameter for which the name is also defined by the application itself and only allow characters set <code class="language-plaintext highlighter-rouge">[a-z]{1,10}</code>) to perform a valid request. The receiving endpoint must only accept HTTP POST requests.</p>
+</blockquote>
+
+<p><strong>Validation flow (if one the validation steps fail then the request is rejected):</strong></p>
+
+<ol>
+  <li>The application will receive the IP address or domain name of the <em>TargetedApplication</em> and it will apply the first validation on the input data using the libraries/regex mentioned in this <a href="/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#application-layer">section</a>.</li>
+  <li>The second validation will be applied against the IP address or domain name of the <em>TargetedApplication</em> using the following blacklist approach:
+    <ul>
+      <li>For IP address:
+        <ul>
+          <li>The application will verify that it is a public one (see the hint provided in the next paragraph with the python code sample).</li>
+        </ul>
+      </li>
+      <li>For domain name:
+        <ol>
+          <li>The application will verify that it is a public one by trying to resolve the domain name against the DNS resolver that will only resolve internal domain name. Here, it must return a response indicating that it do not know the provided domain because the expected value received must be a public domain.</li>
+          <li>To prevent the <code class="language-plaintext highlighter-rouge">DNS pinning</code> attack described in this <a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Bible.pdf">document</a>, the application will retrieve all the IP addresses behind the domain name provided (taking records <em>A</em> + <em>AAAA</em> for IPv4 + IPv6) and it will apply the same verification described in the previous point about IP addresses.</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li>The application will receive the protocol to use for the request via a dedicated input parameter for which it will verify the value against an allowed list of protocols (<code class="language-plaintext highlighter-rouge">HTTP</code> or <code class="language-plaintext highlighter-rouge">HTTPS</code>).</li>
+  <li>The application will receive the parameter name for the token to pass to the <em>TargetedApplication</em> via a dedicated input parameter for which it will only allow the characters set <code class="language-plaintext highlighter-rouge">[a-z]{1,10}</code>.</li>
+  <li>The application will receive the token itself via a dedicated input parameter for which it will only allow the characters set <code class="language-plaintext highlighter-rouge">[a-zA-Z0-9]{20}</code>.</li>
+  <li>The application will receive and validate (from a security point of view) any business data needed to perform a valid call.</li>
+  <li>The application will build the HTTP POST request <strong>using only validated informations</strong> and will send it (<em>don’t forget to disable the support for <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections">redirection</a> in the web client used</em>).</li>
+</ol>
+
+<p><strong>Hints for the step 2 regarding the verification on an IP address:</strong></p>
+
+<p>As mentioned above, not every SDK provide a built-in feature to verify if an IP (V4 + V6) is private/public. So, the following approach can be used based on a blacklist composed of the private IP ranges (<em>example is given in python in order to be easy to understand and portable to others technologies</em>) :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_private_ip</span><span class="p">(</span><span class="n">ip_address</span><span class="p">):</span>
+    <span class="n">is_private</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="s">"""
+    Determine if a IP address provided is a private one.
+    Return TRUE if it's the case, FALSE otherwise.
+    """</span>
+    <span class="c1"># Build the list of IP prefix for V4 and V6 addresses
+</span>    <span class="n">ip_prefix</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Add prefix for loopback addresses
+</span>    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"127."</span><span class="p">)</span>    
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"0."</span><span class="p">)</span>    
+    <span class="c1"># Add IP V4 prefix for private addresses
+</span>    <span class="c1"># See https://en.wikipedia.org/wiki/Private_network
+</span>    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"10."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.16."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.17."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.18."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.19."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.20."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.21."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.22."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.23."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.24."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.25."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.26."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.27."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.28."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.29."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.30."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"172.31."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"192.168."</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"169.254."</span><span class="p">)</span>
+    <span class="c1"># Add IP V6 prefix for private addresses
+</span>    <span class="c1"># See https://en.wikipedia.org/wiki/Unique_local_address
+</span>    <span class="c1"># See https://en.wikipedia.org/wiki/Private_network
+</span>    <span class="c1"># See https://simpledns.com/private-ipv6
+</span>    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"fc"</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"fd"</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"fe"</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"ff"</span><span class="p">)</span>
+    <span class="n">ip_prefix</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"::1"</span><span class="p">)</span>
+    <span class="c1"># Verify the provided IP address
+</span>    <span class="c1"># Remove whitespace characters from the beginning/end of the string 
+</span>    <span class="c1"># and convert it to lower case 
+</span>    <span class="c1"># Lower case is for preventing any IPV6 case bypass using mixed case
+</span>    <span class="c1"># depending on the source used to get the IP address
+</span>    <span class="n">ip_to_verify</span> <span class="o">=</span> <span class="n">ip_address</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">lower</span><span class="p">()</span>
+    <span class="c1"># Perform the check against the list of prefix
+</span>    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">ip_prefix</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ip_to_verify</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+            <span class="n">is_private</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">is_private</span>   
+</code></pre></div></div>
+
+<h4 id="network-layer-1">Network layer</h4>
+
+<p>Similar to the following <a href="/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#network-layer">section</a>.</p>
+
+<h1 id="references">References</h1>
+
+<p>Online version of the <a href="https://docs.google.com/document/d/1v1TkWZtrhzRLy0bYXBcdLUedXGb9njTNIJXa3u9akHM">SSRF bible</a> (PDF version is used in this cheat sheet).</p>
+
+<p>Article about <a href="https://medium.com/@vickieli/bypassing-ssrf-protection-e111ae70727b">Bypassing SSRF Protection</a>.</p>
+
+<p>Articles about SSRF attacks: <a href="https://medium.com/poka-techblog/server-side-request-forgery-ssrf-attacks-part-1-the-basics-a42ba5cc244a">Part 1</a>, <a href="https://medium.com/poka-techblog/server-side-request-forgery-ssrf-attacks-part-2-fun-with-ipv4-addresses-eb51971e476d">part 2</a> and  <a href="https://medium.com/poka-techblog/server-side-request-forgery-ssrf-part-3-other-advanced-techniques-3f48cbcad27e">part 3</a>.</p>
+
+<h1 id="tools-and-code-used-for-schemas">Tools and code used for schemas</h1>
+
+<ul>
+  <li><a href="https://mermaidjs.github.io/mermaid-live-editor">Mermaid Online Editor</a> and <a href="https://mermaidjs.github.io/">Mermaid documentation</a>.</li>
+  <li><a href="https://www.draw.io/">Draw.io Online Editor</a>.</li>
+</ul>
+
+<p>Mermaid code for SSRF common flow (printscreen are used to capture PNG image inserted into this cheat sheet):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sequenceDiagram
+    participant Attacker
+    participant VulnerableApplication
+    participant TargetedApplication
+    Attacker-&gt;&gt;VulnerableApplication: Crafted HTTP request
+    VulnerableApplication-&gt;&gt;TargetedApplication: Request (HTTP, FTP...)
+    Note left of TargetedApplication: Use payload included&lt;br&gt;into the request to&lt;br&gt;VulnerableApplication
+    TargetedApplication-&gt;&gt;VulnerableApplication: Response 
+    VulnerableApplication-&gt;&gt;Attacker: Response
+    Note left of VulnerableApplication: Include response&lt;br&gt;from the&lt;br&gt;TargetedApplication
+</code></pre></div></div>
+
+<p>Draw.io schema XML code for the “<a href="../assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_Case1_NetworkLayer_PreventFlow.xml">case 1 for network layer protection about flows that we want to prevent</a>” schema (printscreen are used to capture PNG image inserted into this cheat sheet).</p>
+
+          </section>
+          
+
+          
+          
+          
+          
+          
+          
+          
+
+          <nav role="navigation" aria-label="navigate page">
+            <ol>
+            
+            
+              <li class='page previous'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet"><span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-left"></i>
+                </span>Securing Cascading Style Sheets Cheat Sheet</a></li>
+            
+            
+            
+              <li class='page next'><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet">Session Management Cheat Sheet<span style="font-size: 3em; color: lightgray; vertical-align:middle;">
+                  <i class="fas fa-angle-right"></i>
+                </span></a></li>
+            
+            </ol>
+        </nav>
+       </div>
+       <hr>
+       <div class="repo">
+       </div>
+
+          <div class="github-buttons">
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch on GitHub">Watch</a>
+    <a class="github-button" href="https://github.com/owasp/www-chapter-ankara" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star on GitHub">Star</a>
+ </div>
+
+          <div class="sidebar" role="complementary">
+    
+
+    
+    
+       
+
+
+
+  
+  <div class='owasp-sidebar-top'>
+    <strong>The OWASP<sup>&reg;</sup> Foundation</strong> works to improve the security of software through its community-led open source software projects, 
+     hundreds of chapters worldwide, tens of thousands of members, and by hosting local and global conferences.
+</div>
+
+
+  
+  
+  
+<ul>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/AJAX_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">AJAX Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Abuse_Case_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Abuse Case 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Access_Control_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Access Control 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Attack Surface Analysis 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Authorization_Testing_Automation.html">
+<span style="font-size:smaller;text-decoration:none;">Authorization Testing Automation
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Bean_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Bean Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">C-Based Toolchain Hardening 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Choosing_and_Using_Security_Questions_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Choosing and Using Security Questions 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Clickjacking Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Content Security Policy 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Credential Stuffing Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross-Site Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cross Site Scripting Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Cryptographic Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DOM based XSS Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Denial_of_Service_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Denial of Service 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Deserialization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Deserialization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Docker_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Docker Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/DotNet_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">DotNet Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Error_Handling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Error Handling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Forgot_Password_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Forgot Password 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTML5_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTML5 Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">HTTP Strict Transport Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Injection_Prevention_Cheat_Sheet_in_Java.html">
+<span style="font-size:smaller;text-decoration:none;">Injection Prevention  in Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Input_Validation_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Input Validation 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Insecure Direct Object Reference Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JAAS_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">JAAS 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html">
+<span style="font-size:smaller;text-decoration:none;">JSON Web Token  for Java
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Key_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Key Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">LDAP Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Logging_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Logging 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Mass_Assignment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Mass Assignment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Microservices_based_Security_Arch_Doc_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Microservices based Security Arch Doc 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Multifactor Authentication 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Nodejs_security_cheat_sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Nodejs security cheat sheet
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">OS Command Injection Defense 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/PHP_Configuration_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">PHP Configuration 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Password_Storage_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Password Storage 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Pinning_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Pinning 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Protect_FileUpload_Against_Malicious_File.html">
+<span style="font-size:smaller;text-decoration:none;">Protect FileUpload Against Malicious File
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Query_Parameterization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Query Parameterization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Assessment_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Assessment 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/REST_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">REST Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Ruby_on_Rails_Cheatsheet.html">
+<span style="font-size:smaller;text-decoration:none;">Ruby on Rails 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SAML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SAML Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">SQL Injection Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Securing_Cascading_Style_Sheets_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Securing Cascading Style Sheets 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html">
+<span style="font-size:normal;text-decoration:none;font-weight: bold;">Server Side Request Forgery Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Session_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Session Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">TLS Cipher String 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Third Party Javascript Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Threat_Modeling_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Threat Modeling 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transaction_Authorization_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transaction Authorization 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Transport Layer Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Unvalidated Redirects and Forwards 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">User Privacy Protection 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Virtual_Patching_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Virtual Patching 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerability_Disclosure_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerability Disclosure 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Vulnerable Dependency Management 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/Web_Service_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">Web Service Security 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML External Entity Prevention 
+</span></a></li>
+
+<li><a href="https://github.com/pages/OWASP/www-chapter-ankara/cheatsheets/XML_Security_Cheat_Sheet.html">
+<span style="font-size:smaller;text-decoration:none;">XML Security 
+</span></a></li>
+
+</ul>
+
+  
+  
+  
+
+  <div class='owasp-sidebar-bottom'>
+<h3>Upcoming Global Events</h3>
+   <ul>
+      <li><a href="https://appsecdays.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Virtual AppSec Days, Summer</a></li>
+      <li><a href="https://sf.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec SF October 19th-23rd</a></li>
+     <li><a href="https://dublin.globalappsec.org/?utm_source=owasp-web&utm_medium=right-col&utm_campaign=www-chapter-ankara" target="_blank" rel="noopener">Global AppSec Dublin February 15-19th, 2021</a></li>
+   </ul>
+</div>
+
+
+  <!--<div>
+    <h3>OWASP News & Opinions</h3>
+    <ul>
+    	
+    </ul>	
+  </div>-->
+</div>
+
+      </div>
+    </main>
+    <footer>
+  
+  <section class="member">
+
+  <script type="text/javascript">
+    var members = [];
+    $(function() {
+      
+      corp_members = YAML.load('https://owasp.org/assets/sitedata/corp_members.yml');
+      $.each(corp_members, function (index) {
+        members.push(this);
+        });
+        var randomIndexUsed = [];
+        var counter = 0;
+        var numberOfImages = 9;
+        if(members.length > 0)
+        {
+          var htmlstring = "";
+          while (counter < numberOfImages)
+          {
+              var randomIndex;
+              var img;
+
+              randomIndex = Math.floor(Math.random() * members.length);
+
+              if (randomIndexUsed.indexOf(randomIndex) == "-1")
+              {
+                  counter++;
+                  htmlstring += '<a href="'+ members[randomIndex]["url"] + '" class="member-logo" rel="sponsored noopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randomIndex]["image"] + '" alt="image"/></a>';
+                  
+                  randomIndexUsed.push(randomIndex);
+              }
+          }
+
+          $("#corp_member_div").html(htmlstring);
+         
+          var randi = Math.floor(Math.random() * members.length);
+          htmlstring = '<h2>Spotlight: ' + members[randi]["name"] + '</h2>';
+          htmlstring += '<a href="'+ members[randi]["url"] + '" rel="sponsored nopener noreferrer" target="_blank" onclick="handleOutboundLinkClicks(event);"><img src="https://owasp.org' + members[randi]["image"] + '" alt="image" /></a>';
+          htmlstring += '<p>' + members[randi]["description"] + '</p>';
+          $(".member-spotlight").html(htmlstring);
+        }
+    });
+  </script>
+  <div class="member-wrapper">
+    <section class="member-spotlight">
+    </section>
+    <section class="member-list">
+      <h2>Corporate Supporters</h2>
+      <div id="corp_member_div">
+      </div>
+      <div class="member-cta">
+        <a class="callout-link" href="/supporters">Become a corporate supporter</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+  
+  <section class="footer-wrapper">
+    <section class="social">
+<a href="https://owasp-slack.herokuapp.com" aria-label="slack group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-slack"></i></a>
+<a href="https://www.facebook.com/OWASPFoundation" aria-label="facebook group" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-facebook-square"></i></a>
+<a href="https://twitter.com/owasp" aria-label="twitter account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-twitter"></i></a>
+<a href="https://www.linkedin.com/company/owasp/" aria-label="linkedin account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-linkedin"></i></a>
+<a href="https://www.youtube.com/user/OWASPGLOBAL" aria-label="youtube account" target="_blank" rel="noopener noreferrer"><i class="fa fa-lg fa-youtube-square"></i></a>
+</section>
+    <nav class="bot-nav" role="navigation" aria-label="secondary navigation">
+      <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="/projects/">PROJECTS</a></li>
+        <li><a href="/chapters/">CHAPTERS</a></li>
+        <li><a href="/events/">EVENTS</a></li>
+        <li><a href="/about/">ABOUT</a></li>
+        <li><a href="/www-policy/operational/privacy">PRIVACY</a></li>
+        <li><a href="/sitemap/">SITEMAP</a></li>
+        <li><a href="/contact/">CONTACT</a></li>
+      </ul>
+    </nav>
+    <p class="disclaimer">
+        OWASP, Open Web Application Security Project, and Global AppSec are registered trademarks and AppSec Days, AppSec California, AppSec Cali, SnowFROC, LASCON, and the OWASP logo are trademarks of the OWASP Foundation, Inc. Unless otherwise specified, all content on the site is Creative Commons Attribution-ShareAlike v4.0 and provided without warranty of service or accuracy. For more information, please refer to our <a href="/www-policy/operational/general-disclaimer.html">General Disclaimer</a>. OWASP does not endorse or recommend commercial products or services, allowing our community to remain vendor neutral with the collective wisdom of the best minds in software security worldwide. Copyright 2020, OWASP Foundation, Inc.      
+    </p>
+  </section>
+</footer>
+
+  </body>
+</html>
+
+
