@@ -3,11 +3,9 @@
 layout: col-sidebar
 title: OWASP Ankara
 tags: example-tag
-level: 4
-type: example
-altfooter: true
-meetup-group: owasp-ankara
-country: 
+region: Asia
+meetup-group: OWASP-Ankara-Chapter
+country: Turkey
 postal-code: 
 
 ---
