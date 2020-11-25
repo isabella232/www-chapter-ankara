@@ -7,6 +7,7 @@
 * [Code of Conduct](https://www.owasp.org/index.php/Governance/Conference_Policies)
 
 ### Social Links
+* [Meetup](https://www.meetup.com/owasp-ankara-meetup-group/)
 * [Twitter](https://twitter.com/owaspankara)
 
 ### Code Repository
