@@ -30,7 +30,8 @@ Eğitim sırasında aşağıdaki konular önce konu anlatımı sonra uygulamalar
 12.	Bilinen güvenlik açıklarına sahip bileşenlerin kullanılması
 13.	Yetersiz loglama ve izleme
 
-Eğitim formatı
+### Eğitim formatı
+
 Her konu önce nedenleri, istismar senaryoları ve risklerle ilgili teorik ele alınacak ve ardından TryHackMe ortamında uygulamalı olarak gösterilecektir. 
 Katılımcıların ücretsiz bir TryHackMe üyeliği açmaları ve kendi ortamlarına Kali Linux kurmaları gerekmektedir. TryHackMe ortamına OpenVPN üzerinden bağlanılmaktadır, eğitim öncesi katılımcıların bu bağlantıyı test etmelerinde fayda olacaktır. 
 Eğitim sırasında eğitim içeriyle ilgili sorular yanıtlanacak ancak Kali kurulumu ve OpenVPN konusunda destek verilmeyecektir. 
