@@ -19,8 +19,6 @@ postal-code:
 ----
 Welcome to the Ankara chapter homepage. The chapter board is <a href="mailto:alper.basaran@owasp.org">Alper Basaran</a>.
 
-Follow chapter news on [Twitter](https://twitter.com/owaspankara)
-
 :+1:
 
 ### :calendar: Check our Upcoming Meetup Events: 
