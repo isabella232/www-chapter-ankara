@@ -5,9 +5,6 @@
 * [Speaker Agreement](https://www.owasp.org/index.php/Speaker_Agreement)
 * [Code of Conduct](https://www.owasp.org/index.php/Governance/Conference_Policies)
 
-### Social Links
-* [Twitter](https://twitter.com/owaspankara)
-
 ### Code Repository
 * [Page Repo](https://github.com/OWASP/www-chapter-ankara)
 * [Legacy Website](https://wiki.owasp.org/index.php/Ankara)
